@@ -1,7 +1,7 @@
 ---
 # Krishibhaav Progress Tracker
 
-Last Updated: 2026-06-10T11:50:00+05:30
+Last Updated: 2026-06-10T20:00:54+05:30
 
 ## Phase Status
 | Phase | Name | Status | Blocker |
@@ -12,7 +12,7 @@ Last Updated: 2026-06-10T11:50:00+05:30
 | 4 | Farmer Core | COMPLETED | - |
 | 5 | Charts & Statistics | COMPLETED | - |
 | 6 | Agent Farmer Management | COMPLETED | - |
-| 7 | Push Notifications | NOT STARTED | - |
+| 7 | Push Notifications | IN PROGRESS | - |
 | 8 | Profile Panels & Polish | NOT STARTED | - |
 | 9 | Python Scraper | NOT STARTED | - |
 | 10 | Build & Deploy | NOT STARTED | - |
@@ -21,13 +21,13 @@ Last Updated: 2026-06-10T11:50:00+05:30
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: Phase 6
-Started: 2026-06-10T14:33:30+05:30
-Last activity: Phase 6 COMPLETED (2026-06-10T14:52:47+05:30). Verified all features live.
+Phase: Phase 7
+Started: 2026-06-10T17:15:04+05:30
+Last activity: Phase 7 closed pending Joel's live test.
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
-[2026-06-10] | Phase 4 | Farmer sign-in with temp password fails (invalid-credential) | - | OPEN
+[2026-06-10] | Phase 4 | Farmer sign-in with temp password fails (invalid-credential) | Auth user recreated and Firestore docs migrated to correct UID | RESOLVED
 
 ## Files Created So Far
 LOGBOOK.md (Phase 1)
@@ -53,4 +53,9 @@ lib/services/farmer_service.dart (Phase 4)
 lib/providers/farmer_provider.dart (Phase 4)
 lib/core/market_status.dart (Phase 4)
 lib/screens/farmer/farmer_home_screen.dart (Phase 4)
+lib/models/price_point.dart (Phase 5)
+lib/services/price_history_service.dart (Phase 5)
+lib/widgets/price_chart_widget.dart (Phase 5)
+lib/widgets/stats_grid_widget.dart (Phase 5)
+lib/screens/agent/farmer_detail_sheet.dart (Phase 6)
 ---

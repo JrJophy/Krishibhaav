@@ -88,4 +88,20 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 6 | lib/screens/agent/agent_home_screen.dart | Modification | Wired FarmerDetailSheet to FarmerListCard tap, customized Remove Farmer confirmation dialog
 [2026-06-10] | Phase 6 | lib/screens/agent/agent_home_screen.dart | Bug fix | Updated empty-state message to handle active search queries correctly
 [2026-06-10] | Phase 6 | Summary | Phase Closure | Detail sheet, custom pricing, search, live badges, and remove logic all verified end-to-end.
+[2026-06-10] | Pre-Phase 7 | PROGRESS_TRACKER.md | Bug fix | Marked Phase 4 sign-in blocker as RESOLVED (root cause: orphaned/duplicate Auth UIDs and whitespace in Firestore data; resolution: Auth user recreated and Firestore docs migrated to the correct UID)
+[2026-06-10] | Pre-Phase 7 | LOREBOOK.md | Documentation | Created an overarching narrative lorebook documenting the project journey from Phase 1 to Phase 6, and the roadmap ahead.
+[2026-06-10] | Phase 7 | .gitignore | Security | Added assets/service_account.json to prevent credential leakage
+[2026-06-10] | Phase 7 | SETUP.md | Documentation | Added manual setup steps for service_account.json and FCM
+[2026-06-10] | Phase 7 | pubspec.yaml | Modification | Added googleapis_auth dependency and assets/service_account.json
+[2026-06-10] | Phase 7 | web/firebase-messaging-sw.js | Creation | Created background service worker for FCM on Web
+[2026-06-10] | Phase 7 | lib/services/notification_service.dart | Creation | Handles FCM token generation, saving to Firestore users collection, and foreground SnackBar display
+[2026-06-10] | Phase 7 | lib/services/fcm_dispatch_service.dart | Creation | Client-side OAuth2 dispatcher using FCM REST v1 API to send notifications
+[2026-06-10] | Phase 7 | lib/screens/agent/agent_home_screen.dart | Modification | Initialized NotificationService upon loading Agent dashboard
+[2026-06-10] | Phase 7 | lib/screens/farmer/farmer_home_screen.dart | Modification | Initialized NotificationService upon loading Farmer dashboard
+[2026-06-10] | Phase 7 | lib/providers/agent_provider.dart | Modification | Hooked FcmDispatchService.notifyGlobalPriceUpdate into updatePrice method
+[2026-06-10] | Phase 7 | lib/screens/farmer/farmer_home_screen.dart | Bug fix | Added mounted check to resolve use_build_context_synchronously warning; wrapped Row children in Expanded to fix RenderFlex overflow
+[2026-06-10] | Phase 7 | lib/services/fcm_dispatch_service.dart | Modification | Updated notification triggers and copy according to user mandate (Open Market, Company, Agent, Custom Set/Revert)
+[2026-06-10] | Phase 7 | lib/providers/agent_provider.dart | Modification | Hooked new Open Market and Company price triggers into updatePrice
+[2026-06-10] | Phase 7 | lib/screens/agent/farmer_detail_sheet.dart | Modification | Passed price values to FCM dispatch calls
+[2026-06-10] | Phase 7 | lib/screens/agent/agent_home_screen.dart | Bug fix | Wrapped label Text in _buildPriceRow with Expanded to fix RenderFlex overflow
 ---

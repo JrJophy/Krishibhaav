@@ -200,6 +200,18 @@
       "languageVersion": "3.9"
     },
     {
+      "name": "google_identity_services_web",
+      "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/google_identity_services_web-0.3.3+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "googleapis_auth",
+      "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/googleapis_auth-1.6.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "hooks",
       "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/hooks-2.0.2",
       "packageUri": "lib/",

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/agent_settings_model.dart';
 import '../models/user_model.dart';
 import '../services/agent_service.dart';
+import '../services/fcm_dispatch_service.dart';
 
 class AgentProvider extends ChangeNotifier {
   final AgentService _agentService = AgentService();
@@ -54,10 +55,13 @@ class AgentProvider extends ChangeNotifier {
 
     if (type == 'Open Market Price') {
       await _agentService.updateOpenMarketPrice(agentId, price);
+      FcmDispatchService().notifyOpenMarketPriceUpdate(agentId, price);
     } else if (type == 'Company Price') {
       await _agentService.updateCompanyPrice(agentId, price);
+      FcmDispatchService().notifyCompanyPriceUpdate(agentId, price);
     } else if (type == 'Global Agent Price') {
       await _agentService.updateGlobalAgentPrice(agentId, price);
+      FcmDispatchService().notifyAgentPriceUpdate(agentId, price);
     }
   }
 

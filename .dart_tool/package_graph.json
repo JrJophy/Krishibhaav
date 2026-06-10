@@ -16,6 +16,7 @@
         "flutter_spinkit",
         "go_router",
         "google_fonts",
+        "googleapis_auth",
         "http",
         "intl",
         "provider",
@@ -50,6 +51,14 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "fl_chart",
+      "version": "0.69.2",
+      "dependencies": [
+        "equatable",
+        "flutter"
       ]
     },
     {
@@ -272,6 +281,14 @@
         "stream_channel",
         "string_scanner",
         "term_glyph"
+      ]
+    },
+    {
+      "name": "equatable",
+      "version": "2.0.8",
+      "dependencies": [
+        "collection",
+        "meta"
       ]
     },
     {
@@ -757,19 +774,22 @@
       ]
     },
     {
-      "name": "fl_chart",
-      "version": "0.69.2",
+      "name": "googleapis_auth",
+      "version": "1.6.0",
       "dependencies": [
-        "equatable",
-        "flutter"
+        "args",
+        "crypto",
+        "google_identity_services_web",
+        "http",
+        "http_parser"
       ]
     },
     {
-      "name": "equatable",
-      "version": "2.0.8",
+      "name": "google_identity_services_web",
+      "version": "0.3.3+1",
       "dependencies": [
-        "collection",
-        "meta"
+        "meta",
+        "web"
       ]
     }
   ],

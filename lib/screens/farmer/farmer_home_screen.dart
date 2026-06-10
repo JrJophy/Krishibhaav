@@ -9,6 +9,7 @@ import '../../widgets/price_chart_widget.dart';
 import '../../widgets/stats_grid_widget.dart';
 import '../../services/price_history_service.dart';
 import '../../models/price_point.dart';
+import '../../services/notification_service.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   final String farmerId;
@@ -33,6 +34,8 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
   Future<void> _loadData() async {
     final provider = Provider.of<FarmerProvider>(context, listen: false);
     await provider.loadFarmer(widget.farmerId);
+    if (!mounted) return;
+    NotificationService().init(context, widget.farmerId);
     setState(() {
       _priceHistoryFuture = _priceHistoryService.fetchPriceHistory();
     });
@@ -168,7 +171,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Company Price', style: TextStyle(fontSize: 16, color: Colors.black87)),
+                          const Expanded(child: Text('Company Price', style: TextStyle(fontSize: 16, color: Colors.black87))),
                           Text('₹${provider.companyPrice.toStringAsFixed(2)} /kg', 
                             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                         ],
@@ -186,7 +189,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Open Market Price', style: TextStyle(fontSize: 16, color: Colors.black54)),
+                          const Expanded(child: Text('Open Market Price', style: TextStyle(fontSize: 16, color: Colors.black54))),
                           Text('₹${provider.openMarketPrice.toStringAsFixed(2)} /kg', 
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black54)),
                         ],

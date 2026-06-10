@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/user_model.dart';
 import '../../providers/agent_provider.dart';
 import '../../services/agent_service.dart';
+import '../../services/fcm_dispatch_service.dart';
 import '../../core/colors.dart';
 
 class FarmerDetailSheet extends StatefulWidget {
@@ -75,6 +76,7 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
 
   Future<void> _saveChanges() async {
     setState(() => _isSaving = true);
+    final globalPrice = Provider.of<AgentProvider>(context, listen: false).agentSettings?.globalAgentPrice ?? 0.0;
     try {
       final newName = _nameController.text.trim();
       final newLocation = _locationController.text.trim();
@@ -89,11 +91,13 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
         final price = double.tryParse(_priceController.text.trim());
         if (price != null) {
           await _agentService.setCustomPrice(widget.farmer.uid, price);
+          FcmDispatchService().notifyCustomPriceSet(widget.farmer.uid, price);
         } else {
           throw Exception("Invalid price format");
         }
       } else {
         await _agentService.clearCustomPrice(widget.farmer.uid);
+        FcmDispatchService().notifyCustomPriceReverted(widget.farmer.uid, globalPrice);
       }
       
       if (mounted) {

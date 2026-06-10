@@ -14,6 +14,7 @@ import '../../widgets/price_chart_widget.dart';
 import '../../widgets/stats_grid_widget.dart';
 import '../../services/price_history_service.dart';
 import '../../models/price_point.dart';
+import '../../services/notification_service.dart';
 
 class AgentHomeScreen extends StatefulWidget {
   const AgentHomeScreen({super.key});
@@ -40,6 +41,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     final agentProvider = Provider.of<AgentProvider>(context, listen: false);
     if (authProvider.userId != null) {
       agentProvider.loadAgent(authProvider.userId!);
+      NotificationService().init(context, authProvider.userId!);
     }
     setState(() {
       _priceHistoryFuture = _priceHistoryService.fetchPriceHistory();
@@ -70,7 +72,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(fontSize: 16)),
+          Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
           Row(
             children: [
               Text('₹${value.toStringAsFixed(2)} /kg', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
