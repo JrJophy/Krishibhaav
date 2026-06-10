@@ -5,6 +5,7 @@ import 'core/colors.dart';
 import 'core/text_styles.dart';
 import 'providers/auth_provider.dart';
 import 'providers/agent_provider.dart';
+import 'providers/farmer_provider.dart';
 import 'app_router.dart';
 
 void main() async {
@@ -23,6 +24,7 @@ class KrishibhaavApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<AgentProvider>(create: (_) => AgentProvider()),
+        ChangeNotifierProvider<FarmerProvider>(create: (_) => FarmerProvider()),
       ],
       child: MaterialApp.router(
         title: 'Krishibhaav',

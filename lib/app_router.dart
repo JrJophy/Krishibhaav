@@ -6,6 +6,7 @@ import 'screens/auth/login_register_screen.dart';
 import 'screens/auth/otp_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/agent/agent_home_screen.dart';
+import 'screens/farmer/farmer_home_screen.dart';
 
 class DummyScreen extends StatelessWidget {
   final String title;
