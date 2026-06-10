@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'screens/auth/login_register_screen.dart';
 import 'screens/auth/otp_screen.dart';
 import 'screens/splash_screen.dart';
+import 'screens/agent/agent_home_screen.dart';
 
 class DummyScreen extends StatelessWidget {
   final String title;
@@ -59,8 +60,10 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(path: '/farmer/home', builder: (context, state) => const DummyScreen(title: 'Farmer Home')),
-    GoRoute(path: '/agent/home', builder: (context, state) => const DummyScreen(title: 'Agent Home')),
+    GoRoute(path: '/farmer/home', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 4')),
+    GoRoute(path: '/agent/home', builder: (context, state) => const AgentHomeScreen()),
+    GoRoute(path: '/agent/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
+    GoRoute(path: '/farmer/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
     GoRoute(path: '/profile', builder: (context, state) => const DummyScreen(title: 'Profile')),
     GoRoute(path: '/settings', builder: (context, state) => const DummyScreen(title: 'Settings')),
     GoRoute(path: '/notifications', builder: (context, state) => const DummyScreen(title: 'Notifications')),

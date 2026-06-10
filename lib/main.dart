@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'core/colors.dart';
 import 'core/text_styles.dart';
 import 'providers/auth_provider.dart';
+import 'providers/agent_provider.dart';
 import 'app_router.dart';
 
 void main() async {
@@ -21,6 +22,7 @@ class KrishibhaavApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+        ChangeNotifierProvider<AgentProvider>(create: (_) => AgentProvider()),
       ],
       child: MaterialApp.router(
         title: 'Krishibhaav',
