@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'utils/theme.dart';
+import 'core/colors.dart';
+import 'core/text_styles.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {
@@ -23,7 +24,6 @@ class KrishibhaavApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Krishibhaav',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
         home: const SplashScreen(),
       ),
     );
