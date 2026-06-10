@@ -111,4 +111,5 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 7 | Summary | Architecture | Scraper-trigger notification deferred by design (planned for Phase 9).
 [2026-06-10] | Phase 7 | Summary | Copy History | Copy evolved through 3 revisions before settling on the uniform format.
 [2026-06-10] | Phase 7 | Summary | UI & Async Fixes | Addressed two RenderFlex overflows (in farmer and agent home screens) using Expanded, and fixed three async-gap warnings (use_build_context_synchronously) via mounted checks and scope refactoring.
+[2026-06-10] | Post-Phase 7 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated (through Phase 7).
 ---

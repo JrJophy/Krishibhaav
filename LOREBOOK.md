@@ -1,7 +1,8 @@
+Derived document — regenerated from LOGBOOK.md and PROGRESS_TRACKER.md at each phase closure. Not a source of truth.
 # The Krishibhaav Lorebook (The Story So Far)
 
 **The Awakening (Phases 1-2)**
-Our journey began with a clear mission: to build *Krishibhaav*, an ambitious MCA academic project designed to bring real-time Rubber price intelligence to the farmers of Kerala. We laid down the scaffolding—setting up Flutter and Firebase—and established our dual-role hierarchy (Agents and Farmers). Constrained by the free Firebase Spark tier, we couldn't rely on expensive SMS providers. Instead, we engineered an ingenious simulated OTP authentication system, complete with a unique, deterministic temporary password system tailored for farmers. 
+Our journey began with a clear mission: to build *Krishibhaav*, an ambitious MCA academic project designed to bring real-time Rubber price intelligence to the farmers of Kerala. We laid down the scaffolding—setting up Flutter and Firebase—and established our dual-role hierarchy (Agents and Farmers). Constrained by the free Firebase Spark tier, we couldn't rely on expensive SMS providers. Instead, we engineered an ingenious simulated OTP authentication system, complete with a unique, deterministic temporary password system tailored for farmers.
 
 **The Dual Worlds (Phases 3-4)**
 With the gates open, we built the Agent Core. Agents gained a powerful, centralized dashboard to dictate Open Market, Company, and Global Agent prices, and began assembling their roster of farmers. Then, the Farmers awoke. We constructed their real-time dashboard, binding the flow of prices to strict market hours (Mon-Sat, 9AM-5PM). Along the way, we defeated our first major nemesis: a cryptic "invalid-credential" bug that haunted our farmer logins, ultimately tracing it back to orphaned Firebase Auth users and rogue whitespace. We recreated the accounts, migrated the data, and stabilized the realm.
@@ -9,12 +10,19 @@ With the gates open, we built the Agent Core. Agents gained a powerful, centrali
 **Sight and Control (Phases 5-6)**
 The data needed a voice. We forged the Charts & Statistics phase, wrestling with stubborn RenderFlex overflows and parsing anomalies until a beautiful 30-day `fl_chart` and responsive stats grid illuminated the screen. Immediately after, we granted Agents surgical precision in Farmer Management. Through a sleek new Farmer Detail Sheet, Agents could now isolate individual farmers in their roster, toggle custom prices, and watch the UI dynamically flip their status badges in real-time between "Global" and "Custom".
 
-**The Road Ahead (Phases 7-10)**
-As we stand victorious at the end of Phase 6, the skies are preparing to thunder. We are now embarking on **Phase 7: Push Notifications**. Because our Spark plan forbids server-side Cloud Functions, we must architect a cunning client-side FCM REST dispatch. The Agent's device itself will act as the master server, silently beaming push notifications directly to the farmers' devices the moment rubber prices shift. 
+**The Messenger's Trial (Phase 7)**
+To awaken devices with real-time updates, we embarked on Phase 7: Push Notifications. Denied the luxury of server-side Cloud Functions by our Firebase Spark tier, we architected a daring client-side Firebase Cloud Messaging (FCM) v1 REST dispatch. The Agent's device itself became the orchestrator.
 
-Following this triumph, we will:
-- Polish the user profiles and UI components to perfection (Phase 8).
-- Unleash a Python web scraper into the wild, hosted on Render.com, to autonomously fetch official Kottayam RSS4 updates (Phase 9).
-- Finally, forge the release-ready Android APK for deployment (Phase 10).
+This phase tested our resolve. We first executed a strict security ritual, aggressively ignoring our `assets/service_account.json` to prevent catastrophic credential leaks—acknowledging client-side credentials as a necessary academic compromise to be resolved in a future V2 server migration. We built the `fcm_dispatch_service.dart` to beam payloads straight to Google's API. 
+
+But the path was fraught. We battled stubborn browsers refusing to fetch FCM tokens, tracing the silent failures back to the treacherous realm of Incognito mode. We patched `use_build_context_synchronously` warnings across three different async gaps, enforcing strict `mounted` checks and scope refactoring. We eradicated two newly spawned RenderFlex overflows in the Agent and Farmer dashboards with strategic `Expanded` wrappers. Our notification copy evolved dynamically—undergoing three revisions before the master decree established our uniform standard: `"<X> Price Updated. Price: ₹<value>/kg"`.
+
+And then, the ultimate victory: the first live push notification successfully broke through to a farmer's browser.
+
+**The Road Ahead**
+Our epic approaches its final chapters:
+- **Phase 8:** We will polish the user profiles and UI components to perfection.
+- **Phase 9:** A Python web scraper will be unleashed into the wild, hosted on Render.com, to autonomously fetch official Kottayam RSS4 updates (with notification triggers deliberately deferred).
+- **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!
