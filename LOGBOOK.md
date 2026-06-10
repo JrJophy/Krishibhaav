@@ -55,4 +55,7 @@ Resume from the last incomplete phase. Do not redo completed phases.
 [2026-06-10] | Phase 4 | lib/screens/farmer/farmer_home_screen.dart | Created file | Real-time price display
 [2026-06-10] | Phase 4 | lib/services/farmer_service.dart | Fixed combine logic | Treat missing farmer doc as no custom price
 [2026-06-10] | Phase 4 | lib/providers/farmer_provider.dart | Fixed cache logic | Wrapped cache save in try-catch
+[2026-06-10] | Phase 4 | lib/main.dart | Bug fix | Added FirebaseOptions to initialization
+[2026-06-10] | Phase 4 | lib/screens/splash_screen.dart | Bug fix | Added missing navigation to auth route
+[2026-06-10] | Phase 4 | lib/screens/auth/login_register_screen.dart | Bug fix | Fixed multiple tickers crash
 ---

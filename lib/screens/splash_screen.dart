@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,11 +18,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _navigateToNext() async {
     await Future.delayed(const Duration(seconds: 2));
-    if (mounted) {
-      // Placeholder for actual navigation (e.g. to Login or Home)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Welcome to Krishibhaav!')),
-      );
+    if (!mounted) return;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      context.go('/auth');
+    } else {
+      // Existing session — let the router's auth guard resolve the role.
+      // Navigate to /auth; the redirect logic will forward logged-in
+      // users to /agent/home or /farmer/home based on their role.
+      context.go('/auth');
     }
   }
 

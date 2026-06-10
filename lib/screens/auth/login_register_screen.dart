@@ -13,7 +13,7 @@ class LoginRegisterScreen extends StatefulWidget {
   State<LoginRegisterScreen> createState() => _LoginRegisterScreenState();
 }
 
-class _LoginRegisterScreenState extends State<LoginRegisterScreen> with SingleTickerProviderStateMixin {
+class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
   // Sign In Controllers

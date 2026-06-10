@@ -16,10 +16,10 @@ dependencies:
   go_router: ^13.2.0
 
   # Firebase (Spark plan)
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.15.3
-  cloud_firestore: ^4.13.6
-  firebase_messaging: ^14.7.10
+  firebase_core: ^4.10.0
+  firebase_auth: ^6.5.2
+  cloud_firestore: ^6.5.0
+  firebase_messaging: ^16.3.0
 
   # UI / Utils
   google_fonts: ^6.1.0
