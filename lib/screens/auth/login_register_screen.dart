@@ -27,6 +27,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
   final _regMobileController = TextEditingController();
   final _regPasswordController = TextEditingController();
   final _regLocationController = TextEditingController();
+  bool _obscureRegPassword = true;
   String _selectedRole = 'farmer';
 
   // Animation for shake
@@ -193,8 +194,18 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
           const SizedBox(height: 16),
           TextField(
             controller: _regPasswordController,
-            obscureText: true,
-            decoration: const InputDecoration(labelText: 'Password (min 6 chars)'),
+            obscureText: _obscureRegPassword,
+            decoration: InputDecoration(
+              labelText: 'Password (min 6 chars)',
+              suffixIcon: IconButton(
+                icon: Icon(_obscureRegPassword ? Icons.visibility : Icons.visibility_off),
+                onPressed: () {
+                  setState(() {
+                    _obscureRegPassword = !_obscureRegPassword;
+                  });
+                },
+              ),
+            ),
           ),
           const SizedBox(height: 16),
           TextField(
