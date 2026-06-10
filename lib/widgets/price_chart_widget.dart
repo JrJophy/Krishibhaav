@@ -30,7 +30,7 @@ class PriceChartWidget extends StatelessWidget {
     final maxPrice = prices.reduce((a, b) => a > b ? a : b);
     final minPrice = prices.reduce((a, b) => a < b ? a : b);
     
-    final padding = (maxPrice - minPrice) * 0.05;
+    final padding = maxPrice == minPrice ? maxPrice * 0.05 : (maxPrice - minPrice) * 0.05;
     final maxY = maxPrice + padding;
     final minY = minPrice - padding;
 
@@ -49,8 +49,11 @@ class PriceChartWidget extends StatelessWidget {
                 sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 22,
+                  interval: 1,
                   getTitlesWidget: (value, meta) {
                     final index = value.toInt();
+                    if (index < 0 || index >= points.length) return const SizedBox.shrink();
+                    
                     if (index == 0 || index == points.length - 1 || index == points.length ~/ 2) {
                       return Text(
                         _formatDate(points[index].date),
