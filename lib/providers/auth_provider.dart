@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth_service.dart';
 import '../app_router.dart';
 
@@ -20,6 +21,27 @@ class AuthProvider extends ChangeNotifier {
     if (user != null) {
       _userId = user.uid;
     }
+  }
+
+  String _mapFirebaseError(dynamic e) {
+    if (e is FirebaseAuthException) {
+      switch (e.code) {
+        case 'email-already-in-use':
+          return 'This mobile number is already registered. Try signing in instead.';
+        case 'user-not-found':
+          return 'No account found with this mobile number.';
+        case 'wrong-password':
+        case 'invalid-credential':
+          return 'Incorrect mobile number or password.';
+        case 'weak-password':
+          return 'Password must be at least 6 characters.';
+        case 'network-request-failed':
+          return 'Network error. Check your connection.';
+        default:
+          return 'Something went wrong. Please try again.';
+      }
+    }
+    return 'Something went wrong. Please try again.';
   }
 
   Future<String?> register({
@@ -46,7 +68,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return otp;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = _mapFirebaseError(e);
       _isLoading = false;
       notifyListeners();
       return null;
@@ -79,7 +101,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return success;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = _mapFirebaseError(e);
       _isLoading = false;
       notifyListeners();
       return false;
@@ -98,7 +120,7 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = _mapFirebaseError(e);
       _isLoading = false;
       notifyListeners();
       return false;
