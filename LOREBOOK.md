@@ -20,12 +20,15 @@ But the path was fraught. We battled stubborn browsers refusing to fetch FCM tok
 And then, the ultimate victory: the first live push notification successfully broke through to a farmer's browser.
 
 **Identity and Armor (Phase 8)**
-With the notifications flowing, it was time to lock down the perimeter and polish the user experience. In Phase 8, we hardened our router's authentication guards against role-route mismatch vulnerabilities and mid-OTP escape hatch exploits. We implemented explicit cache resets and meticulously preserved our offline cache fallback mechanism to ensure Farmers could still view prices without a connection.
+With the notifications flowing, it was time to lock down the perimeter and polish the user experience. In Phase 8, we hardened our router's authentication guards against role-route mismatch vulnerabilities and mid-OTP escape hatch exploits. We meticulously preserved our offline cache fallback mechanism to ensure Farmers could still view prices without a connection. We even extracted the router's decision logic into a pure, testable function and fortified it with comprehensive unit tests.
 
-Simultaneously, we unified the identity management. We forged a dynamic, multi-role `ProfileSheet` accessible directly from the dashboards, giving Farmers and Agents the power to view and edit their profiles (with their mobile number securely locked as a read-only login identity). We rounded out the phase by introducing password visibility toggles and seamless in-app logout flows.
+Simultaneously, we unified the identity management. We forged a dynamic, multi-role `ProfileSheet` accessible directly from the dashboards, giving Farmers and Agents the power to view and edit their profiles. We also polished the interface, fixing a phantom password visibility eye-toggle on the Registration tab and gracing the dashboards with dynamic, time-of-day greetings ("Good Morning", "Good Afternoon").
+
+But Phase 8 had one final twist: the Records Saga. A silent editor-buffer conflict threatened to destroy our tracking history, overwriting `PROGRESS_TRACKER.md` with stale data. We caught the discrepancy, forced a complete disk-read verification, and established a new, unshakeable law: all tracking documents must be verified from the disk immediately after every write. The truth lives on the disk.
 
 **The Road Ahead**
 Our epic approaches its final chapters:
+- **Phase 8.5:** A brief intermission for final polish.
 - **Phase 9:** A Python web scraper will be unleashed into the wild, hosted on Render.com, to autonomously fetch official Kottayam RSS4 updates.
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 

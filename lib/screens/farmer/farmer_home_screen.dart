@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import '../../core/colors.dart';
 import '../../core/text_styles.dart';
 import '../../core/market_status.dart';
@@ -57,6 +56,13 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
     );
   }
 
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isMarketOpen = MarketStatus.isMarketOpen();
@@ -70,7 +76,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Krishibhaav', style: AppTextStyles.poppinsHeading.copyWith(fontSize: 20)),
-                Text('Hello, ${provider.farmerName.isNotEmpty ? provider.farmerName : 'Farmer'}', 
+                Text('${_getGreeting()}, ${provider.farmerName.isNotEmpty ? provider.farmerName : 'Farmer'}', 
                   style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
               ],
             );
@@ -80,9 +86,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
           IconButton(
             icon: const Icon(Icons.account_circle, size: 28),
             onPressed: () {
-              final uid = Provider.of<FarmerProvider>(context, listen: false).farmerName; // Just to get context, but actually we use authProvider
-              // wait, farmer provider doesn't expose uid. We can use FirebaseAuth.instance.currentUser?.uid
-              // or just widget.farmerId
+              // we can just use widget.farmerId
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,

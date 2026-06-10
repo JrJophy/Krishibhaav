@@ -27,26 +27,53 @@ void setCachedRole(String role) {
   _cachedRole = role;
 }
 
+String? decideRedirect({
+  required bool isAwaitingOtp,
+  required bool loggedIn,
+  String? cachedRole,
+  required String location,
+}) {
+  final isAuthRoute = location == '/auth' || location == '/otp';
+  final isSplash = location == '/';
+
+  if (isSplash) return null;
+
+  if (isAwaitingOtp) {
+    if (isAuthRoute) return null;
+    return '/otp';
+  }
+
+  if (!loggedIn) {
+    if (!isAuthRoute) return '/auth';
+    return null;
+  }
+
+  if (cachedRole == null) {
+    return '/auth';
+  }
+
+  if (location.startsWith('/agent') && cachedRole != 'agent') {
+    return '/farmer/home';
+  }
+  if (location.startsWith('/farmer') && cachedRole != 'farmer') {
+    return '/agent/home';
+  }
+
+  if (isAuthRoute) {
+    return cachedRole == 'agent' ? '/agent/home' : '/farmer/home';
+  }
+
+  return null;
+}
+
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   redirect: (context, state) async {
     final user = FirebaseAuth.instance.currentUser;
-    final isAuthRoute = state.matchedLocation == '/auth' || state.matchedLocation == '/otp';
-    final isSplash = state.matchedLocation == '/';
-
-    if (isSplash) return null;
-
-    if (isAwaitingOtp) {
-      if (state.matchedLocation == '/otp' || state.matchedLocation == '/auth') return null;
-      return '/otp';
-    }
-
-    if (user == null) {
-      if (!isAuthRoute) return '/auth';
-      return null;
-    }
-
-    if (_cachedRole == null) {
+    final location = state.matchedLocation;
+    
+    // Only fetch if we actually need the role (logged in, no role, not awaiting OTP, not splash)
+    if (user != null && _cachedRole == null && !isAwaitingOtp && location != '/') {
       try {
         // Note: Firestore's default get() falls back to local cache when offline, preserving offline mode.
         final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
@@ -55,33 +82,25 @@ final GoRouter appRouter = GoRouter(
         } else {
           await FirebaseAuth.instance.signOut();
           resetAuthCache();
-          return '/auth';
         }
       } catch (_) {
         await FirebaseAuth.instance.signOut();
         resetAuthCache();
-        return '/auth';
       }
     }
 
-    if (_cachedRole == null) {
+    if (user != null && _cachedRole == null && !isAwaitingOtp && location != '/') {
+      // Failsafe if role still null after fetch
       await FirebaseAuth.instance.signOut();
       resetAuthCache();
-      return '/auth';
     }
 
-    if (state.matchedLocation.startsWith('/agent') && _cachedRole != 'agent') {
-      return '/farmer/home';
-    }
-    if (state.matchedLocation.startsWith('/farmer') && _cachedRole != 'farmer') {
-      return '/agent/home';
-    }
-
-    if (isAuthRoute) {
-      return _cachedRole == 'agent' ? '/agent/home' : '/farmer/home';
-    }
-
-    return null;
+    return decideRedirect(
+      isAwaitingOtp: isAwaitingOtp,
+      loggedIn: user != null,
+      cachedRole: _cachedRole,
+      location: location,
+    );
   },
   routes: [
     GoRoute(path: '/', builder: (context, state) => const SplashScreen()),

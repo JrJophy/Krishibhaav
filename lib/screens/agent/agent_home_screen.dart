@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/colors.dart';
 import '../../core/text_styles.dart';
 import '../../providers/auth_provider.dart';
@@ -28,6 +28,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   Future<List<PricePoint>>? _priceHistoryFuture;
   final PriceHistoryService _priceHistoryService = PriceHistoryService();
+  String _agentName = 'Agent';
 
   @override
   void initState() {
@@ -41,6 +42,12 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final agentProvider = Provider.of<AgentProvider>(context, listen: false);
     if (authProvider.userId != null) {
+      FirebaseFirestore.instance.collection('users').doc(authProvider.userId!).get().then((doc) {
+        if (mounted && doc.exists) {
+          setState(() => _agentName = doc.data()?['name'] ?? 'Agent');
+        }
+      }).catchError((_) {});
+
       agentProvider.loadAgent(authProvider.userId!);
       NotificationService().init(context, authProvider.userId!);
     }
@@ -91,6 +98,13 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     );
   }
 
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +114,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Krishibhaav', style: AppTextStyles.poppinsHeading.copyWith(fontSize: 20)),
-            const Text('Agent Dashboard', style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
+            Text('${_getGreeting()}, $_agentName', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
           ],
         ),
         actions: [

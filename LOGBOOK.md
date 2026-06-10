@@ -118,4 +118,11 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 8 | lib/screens/farmer/farmer_home_screen.dart | Modification | Replaced placeholder route push with ProfileSheet bottom sheet invocation.
 [2026-06-10] | Phase 8 | lib/screens/auth/login_register_screen.dart | Modification | Added password visibility toggle to the Registration tab matching the existing Sign In pattern.
 [2026-06-10] | Post-Phase 8 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated (through Phase 8).
+[2026-06-10] | Phase 8 | lib/screens/auth/login_register_screen.dart | Bug fix | Implemented missing password visibility toggle on the Register tab.
+[2026-06-10] | Phase 8 | lib/screens/agent/agent_home_screen.dart | UX & Cleanup | Removed unused go_router import. Replaced static greeting with dynamic time-of-day greeting (Good Morning/Afternoon/Evening) and fetched Agent's name from Firestore for display.
+[2026-06-10] | Phase 8 | lib/screens/farmer/farmer_home_screen.dart | UX & Cleanup | Removed unused go_router import and dead uid variable. Replaced static "Hello" with dynamic time-of-day greeting.
+[2026-06-10] | Phase 8 | lib/app_router.dart | Refactor | Extracted redirect logic into a pure, testable function `decideRedirect`.
+[2026-06-10] | Phase 8 | test/router_redirect_test.dart | Creation | Created comprehensive unit tests for `decideRedirect` covering role mismatches, logged-out states, OTP states, and missing role fallbacks.
+[2026-06-10] | Phase 8 | Summary | Records Saga | Encountered an editor-buffer conflict during Phase 8 documentation updates. Established a strict new rule to re-read tracking files from disk immediately after every write to guarantee state consistency.
+[2026-06-10] | Post-Phase 8 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated (through Phase 8 live-test fixes).
 ---
