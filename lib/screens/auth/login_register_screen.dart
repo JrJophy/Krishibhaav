@@ -65,9 +65,9 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
       if (mounted) {
         final role = provider.userRole;
         if (role == 'agent') {
-          context.go('/agent_dashboard');
+          context.go('/agent/home');
         } else {
-          context.go('/farmer_dashboard');
+          context.go('/farmer/home');
         }
       }
     } else {

@@ -63,4 +63,5 @@ Resume from the last incomplete phase. Do not redo completed phases.
 [2026-06-10] | Phase 4 | lib/screens/auth/otp_screen.dart | Bug fix | Handled isAwaitingOtp on success
 [2026-06-10] | Phase 4 | lib/providers/auth_provider.dart | Bug fix | Reset router cache on signOut
 [2026-06-10] | Phase 4 | lib/providers/auth_provider.dart | UX fix | Mapped Firebase auth errors to user-friendly messages
+[2026-06-10] | Phase 4 | lib/screens/auth/login_register_screen.dart | Bug fix | Replaced invalid navigation routes
 ---
