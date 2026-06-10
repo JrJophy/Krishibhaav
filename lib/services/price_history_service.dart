@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../models/price_point.dart';
 
 class PriceStats {
@@ -26,6 +27,11 @@ class PriceHistoryService {
           .limit(days)
           .get();
 
+      debugPrint('[HISTORY] got ${snapshot.docs.length} docs');
+      for (final d in snapshot.docs) { 
+        debugPrint('[HISTORY] ${d.id} => ${d.data()}'); 
+      }
+
       if (snapshot.docs.isEmpty) {
         return [];
       }
@@ -35,6 +41,8 @@ class PriceHistoryService {
           .toList()
           .reversed
           .toList();
+          
+      debugPrint('[HISTORY] points: ${points.map((p) => "${p.date}:${p.price}").join(", ")}');
           
       return points;
     } catch (e) {

@@ -78,4 +78,7 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 5 | Multiple | Bug fix | Resolved analyzer warnings (unused imports, const constructors, missing colors)
 [2026-06-10] | Phase 5 | lib/models/price_point.dart | Bug fix | Robust string/field-name parsing for PricePoint to fix flat chart (0.0 values) and stats
 [2026-06-10] | Phase 5 | lib/widgets/price_chart_widget.dart | Bug fix | Enforced interval: 1 on X-axis and dynamic padding to fix repeating labels and scaling
+[2026-06-10] | Phase 5 | lib/widgets/stats_grid_widget.dart | Bug fix | Fixed RenderFlex overflow by adjusting childAspectRatio to 1.8 and using FittedBox
+[2026-06-10] | Phase 5 | lib/models/price_point.dart | Bug fix | Applied actual robust parsing fix (previous fix was reported but not properly applied)
+[2026-06-10] | Phase 5 | Diagnostics | Instrumentation | Added temporary debugPrints in price history service and chart widget to trace data flow
 ---

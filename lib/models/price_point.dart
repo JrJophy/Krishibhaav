@@ -5,17 +5,16 @@ class PricePoint {
   PricePoint({required this.date, required this.price});
 
   factory PricePoint.fromMap(Map<String, dynamic> map) {
-    dynamic p = map['price'] ?? map['openMarketPrice'] ?? map['marketPrice'] ?? map['value'] ?? 0;
-    double parsedPrice = 0.0;
-    if (p is num) {
-      parsedPrice = p.toDouble();
-    } else if (p is String) {
-      parsedPrice = double.tryParse(p) ?? 0.0;
+    final raw = map['rss4Price'] ?? map['price'];
+    double parsed = 0.0;
+    if (raw is num) {
+      parsed = raw.toDouble();
+    } else if (raw is String) {
+      parsed = double.tryParse(raw) ?? 0.0;
     }
-    
     return PricePoint(
-      date: map['date']?.toString() ?? '',
-      price: parsedPrice,
+      date: map['date'] ?? '',
+      price: parsed,
     );
   }
 }

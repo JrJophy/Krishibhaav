@@ -34,6 +34,8 @@ class PriceChartWidget extends StatelessWidget {
     final maxY = maxPrice + padding;
     final minY = minPrice - padding;
 
+    debugPrint('[CHART] n=${points.length} minY=$minY maxY=$maxY');
+
     return AspectRatio(
       aspectRatio: 1.5,
       child: Padding(

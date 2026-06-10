@@ -13,7 +13,7 @@ class StatsGridWidget extends StatelessWidget {
       crossAxisCount: 2,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: 2.5,
+      childAspectRatio: 1.8,
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
       children: [
@@ -44,11 +44,19 @@ class StatsGridWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+          ),
           const SizedBox(height: 4),
-          Text(
-            displayValue,
-            style: TextStyle(color: valueColor, fontWeight: FontWeight.bold, fontSize: 16),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              displayValue,
+              style: TextStyle(color: valueColor, fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ),
         ],
       ),
