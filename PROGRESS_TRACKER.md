@@ -1,7 +1,7 @@
 ---
 # Krishibhaav Progress Tracker
 
-Last Updated: 2026-06-09T14:45:00+05:30
+Last Updated: 2026-06-10T11:00:00+05:30
 
 ## Phase Status
 | Phase | Name | Status | Blocker |
@@ -23,10 +23,11 @@ NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 ## Current Phase
 Phase: Phase 4
 Started: 2026-06-10T07:35:00+05:30
-Last activity: Completed Phase 2 & 3 with authentication, agent core logic, and UI
+Last activity: Mid-Phase 4 live testing. Implementing farmer core logic and actively debugging farmer login issues (invalid-credential).
 
 ## Blockers & Issues Log
-[2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | OPEN
+[2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
+[2026-06-10] | Phase 4 | Farmer sign-in with temp password fails (invalid-credential) | - | OPEN
 
 ## Files Created So Far
 LOGBOOK.md (Phase 1)
@@ -38,4 +39,18 @@ lib/screens/splash_screen.dart (Phase 1)
 lib/models/.gitkeep (Phase 1)
 lib/services/.gitkeep (Phase 1)
 lib/providers/.gitkeep (Phase 1)
+lib/models/user_model.dart (Phase 2)
+lib/services/auth_service.dart (Phase 2)
+lib/providers/auth_provider.dart (Phase 2)
+lib/screens/auth/* (Phase 2)
+lib/models/agent_settings_model.dart (Phase 3)
+lib/services/agent_service.dart (Phase 3)
+lib/providers/agent_provider.dart (Phase 3)
+lib/widgets/* (Phase 3)
+lib/screens/agent/* (Phase 3)
+lib/services/cache_service.dart (Phase 4)
+lib/services/farmer_service.dart (Phase 4)
+lib/providers/farmer_provider.dart (Phase 4)
+lib/core/market_status.dart (Phase 4)
+lib/screens/farmer/farmer_home_screen.dart (Phase 4)
 ---

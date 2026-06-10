@@ -54,7 +54,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
 
   void _handleSignIn() async {
     final mobile = _signInMobileController.text.trim();
-    final password = _signInPasswordController.text;
+    final password = _signInPasswordController.text.trim();
 
     if (mobile.isEmpty || password.isEmpty) return;
 
@@ -78,7 +78,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
   void _handleRegister() async {
     final name = _regNameController.text.trim();
     final mobile = _regMobileController.text.trim();
-    final password = _regPasswordController.text;
+    final password = _regPasswordController.text.trim();
     final location = _regLocationController.text.trim();
 
     if (name.isEmpty || mobile.length != 10 || password.length < 6 || location.isEmpty) {

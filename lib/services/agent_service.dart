@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,6 +70,7 @@ class AgentService {
     final secondaryAuth = FirebaseAuth.instanceFor(app: app);
     
     try {
+      debugPrint('[ADD_FARMER] email=[$email] password=[$tempPassword]');
       final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
         email: email,
         password: tempPassword,

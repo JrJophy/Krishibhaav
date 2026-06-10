@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
@@ -62,6 +63,7 @@ class AuthService {
     required String password,
   }) async {
     final email = '$mobile@krishibhaav.app';
+    debugPrint('[SIGN_IN] email=[$email] password=[$password]');
     UserCredential credential = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
