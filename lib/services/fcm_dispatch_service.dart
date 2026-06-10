@@ -74,7 +74,7 @@ class FcmDispatchService {
         await sendNotification(
           token: token,
           title: 'Open Market Price Updated',
-          body: 'Open market price is now ₹${price.toStringAsFixed(2)}/kg',
+          body: 'Price: ₹${price.toStringAsFixed(2)}/kg',
         );
       }
     } catch (e) {
@@ -89,7 +89,7 @@ class FcmDispatchService {
         await sendNotification(
           token: token,
           title: 'Company Price Updated',
-          body: 'Company price is now ₹${price.toStringAsFixed(2)}/kg',
+          body: 'Price: ₹${price.toStringAsFixed(2)}/kg',
         );
       }
     } catch (e) {
@@ -124,7 +124,7 @@ class FcmDispatchService {
         await sendNotification(
           token: token,
           title: 'Agent Price Updated',
-          body: "Your agent's price is now ₹${price.toStringAsFixed(2)}/kg",
+          body: "Price: ₹${price.toStringAsFixed(2)}/kg",
         );
       }
     } catch (e) {
@@ -155,8 +155,8 @@ class FcmDispatchService {
       if (token != null && token.isNotEmpty) {
         await sendNotification(
           token: token,
-          title: 'Your Price Updated',
-          body: 'Your price is back to the agent price: ₹${globalPrice.toStringAsFixed(2)}/kg',
+          title: 'Price Updated',
+          body: 'Price: ₹${globalPrice.toStringAsFixed(2)}/kg',
         );
       }
     } catch (e) {

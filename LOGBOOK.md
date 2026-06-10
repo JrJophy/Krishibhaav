@@ -106,4 +106,9 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 7 | lib/screens/agent/agent_home_screen.dart | Bug fix | Wrapped label Text in _buildPriceRow with Expanded to fix RenderFlex overflow
 [2026-06-10] | Phase 7 | lib/screens/agent/farmer_detail_sheet.dart | Bug fix | Moved context-dependent globalPrice read before the await block to fix use_build_context_synchronously warning
 [2026-06-10] | Phase 7 | lib/services/fcm_dispatch_service.dart | Modification | Updated trigger 4 (custom price set) copy per user mandate
+[2026-06-10] | Phase 7 | lib/services/fcm_dispatch_service.dart | Modification | Standardized all notification copy to "<X> Price Updated. Price: ₹<value>/kg" format per final user mandate
+[2026-06-10] | Phase 7 | Summary | Security | .gitignore updated for assets/service_account.json. Client-side credential handling noted as academic compromise (to be replaced in V2).
+[2026-06-10] | Phase 7 | Summary | Architecture | Scraper-trigger notification deferred by design (planned for Phase 9).
+[2026-06-10] | Phase 7 | Summary | Copy History | Copy evolved through 3 revisions before settling on the uniform format.
+[2026-06-10] | Phase 7 | Summary | UI & Async Fixes | Addressed two RenderFlex overflows (in farmer and agent home screens) using Expanded, and fixed three async-gap warnings (use_build_context_synchronously) via mounted checks and scope refactoring.
 ---
