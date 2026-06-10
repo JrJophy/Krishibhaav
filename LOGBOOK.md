@@ -104,4 +104,6 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 7 | lib/providers/agent_provider.dart | Modification | Hooked new Open Market and Company price triggers into updatePrice
 [2026-06-10] | Phase 7 | lib/screens/agent/farmer_detail_sheet.dart | Modification | Passed price values to FCM dispatch calls
 [2026-06-10] | Phase 7 | lib/screens/agent/agent_home_screen.dart | Bug fix | Wrapped label Text in _buildPriceRow with Expanded to fix RenderFlex overflow
+[2026-06-10] | Phase 7 | lib/screens/agent/farmer_detail_sheet.dart | Bug fix | Moved context-dependent globalPrice read before the await block to fix use_build_context_synchronously warning
+[2026-06-10] | Phase 7 | lib/services/fcm_dispatch_service.dart | Modification | Updated trigger 4 (custom price set) copy per user mandate
 ---
