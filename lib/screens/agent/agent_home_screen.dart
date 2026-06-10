@@ -206,9 +206,16 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                     decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(12)),
                   ))
                 else if (farmers.isEmpty)
-                  const Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Center(child: Text("No farmers yet. Tap + Add Farmer to begin.", textAlign: TextAlign.center)),
+                  Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Center(
+                      child: Text(
+                        agentProvider.searchQuery.isNotEmpty 
+                            ? "No farmers match your search." 
+                            : "No farmers yet. Tap + Add Farmer to begin.", 
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   )
                 else
                   ...farmers.map((farmer) => FarmerListCard(

@@ -86,4 +86,6 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 6 | lib/screens/agent/farmer_detail_sheet.dart | Creation | Built detail sheet for farmer profile edits and custom price toggles
 [2026-06-10] | Phase 6 | lib/services/agent_service.dart | Modification | Added setCustomPrice, clearCustomPrice, and updateFarmerProfile methods
 [2026-06-10] | Phase 6 | lib/screens/agent/agent_home_screen.dart | Modification | Wired FarmerDetailSheet to FarmerListCard tap, customized Remove Farmer confirmation dialog
+[2026-06-10] | Phase 6 | lib/screens/agent/agent_home_screen.dart | Bug fix | Updated empty-state message to handle active search queries correctly
+[2026-06-10] | Phase 6 | Summary | Phase Closure | Detail sheet, custom pricing, search, live badges, and remove logic all verified end-to-end.
 ---
