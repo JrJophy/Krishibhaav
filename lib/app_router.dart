@@ -36,31 +36,51 @@ final GoRouter appRouter = GoRouter(
 
     if (isSplash) return null;
 
-    if (isAwaitingOtp && (state.matchedLocation == '/otp' || state.matchedLocation == '/auth')) return null;
+    if (isAwaitingOtp) {
+      if (state.matchedLocation == '/otp' || state.matchedLocation == '/auth') return null;
+      return '/otp';
+    }
 
     if (user == null) {
       if (!isAuthRoute) return '/auth';
-    } else {
-      if (isAuthRoute) {
-        if (_cachedRole == null) {
-          try {
-            final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-            if (doc.exists) {
-              _cachedRole = doc.get('role');
-            } else if (!isAwaitingOtp) {
-              await FirebaseAuth.instance.signOut();
-              return '/auth';
-            }
-          } catch (_) {}
-        }
-        
-        if (_cachedRole == 'agent') {
-          return '/agent/home';
+      return null;
+    }
+
+    if (_cachedRole == null) {
+      try {
+        // Note: Firestore's default get() falls back to local cache when offline, preserving offline mode.
+        final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+        if (doc.exists) {
+          _cachedRole = doc.get('role');
         } else {
-          return '/farmer/home';
+          await FirebaseAuth.instance.signOut();
+          resetAuthCache();
+          return '/auth';
         }
+      } catch (_) {
+        await FirebaseAuth.instance.signOut();
+        resetAuthCache();
+        return '/auth';
       }
     }
+
+    if (_cachedRole == null) {
+      await FirebaseAuth.instance.signOut();
+      resetAuthCache();
+      return '/auth';
+    }
+
+    if (state.matchedLocation.startsWith('/agent') && _cachedRole != 'agent') {
+      return '/farmer/home';
+    }
+    if (state.matchedLocation.startsWith('/farmer') && _cachedRole != 'farmer') {
+      return '/agent/home';
+    }
+
+    if (isAuthRoute) {
+      return _cachedRole == 'agent' ? '/agent/home' : '/farmer/home';
+    }
+
     return null;
   },
   routes: [

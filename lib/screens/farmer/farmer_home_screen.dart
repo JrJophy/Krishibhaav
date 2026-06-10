@@ -10,6 +10,7 @@ import '../../widgets/stats_grid_widget.dart';
 import '../../services/price_history_service.dart';
 import '../../models/price_point.dart';
 import '../../services/notification_service.dart';
+import '../../widgets/profile_sheet.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   final String farmerId;
@@ -78,7 +79,17 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle, size: 28),
-            onPressed: () => context.push('/farmer/profile'),
+            onPressed: () {
+              final uid = Provider.of<FarmerProvider>(context, listen: false).farmerName; // Just to get context, but actually we use authProvider
+              // wait, farmer provider doesn't expose uid. We can use FirebaseAuth.instance.currentUser?.uid
+              // or just widget.farmerId
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => ProfileSheet(uid: widget.farmerId),
+              );
+            },
           )
         ],
       ),

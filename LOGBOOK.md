@@ -112,4 +112,9 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 7 | Summary | Copy History | Copy evolved through 3 revisions before settling on the uniform format.
 [2026-06-10] | Phase 7 | Summary | UI & Async Fixes | Addressed two RenderFlex overflows (in farmer and agent home screens) using Expanded, and fixed three async-gap warnings (use_build_context_synchronously) via mounted checks and scope refactoring.
 [2026-06-10] | Post-Phase 7 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated (through Phase 7).
+[2026-06-10] | Phase 8 | lib/app_router.dart | Bug fix / Security | Hardened go_router redirect logic. Closed role-route mismatch vulnerability, fixed mid-OTP escape hatch exploit, and gracefully handled offline fail-closed paths with explicit resetAuthCache().
+[2026-06-10] | Phase 8 | lib/widgets/profile_sheet.dart | Creation | Created unified ProfileSheet supporting dynamic display for Farmers and Agents with inline Firestore save capability and logout button integration. Mobile number explicitly marked read-only to preserve identity mapping.
+[2026-06-10] | Phase 8 | lib/screens/agent/agent_home_screen.dart | Modification | Replaced placeholder route push with ProfileSheet bottom sheet invocation.
+[2026-06-10] | Phase 8 | lib/screens/farmer/farmer_home_screen.dart | Modification | Replaced placeholder route push with ProfileSheet bottom sheet invocation.
+[2026-06-10] | Phase 8 | lib/screens/auth/login_register_screen.dart | Modification | Added password visibility toggle to the Registration tab matching the existing Sign In pattern.
 ---

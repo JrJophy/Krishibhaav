@@ -15,6 +15,7 @@ import '../../widgets/stats_grid_widget.dart';
 import '../../services/price_history_service.dart';
 import '../../models/price_point.dart';
 import '../../services/notification_service.dart';
+import '../../widgets/profile_sheet.dart';
 
 class AgentHomeScreen extends StatefulWidget {
   const AgentHomeScreen({super.key});
@@ -105,7 +106,17 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.account_circle, size: 28),
-            onPressed: () => context.push('/agent/profile'),
+            onPressed: () {
+              final authProvider = Provider.of<AuthProvider>(context, listen: false);
+              if (authProvider.userId != null) {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) => ProfileSheet(uid: authProvider.userId!),
+                );
+              }
+            },
           )
         ],
       ),
