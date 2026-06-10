@@ -39,4 +39,13 @@ Resume from the last incomplete phase. Do not redo completed phases.
 [2026-06-09] | Phase 1 | lib/utils/theme.dart | Created file | App material theme
 [2026-06-09] | Phase 1 | lib/screens/splash_screen.dart | Created file | Initial splash screen UI
 [2026-06-09] | Phase 1 | lib/*/.* | Created .gitkeep | Scaffolded models, services, providers folders
+[2026-06-10] | Phase 2 | lib/models/user_model.dart | Created file | User schema
+[2026-06-10] | Phase 2 | lib/services/auth_service.dart | Created file | Firebase Auth and User creation
+[2026-06-10] | Phase 2 | lib/providers/auth_provider.dart | Created file | App auth state management
+[2026-06-10] | Phase 2 | lib/screens/auth/* | Created files | Login and OTP screens
+[2026-06-10] | Phase 3 | lib/models/* | Created files | AgentSettingsModel and FarmerPriceModel
+[2026-06-10] | Phase 3 | lib/services/agent_service.dart | Created file | Agent Firestore interactions
+[2026-06-10] | Phase 3 | lib/providers/agent_provider.dart | Created file | App agent state management
+[2026-06-10] | Phase 3 | lib/widgets/* | Created files | PriceEditDialog and FarmerListCard
+[2026-06-10] | Phase 3 | lib/screens/agent/* | Created files | AgentHomeScreen and AddFarmerSheet
 ---

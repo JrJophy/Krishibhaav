@@ -60,7 +60,13 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-    GoRoute(path: '/farmer/home', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 4')),
+    GoRoute(
+      path: '/farmer/home', 
+      builder: (context, state) {
+        final user = FirebaseAuth.instance.currentUser;
+        return FarmerHomeScreen(farmerId: user?.uid ?? '');
+      },
+    ),
     GoRoute(path: '/agent/home', builder: (context, state) => const AgentHomeScreen()),
     GoRoute(path: '/agent/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
     GoRoute(path: '/farmer/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
