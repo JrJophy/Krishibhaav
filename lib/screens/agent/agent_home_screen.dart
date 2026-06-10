@@ -9,6 +9,10 @@ import '../../providers/agent_provider.dart';
 import '../../widgets/price_edit_dialog.dart';
 import '../../widgets/farmer_list_card.dart';
 import 'add_farmer_sheet.dart';
+import '../../widgets/price_chart_widget.dart';
+import '../../widgets/stats_grid_widget.dart';
+import '../../services/price_history_service.dart';
+import '../../models/price_point.dart';
 
 class AgentHomeScreen extends StatefulWidget {
   const AgentHomeScreen({super.key});
@@ -19,6 +23,8 @@ class AgentHomeScreen extends StatefulWidget {
 
 class _AgentHomeScreenState extends State<AgentHomeScreen> {
   final TextEditingController _searchController = TextEditingController();
+  Future<List<PricePoint>>? _priceHistoryFuture;
+  final PriceHistoryService _priceHistoryService = PriceHistoryService();
 
   @override
   void initState() {
@@ -34,6 +40,9 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     if (authProvider.userId != null) {
       agentProvider.loadAgent(authProvider.userId!);
     }
+    setState(() {
+      _priceHistoryFuture = _priceHistoryService.fetchPriceHistory();
+    });
   }
 
   @override
@@ -226,6 +235,39 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                       );
                     },
                   )),
+                const SizedBox(height: 24),
+                // Expansion tile for the chart
+                ExpansionTile(
+                  title: const Text('30-Day Market Trend', style: TextStyle(fontWeight: FontWeight.bold)),
+                  children: [
+                    FutureBuilder<List<PricePoint>>(
+                      future: _priceHistoryFuture,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
+                          return const Padding(
+                            padding: EdgeInsets.all(32.0),
+                            child: Center(child: CircularProgressIndicator()),
+                          );
+                        }
+
+                        final points = snapshot.data!;
+                        final stats = _priceHistoryService.computeStats(points);
+                        
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PriceChartWidget(points: points),
+                              const SizedBox(height: 16),
+                              StatsGridWidget(stats: stats),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ],
             );
           },

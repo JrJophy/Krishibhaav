@@ -5,6 +5,10 @@ import '../../core/colors.dart';
 import '../../core/text_styles.dart';
 import '../../core/market_status.dart';
 import '../../providers/farmer_provider.dart';
+import '../../widgets/price_chart_widget.dart';
+import '../../widgets/stats_grid_widget.dart';
+import '../../services/price_history_service.dart';
+import '../../models/price_point.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   final String farmerId;
@@ -15,6 +19,9 @@ class FarmerHomeScreen extends StatefulWidget {
 }
 
 class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
+  Future<List<PricePoint>>? _priceHistoryFuture;
+  final PriceHistoryService _priceHistoryService = PriceHistoryService();
+
   @override
   void initState() {
     super.initState();
@@ -26,6 +33,9 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
   Future<void> _loadData() async {
     final provider = Provider.of<FarmerProvider>(context, listen: false);
     await provider.loadFarmer(widget.farmerId);
+    setState(() {
+      _priceHistoryFuture = _priceHistoryService.fetchPriceHistory();
+    });
   }
 
   Widget _buildLoadingSkeletons() {
@@ -186,20 +196,48 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                 ],
                 const SizedBox(height: 32),
 
-                // Price Trend Placeholder
-                const Text('Price Trend', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                // Price Trend section
+                const Text('30-Day Market Trend', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 16),
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.grey.shade300),
-                  ),
-                  child: const Center(
-                    child: Text('Chart coming in Phase 5', style: TextStyle(color: Colors.grey)),
-                  ),
+                FutureBuilder<List<PricePoint>>(
+                  future: _priceHistoryFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
+                      return Column(
+                        children: [
+                          Container(
+                            height: 200,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            height: 120,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade300,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    final points = snapshot.data!;
+                    final stats = _priceHistoryService.computeStats(points);
+                    
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        PriceChartWidget(points: points),
+                        const SizedBox(height: 16),
+                        StatsGridWidget(stats: stats),
+                      ],
+                    );
+                  },
                 ),
               ],
             );

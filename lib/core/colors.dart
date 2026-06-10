@@ -12,4 +12,11 @@ class AppColors {
   static const Color agentPrice = Color(0xFF1976D2);
   static const Color companyPrice = Color(0xFF388E3C);
   static const Color marketPrice = Color(0xFFFBC02D);
+  static const Color primaryLight = Color(0xFF4CAF50);
+  static const Color accent = Color(0xFFFFB300);
+  static const Color danger = Color(0xFFD32F2F);
+  static const Color cardBackground = Color(0xFFFFFFFF);
+  static const Color textOnPrimary = Color(0xFFFFFFFF);
+  static const Color priceGreen = Color(0xFF4CAF50);
+  static const Color priceRed = Color(0xFFF44336);
 }

@@ -11,6 +11,7 @@
         "firebase_auth",
         "firebase_core",
         "firebase_messaging",
+        "fl_chart",
         "flutter",
         "flutter_spinkit",
         "go_router",
@@ -753,6 +754,22 @@
         "collection",
         "meta",
         "pub_semver"
+      ]
+    },
+    {
+      "name": "fl_chart",
+      "version": "0.69.2",
+      "dependencies": [
+        "equatable",
+        "flutter"
+      ]
+    },
+    {
+      "name": "equatable",
+      "version": "2.0.8",
+      "dependencies": [
+        "collection",
+        "meta"
       ]
     }
   ],

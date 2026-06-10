@@ -14,6 +14,9 @@ If Antigravity crashes or connection is lost, read this file first.
 Then read PROGRESS_TRACKER.md.
 Resume from the last incomplete phase. Do not redo completed phases.
 
+## VERSION_ROADMAP
+V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-message paste-and-parse feature. New ideas go to V2+, never into V1.
+
 ## Pre-Coding Decisions Log
 [2026-06-09] Project scoped as MCA academic project
 [2026-06-09] App name decided: Krishibhaav
@@ -65,4 +68,12 @@ Resume from the last incomplete phase. Do not redo completed phases.
 [2026-06-10] | Phase 4 | lib/providers/auth_provider.dart | UX fix | Mapped Firebase auth errors to user-friendly messages
 [2026-06-10] | Phase 4 | lib/screens/auth/login_register_screen.dart | Bug fix | Replaced invalid navigation routes
 [2026-06-10] | Phase 4 | Diagnostics | Bug hunt | Added debugPrints for invalid-credential error, applied .trim() to inputs
+[2026-06-10] | Phase 5 | pubspec.yaml | Dependency | Added fl_chart dependency
+[2026-06-10] | Phase 5 | lib/models/price_point.dart | Created file | PricePoint data model
+[2026-06-10] | Phase 5 | lib/services/price_history_service.dart | Created file | Firestore history fetcher and stats computer
+[2026-06-10] | Phase 5 | lib/widgets/price_chart_widget.dart | Created file | fl_chart implementation
+[2026-06-10] | Phase 5 | lib/widgets/stats_grid_widget.dart | Created file | 2x2 grid for 7-day and 30-day stats
+[2026-06-10] | Phase 5 | lib/screens/farmer/farmer_home_screen.dart | Modification | Wired chart and stats grid into farmer UI
+[2026-06-10] | Phase 5 | lib/screens/agent/agent_home_screen.dart | Modification | Added collapsed chart in agent UI
+[2026-06-10] | Phase 5 | Multiple | Bug fix | Resolved analyzer warnings (unused imports, const constructors, missing colors)
 ---
