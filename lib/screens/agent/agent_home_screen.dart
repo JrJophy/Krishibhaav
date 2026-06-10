@@ -9,6 +9,7 @@ import '../../providers/agent_provider.dart';
 import '../../widgets/price_edit_dialog.dart';
 import '../../widgets/farmer_list_card.dart';
 import 'add_farmer_sheet.dart';
+import 'farmer_detail_sheet.dart';
 import '../../widgets/price_chart_widget.dart';
 import '../../widgets/stats_grid_widget.dart';
 import '../../services/price_history_service.dart';
@@ -213,22 +214,27 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   ...farmers.map((farmer) => FarmerListCard(
                     farmer: farmer,
                     onTap: () {
-                      // Navigate to farmer details if needed later
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => FarmerDetailSheet(farmer: farmer),
+                      );
                     },
                     onRemove: () {
                       showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          title: const Text('Remove Farmer?'),
-                          content: Text('Are you sure you want to remove ${farmer.name}?'),
+                          title: Text('Remove ${farmer.name}?'),
+                          content: const Text('They will no longer see your prices.'),
                           actions: [
-                            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+                            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel', style: TextStyle(color: Colors.grey))),
                             TextButton(
                               onPressed: () {
                                 agentProvider.removeFarmer(farmer.uid);
                                 Navigator.pop(ctx);
                               },
-                              child: const Text('Remove', style: TextStyle(color: Colors.red)),
+                              child: const Text('Remove', style: TextStyle(color: AppColors.danger)),
                             ),
                           ],
                         ),

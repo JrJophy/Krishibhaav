@@ -80,5 +80,10 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 5 | lib/widgets/price_chart_widget.dart | Bug fix | Enforced interval: 1 on X-axis and dynamic padding to fix repeating labels and scaling
 [2026-06-10] | Phase 5 | lib/widgets/stats_grid_widget.dart | Bug fix | Fixed RenderFlex overflow by adjusting childAspectRatio to 1.8 and using FittedBox
 [2026-06-10] | Phase 5 | lib/models/price_point.dart | Bug fix | Applied actual robust parsing fix (previous fix was reported but not properly applied)
-[2026-06-10] | Phase 5 | Diagnostics | Instrumentation | Added temporary debugPrints in price history service and chart widget to trace data flow
+[2026-06-10] | Phase 5 | Diagnostics | Instrumentation | Removed temporary debugPrints from price_history_service.dart and price_chart_widget.dart
+[2026-06-10] | Phase 5 | lib/widgets/stats_grid_widget.dart | Bug fix | Wrapped grid Column in FittedBox to elegantly prevent RenderFlex overflows at any size
+[2026-06-10] | Phase 5 | Summary | Phase Closure | Phase 5 debugging root causes were data-layer (Firestore field-name whitespace) and session hygiene — core service/widget code correct after fromMap field fix.
+[2026-06-10] | Phase 6 | lib/screens/agent/farmer_detail_sheet.dart | Creation | Built detail sheet for farmer profile edits and custom price toggles
+[2026-06-10] | Phase 6 | lib/services/agent_service.dart | Modification | Added setCustomPrice, clearCustomPrice, and updateFarmerProfile methods
+[2026-06-10] | Phase 6 | lib/screens/agent/agent_home_screen.dart | Modification | Wired FarmerDetailSheet to FarmerListCard tap, customized Remove Farmer confirmation dialog
 ---

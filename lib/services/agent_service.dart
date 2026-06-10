@@ -102,6 +102,30 @@ class AgentService {
     }
   }
 
+  Future<void> updateFarmerProfile(String farmerId, String name, String location) async {
+    await _firestore.collection('users').doc(farmerId).update({
+      'name': name,
+      'location': location,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> setCustomPrice(String farmerId, double price) async {
+    await _firestore.collection('farmer_prices').doc(farmerId).update({
+      'hasCustomPrice': true,
+      'customPrice': price,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> clearCustomPrice(String farmerId) async {
+    await _firestore.collection('farmer_prices').doc(farmerId).update({
+      'hasCustomPrice': false,
+      'customPrice': null,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   Future<void> removeFarmer(String farmerId) async {
     await _firestore.collection('farmer_prices').doc(farmerId).delete();
     await _firestore.collection('users').doc(farmerId).delete();
