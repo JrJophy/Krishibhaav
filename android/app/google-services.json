@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "899657388780",
+    "project_id": "krishibhaav",
+    "storage_bucket": "krishibhaav.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899657388780:android:b150c7f30d7ff70b8a0bc9",
+        "android_client_info": {
+          "package_name": "com.example.krishibhaav"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRW6uSRzopFU-YofST6QH2limC1EUq-Gg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
