@@ -24,21 +24,29 @@ class FarmerService {
         double effectivePrice = 0.0;
         bool isCustom = false;
 
-        if (farmerDoc.exists && agentDoc.exists) {
-          final farmerData = farmerDoc.data() as Map<String, dynamic>?;
+        if (agentDoc.exists) {
           final agentData = agentDoc.data() as Map<String, dynamic>?;
+          final globalAgentPrice = agentData?['globalAgentPrice'] ?? 0.0;
 
-          if (farmerData != null && agentData != null) {
-            isCustom = farmerData['hasCustomPrice'] ?? false;
-            final customPrice = farmerData['customPrice'];
-            final globalAgentPrice = agentData['globalAgentPrice'] ?? 0.0;
+          if (farmerDoc.exists) {
+            final farmerData = farmerDoc.data() as Map<String, dynamic>?;
+            final hasCustomPrice = farmerData?['hasCustomPrice'] == true;
+            final customPrice = farmerData?['customPrice'];
 
-            if (isCustom && customPrice != null) {
+            if (hasCustomPrice && customPrice != null) {
               effectivePrice = (customPrice as num).toDouble();
+              isCustom = true;
             } else {
               effectivePrice = (globalAgentPrice as num).toDouble();
+              isCustom = false;
             }
+          } else {
+            effectivePrice = (globalAgentPrice as num).toDouble();
+            isCustom = false;
           }
+        } else {
+          effectivePrice = 0.0;
+          isCustom = false;
         }
 
         return EffectivePriceResult(effectivePrice, isCustom);

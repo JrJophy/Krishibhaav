@@ -97,12 +97,16 @@ class FarmerProvider extends ChangeNotifier {
     // Only save if not offline
     if (_isOffline) return;
     
-    await _cacheService.saveLastKnownPrices(
-      effectivePrice: _effectivePrice,
-      companyPrice: _companyPrice,
-      openMarketPrice: _openMarketPrice,
-      timestamp: DateTime.now(),
-    );
+    try {
+      await _cacheService.saveLastKnownPrices(
+        effectivePrice: _effectivePrice,
+        companyPrice: _companyPrice,
+        openMarketPrice: _openMarketPrice,
+        timestamp: DateTime.now(),
+      );
+    } catch (e) {
+      debugPrint('Failed to save to cache: $e');
+    }
   }
 
   @override

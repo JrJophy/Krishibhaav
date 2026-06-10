@@ -53,4 +53,6 @@ Resume from the last incomplete phase. Do not redo completed phases.
 [2026-06-10] | Phase 4 | lib/providers/farmer_provider.dart | Created file | Farmer state management
 [2026-06-10] | Phase 4 | lib/core/market_status.dart | Created file | Time-based open/close logic
 [2026-06-10] | Phase 4 | lib/screens/farmer/farmer_home_screen.dart | Created file | Real-time price display
+[2026-06-10] | Phase 4 | lib/services/farmer_service.dart | Fixed combine logic | Treat missing farmer doc as no custom price
+[2026-06-10] | Phase 4 | lib/providers/farmer_provider.dart | Fixed cache logic | Wrapped cache save in try-catch
 ---
