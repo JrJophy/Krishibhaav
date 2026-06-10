@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'core/colors.dart';
 import 'core/text_styles.dart';
-import 'screens/splash_screen.dart';
+import 'providers/auth_provider.dart';
+import 'app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Firebase initialization will go here in Phase 2
+  await Firebase.initializeApp();
   
   runApp(const KrishibhaavApp());
 }
@@ -16,15 +18,14 @@ class KrishibhaavApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Basic Provider scaffolding, to be expanded
     return MultiProvider(
       providers: [
-        Provider<String>(create: (_) => 'Placeholder Provider'),
+        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Krishibhaav',
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
+        routerConfig: appRouter,
       ),
     );
   }

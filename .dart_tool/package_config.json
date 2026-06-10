@@ -176,6 +176,12 @@
       "languageVersion": "3.10"
     },
     {
+      "name": "go_router",
+      "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/go_router-13.2.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "google_fonts",
       "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/google_fonts-6.3.3",
       "packageUri": "lib/",
