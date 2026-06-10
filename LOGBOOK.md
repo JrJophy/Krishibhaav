@@ -117,4 +117,5 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 8 | lib/screens/agent/agent_home_screen.dart | Modification | Replaced placeholder route push with ProfileSheet bottom sheet invocation.
 [2026-06-10] | Phase 8 | lib/screens/farmer/farmer_home_screen.dart | Modification | Replaced placeholder route push with ProfileSheet bottom sheet invocation.
 [2026-06-10] | Phase 8 | lib/screens/auth/login_register_screen.dart | Modification | Added password visibility toggle to the Registration tab matching the existing Sign In pattern.
+[2026-06-10] | Post-Phase 8 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated (through Phase 8).
 ---

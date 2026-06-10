@@ -19,10 +19,14 @@ But the path was fraught. We battled stubborn browsers refusing to fetch FCM tok
 
 And then, the ultimate victory: the first live push notification successfully broke through to a farmer's browser.
 
+**Identity and Armor (Phase 8)**
+With the notifications flowing, it was time to lock down the perimeter and polish the user experience. In Phase 8, we hardened our router's authentication guards against role-route mismatch vulnerabilities and mid-OTP escape hatch exploits. We implemented explicit cache resets and meticulously preserved our offline cache fallback mechanism to ensure Farmers could still view prices without a connection.
+
+Simultaneously, we unified the identity management. We forged a dynamic, multi-role `ProfileSheet` accessible directly from the dashboards, giving Farmers and Agents the power to view and edit their profiles (with their mobile number securely locked as a read-only login identity). We rounded out the phase by introducing password visibility toggles and seamless in-app logout flows.
+
 **The Road Ahead**
 Our epic approaches its final chapters:
-- **Phase 8:** We will polish the user profiles and UI components to perfection.
-- **Phase 9:** A Python web scraper will be unleashed into the wild, hosted on Render.com, to autonomously fetch official Kottayam RSS4 updates (with notification triggers deliberately deferred).
+- **Phase 9:** A Python web scraper will be unleashed into the wild, hosted on Render.com, to autonomously fetch official Kottayam RSS4 updates.
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!

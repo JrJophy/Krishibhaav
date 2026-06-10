@@ -1,7 +1,7 @@
 ---
 # Krishibhaav Progress Tracker
 
-Last Updated: 2026-06-10T20:00:54+05:30
+Last Updated: 2026-06-10T22:59:10+05:30
 
 ## Phase Status
 | Phase | Name | Status | Blocker |
@@ -13,7 +13,7 @@ Last Updated: 2026-06-10T20:00:54+05:30
 | 5 | Charts & Statistics | COMPLETED | - |
 | 6 | Agent Farmer Management | COMPLETED | - |
 | 7 | Push Notifications | COMPLETED | - |
-| 8 | Profile Panels & Polish | COMPLETED | - |
+| 8 | Profile Panels & Polish | IN PROGRESS | code complete, pending live test |
 | 9 | Python Scraper | NOT STARTED | - |
 | 10 | Build & Deploy | NOT STARTED | - |
 
@@ -23,7 +23,7 @@ NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 ## Current Phase
 Phase: Phase 8
 Started: 2026-06-10T17:15:04+05:30
-Last activity: Phase 8 COMPLETED (2026-06-10T22:53:00+05:30).
+Last activity: Phase 8 code complete pending live test.
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
@@ -58,4 +58,9 @@ lib/services/price_history_service.dart (Phase 5)
 lib/widgets/price_chart_widget.dart (Phase 5)
 lib/widgets/stats_grid_widget.dart (Phase 5)
 lib/screens/agent/farmer_detail_sheet.dart (Phase 6)
+LOREBOOK.md (Pre-Phase 7)
+web/firebase-messaging-sw.js (Phase 7)
+lib/services/notification_service.dart (Phase 7)
+lib/services/fcm_dispatch_service.dart (Phase 7)
+lib/widgets/profile_sheet.dart (Phase 8)
 ---
