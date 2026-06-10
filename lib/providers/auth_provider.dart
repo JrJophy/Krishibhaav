@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
+import '../app_router.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -112,6 +113,8 @@ class AuthProvider extends ChangeNotifier {
     _userRole = null;
     _userId = null;
     _errorMessage = null;
+    
+    resetAuthCache();
     
     _isLoading = false;
     notifyListeners();

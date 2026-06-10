@@ -58,4 +58,8 @@ Resume from the last incomplete phase. Do not redo completed phases.
 [2026-06-10] | Phase 4 | lib/main.dart | Bug fix | Added FirebaseOptions to initialization
 [2026-06-10] | Phase 4 | lib/screens/splash_screen.dart | Bug fix | Added missing navigation to auth route
 [2026-06-10] | Phase 4 | lib/screens/auth/login_register_screen.dart | Bug fix | Fixed multiple tickers crash
+[2026-06-10] | Phase 4 | lib/app_router.dart | Bug fix | Added pending-verification escape hatch and caching methods
+[2026-06-10] | Phase 4 | lib/screens/auth/login_register_screen.dart | Bug fix | Set isAwaitingOtp before register
+[2026-06-10] | Phase 4 | lib/screens/auth/otp_screen.dart | Bug fix | Handled isAwaitingOtp on success
+[2026-06-10] | Phase 4 | lib/providers/auth_provider.dart | Bug fix | Reset router cache on signOut
 ---

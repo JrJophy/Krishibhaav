@@ -5,6 +5,7 @@ import 'dart:math';
 import '../../core/colors.dart';
 import '../../core/text_styles.dart';
 import '../../providers/auth_provider.dart';
+import '../../app_router.dart';
 
 class LoginRegisterScreen extends StatefulWidget {
   const LoginRegisterScreen({super.key});
@@ -86,6 +87,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
     }
 
     final provider = Provider.of<AuthProvider>(context, listen: false);
+    isAwaitingOtp = true;
     final otp = await provider.register(
       name: name,
       mobile: mobile,

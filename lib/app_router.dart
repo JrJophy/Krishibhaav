@@ -16,6 +16,16 @@ class DummyScreen extends StatelessWidget {
 }
 
 String? _cachedRole;
+bool isAwaitingOtp = false;
+
+void resetAuthCache() {
+  _cachedRole = null;
+  isAwaitingOtp = false;
+}
+
+void setCachedRole(String role) {
+  _cachedRole = role;
+}
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -26,6 +36,8 @@ final GoRouter appRouter = GoRouter(
 
     if (isSplash) return null;
 
+    if (isAwaitingOtp && (state.matchedLocation == '/otp' || state.matchedLocation == '/auth')) return null;
+
     if (user == null) {
       if (!isAuthRoute) return '/auth';
     } else {
@@ -35,6 +47,9 @@ final GoRouter appRouter = GoRouter(
             final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
             if (doc.exists) {
               _cachedRole = doc.get('role');
+            } else if (!isAwaitingOtp) {
+              await FirebaseAuth.instance.signOut();
+              return '/auth';
             }
           } catch (_) {}
         }

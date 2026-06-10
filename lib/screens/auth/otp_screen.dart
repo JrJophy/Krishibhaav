@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/colors.dart';
 import '../../providers/auth_provider.dart';
+import '../../app_router.dart';
 
 class OtpScreen extends StatefulWidget {
   final String otpGenerated;
@@ -55,10 +56,12 @@ class _OtpScreenState extends State<OtpScreen> {
     );
 
     if (success && mounted) {
+      isAwaitingOtp = false;
+      setCachedRole(widget.userData['role']);
       if (widget.userData['role'] == 'agent') {
-        context.go('/agent_dashboard');
+        context.go('/agent/home');
       } else {
-        context.go('/farmer_dashboard');
+        context.go('/farmer/home');
       }
     }
   }
