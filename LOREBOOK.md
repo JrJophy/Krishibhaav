@@ -35,6 +35,8 @@ To execute this, we exercised strict "strip-list discipline", ruthlessly breakin
 - **8.5c:** Overhauled all Agent surfaces (dashboard, sheets, dialogs), and crucially, replaced the generic SnackBar with a custom, theme-aware floating Overlay toast for notifications.
 - **8.5d:** Applied the new brand assets (symbol, lockup), injected the dark theme toggle into the Profile Sheet, and configured the launcher icons.
 
+Following the core execution, we conducted a rigorous visual polish round to perfect app bar branding alignment, correct stats grid dark-mode rendering, and boost the dark mode login screen contrast. However, we encountered a stubborn input field ghosting defect in the price-edit dialog caused by `hintText` and default `FloatingLabelBehavior` rendering quirks. Under the strict "zero logic changes" mandate and moving swiftly, this purely cosmetic defect was formally deferred to V2.
+
 With the brand identity solidified and the UI gleaming in both light and dark, Phase 8.5 concluded smoothly.
 
 **The Road Ahead**
@@ -43,6 +45,3 @@ Our epic approaches its final chapters:
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!
-
-## Current Chapter (live)
-[2026-06-11] 8.5 polish: Executed final visual polish pass (app bar branding, stats grid theme-awareness, input field ghosting fixes, and dark mode login contrast).
