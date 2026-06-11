@@ -175,4 +175,8 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 9a fix | lib/services/agent_service.dart | Bug fix | Changed farmer_prices updates to use SetOptions(merge:true) to prevent visibility flag clobbering
 [2026-06-11] | Phase 9a fix | lib/screens/farmer/farmer_home_screen.dart | UX | Fixed RenderFlex overflow on app bar by wrapping title column in Flexible and using TextOverflow.ellipsis
 [2026-06-11] | Phase 9a fix | lib/screens/agent/agent_home_screen.dart | UX | Fixed RenderFlex overflow on app bar by wrapping title column in Flexible and using TextOverflow.ellipsis
+[2026-06-11] | Phase 9b | lib/core/market_message_parser.dart | Creation | Created parser with regex for WhatsApp market prices
+[2026-06-11] | Phase 9b | test/market_message_parser_test.dart | Creation | Added 5 unit tests for WhatsApp parser
+[2026-06-11] | Phase 9b | lib/widgets/paste_market_message_sheet.dart | Creation | Built UI for pasting and previewing market message
+[2026-06-11] | Phase 9b | lib/screens/agent/agent_home_screen.dart | Modification | Added paste icon button to Open Market row
 ---
