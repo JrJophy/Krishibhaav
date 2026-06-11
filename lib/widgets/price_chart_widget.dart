@@ -60,7 +60,7 @@ class PriceChartWidget extends StatelessWidget {
                     final index = value.toInt();
                     if (index < 0 || index >= points.length) return const SizedBox.shrink();
                     
-                    final labelCount = 6;
+                    const labelCount = 6;
                     final step = (points.length / labelCount).ceil().clamp(1, points.length);
                     
                     // Always show first, last, and points that fall on the step interval
