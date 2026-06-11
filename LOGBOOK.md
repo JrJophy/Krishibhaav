@@ -125,4 +125,8 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-10] | Phase 8 | test/router_redirect_test.dart | Creation | Created comprehensive unit tests for `decideRedirect` covering role mismatches, logged-out states, OTP states, and missing role fallbacks.
 [2026-06-10] | Phase 8 | Summary | Records Saga | Encountered an editor-buffer conflict during Phase 8 documentation updates. Established a strict new rule to re-read tracking files from disk immediately after every write to guarantee state consistency.
 [2026-06-10] | Post-Phase 8 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated (through Phase 8 live-test fixes).
+[2026-06-11] | Phase 8.5a | lib/core/colors.dart | Modification | Rewrote to define LIGHT and DARK palettes, kept existing colors as deprecated aliases
+[2026-06-11] | Phase 8.5a | lib/utils/theme.dart | Modification | Built lightTheme and darkTheme objects using new tokens and Work Sans typography
+[2026-06-11] | Phase 8.5a | lib/providers/theme_provider.dart | Creation | Scaffolding for theme toggle with SharedPreferences persistence
+[2026-06-11] | Phase 8.5a | lib/main.dart | Modification | Registered ThemeProvider and applied theme settings to MaterialApp
 ---
