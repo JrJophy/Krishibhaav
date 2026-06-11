@@ -129,4 +129,6 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 8.5a | lib/utils/theme.dart | Modification | Built lightTheme and darkTheme objects using new tokens and Work Sans typography
 [2026-06-11] | Phase 8.5a | lib/providers/theme_provider.dart | Creation | Scaffolding for theme toggle with SharedPreferences persistence
 [2026-06-11] | Phase 8.5a | lib/main.dart | Modification | Registered ThemeProvider and applied theme settings to MaterialApp
+[2026-06-11] | Phase 8.5a | lib/utils/theme.dart | Bug fix | Replaced CardTheme/DialogTheme with CardThemeData/DialogThemeData for Flutter 3.44 API compatibility
+[2026-06-11] | Phase 8.5a | Summary | Rule Amendment | LOREBOOK.md gains a "Current Chapter (live)" section for sub-phase tickers.
 ---
