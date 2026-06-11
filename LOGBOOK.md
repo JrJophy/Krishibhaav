@@ -131,4 +131,7 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 8.5a | lib/main.dart | Modification | Registered ThemeProvider and applied theme settings to MaterialApp
 [2026-06-11] | Phase 8.5a | lib/utils/theme.dart | Bug fix | Replaced CardTheme/DialogTheme with CardThemeData/DialogThemeData for Flutter 3.44 API compatibility
 [2026-06-11] | Phase 8.5a | Summary | Rule Amendment | LOREBOOK.md gains a "Current Chapter (live)" section for sub-phase tickers.
+[2026-06-11] | Phase 8.5b | lib/screens/farmer/farmer_home_screen.dart | Modification | Restyled UI to match Stitch design using theme-aware colors
+[2026-06-11] | Phase 8.5b | lib/widgets/price_chart_widget.dart | Modification | Restyled chart to use theme-aware colors and soft gradient
+[2026-06-11] | Phase 8.5b | Summary | Modification | Skipped adding 'Last Updated' to Farmer home as data was not natively present in the existing screen
 ---

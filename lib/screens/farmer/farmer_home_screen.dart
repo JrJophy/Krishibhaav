@@ -66,27 +66,36 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final bool isMarketOpen = MarketStatus.isMarketOpen();
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    final valueGreen = isDark ? AppColors.darkValueGreen : AppColors.lightValueGreen;
+    final valueGreenSoft = isDark ? AppColors.darkValueGreenSoft : AppColors.lightValueGreenSoft;
+    final danger = isDark ? AppColors.darkDanger : AppColors.lightDanger;
+    final dangerSoft = isDark ? AppColors.darkDanger.withValues(alpha: 0.15) : AppColors.lightDanger.withValues(alpha: 0.15);
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+    final surfaceTintA = isDark ? AppColors.darkSurfaceTintA : AppColors.lightSurfaceTintA;
+    final surface = theme.colorScheme.surface;
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Consumer<FarmerProvider>(
           builder: (context, provider, _) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Krishibhaav', style: AppTextStyles.poppinsHeading.copyWith(fontSize: 20)),
+                Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
                 Text('${_getGreeting()}, ${provider.farmerName.isNotEmpty ? provider.farmerName : 'Farmer'}', 
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
               ],
             );
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle, size: 28),
+            icon: Icon(Icons.account_circle, size: 28, color: theme.appBarTheme.foregroundColor),
             onPressed: () {
-              // we can just use widget.farmerId
               showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
@@ -111,13 +120,13 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                       decoration: BoxDecoration(
-                        color: isMarketOpen ? Colors.green.shade100 : Colors.red.shade100,
+                        color: isMarketOpen ? valueGreenSoft : dangerSoft,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
                         isMarketOpen ? '● Market Open' : '● Market Closed',
                         style: TextStyle(
-                          color: isMarketOpen ? Colors.green.shade800 : Colors.red.shade800,
+                          color: isMarketOpen ? valueGreen : danger,
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
                         ),
@@ -153,69 +162,94 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                 if (provider.isLoading)
                   _buildLoadingSkeletons()
                 else ...[
-                  // Card 1 - YOUR PRICE
-                  Card(
-                    color: AppColors.primary,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Your Price Today', style: TextStyle(color: Colors.white, fontSize: 16)),
-                          const SizedBox(height: 8),
-                          Text('₹${provider.effectivePrice.toStringAsFixed(2)} /kg', 
-                            style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 8),
-                          Text(
-                            provider.hasCustomPrice ? 'Special price set by your agent' : 'Standard agent price',
-                            style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 12),
+                  // Hero Price Card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24.0),
+                    decoration: BoxDecoration(
+                      color: isDark ? surface : AppColors.lightValueGreen,
+                      borderRadius: BorderRadius.circular(16),
+                      border: isDark ? Border.all(color: valueGreen.withValues(alpha: 0.5), width: 1) : null,
+                      boxShadow: isDark ? [BoxShadow(color: valueGreen.withValues(alpha: 0.1), blurRadius: 8, spreadRadius: 2)] : [],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('YOUR PRICE TODAY', style: TextStyle(
+                          color: isDark ? AppColors.darkPrimary : Colors.white, 
+                          fontSize: 12, 
+                          letterSpacing: 1.5, 
+                          fontWeight: FontWeight.bold
+                        )),
+                        const SizedBox(height: 8),
+                        Text('₹${provider.effectivePrice.toStringAsFixed(2)}/kg', 
+                          style: TextStyle(
+                            color: isDark ? valueGreen : Colors.white, 
+                            fontSize: 44, 
+                            fontWeight: FontWeight.bold
+                          )),
+                        const SizedBox(height: 8),
+                        Text(
+                          provider.hasCustomPrice ? 'Special price set by your agent' : 'Standard agent price',
+                          style: TextStyle(
+                            color: isDark ? ink.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.7), 
+                            fontSize: 14
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 16),
 
-                  // Card 2 - Company Price
-                  Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Expanded(child: Text('Company Price', style: TextStyle(fontSize: 16, color: Colors.black87))),
-                          Text('₹${provider.companyPrice.toStringAsFixed(2)} /kg', 
-                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        ],
+                  // Secondary Price Cards
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: isDark ? surface : Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Company Price', style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 13)),
+                              const SizedBox(height: 8),
+                              Text('₹${provider.companyPrice.toStringAsFixed(2)}/kg', 
+                                style: TextStyle(color: valueGreen, fontSize: 20, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Card 3 - Open Market Price
-                  Card(
-                    color: Colors.grey.shade100,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Expanded(child: Text('Open Market Price', style: TextStyle(fontSize: 16, color: Colors.black54))),
-                          Text('₹${provider.openMarketPrice.toStringAsFixed(2)} /kg', 
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black54)),
-                        ],
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: isDark ? surface : Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Open Market Price', style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 13)),
+                              const SizedBox(height: 8),
+                              Text('₹${provider.openMarketPrice.toStringAsFixed(2)}/kg', 
+                                style: TextStyle(color: valueGreen, fontSize: 20, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
                 const SizedBox(height: 32),
 
                 // Price Trend section
-                const Text('30-Day Market Trend', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                Text('30-Day Market Trend', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink)),
                 const SizedBox(height: 16),
                 FutureBuilder<List<PricePoint>>(
                   future: _priceHistoryFuture,
@@ -227,8 +261,9 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                             height: 200,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
+                              color: isDark ? surface : Colors.white,
                               borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -236,8 +271,9 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                             height: 120,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
+                              color: isDark ? surface : Colors.white,
                               borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
                             ),
                           ),
                         ],
@@ -250,9 +286,24 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        PriceChartWidget(points: points),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: isDark ? surface : Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                          ),
+                          child: PriceChartWidget(points: points),
+                        ),
                         const SizedBox(height: 16),
-                        StatsGridWidget(stats: stats),
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: isDark ? surface : Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                          ),
+                          child: StatsGridWidget(stats: stats),
+                        ),
                       ],
                     );
                   },

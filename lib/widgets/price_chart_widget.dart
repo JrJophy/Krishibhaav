@@ -23,8 +23,14 @@ class PriceChartWidget extends StatelessWidget {
       );
     }
 
-    final isUp = points.last.price >= points.first.price;
-    final lineColor = isUp ? AppColors.priceGreen : AppColors.priceRed;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final valueGreen = isDark ? AppColors.darkValueGreen : AppColors.lightValueGreen;
+    final valueGreenSoft = isDark ? AppColors.darkValueGreenSoft : AppColors.lightValueGreenSoft;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+    final mutedInk = ink.withValues(alpha: 0.5);
+
+    final lineColor = valueGreen;
 
     final prices = points.map((p) => p.price).toList();
     final maxPrice = prices.reduce((a, b) => a > b ? a : b);
@@ -57,7 +63,7 @@ class PriceChartWidget extends StatelessWidget {
                     if (index == 0 || index == points.length - 1 || index == points.length ~/ 2) {
                       return Text(
                         _formatDate(points[index].date),
-                        style: const TextStyle(color: Colors.grey, fontSize: 10),
+                        style: TextStyle(color: mutedInk, fontSize: 10),
                       );
                     }
                     return const SizedBox.shrink();
@@ -71,7 +77,7 @@ class PriceChartWidget extends StatelessWidget {
                   getTitlesWidget: (value, meta) {
                     return Text(
                       value.toStringAsFixed(0),
-                      style: const TextStyle(color: Colors.grey, fontSize: 10),
+                      style: TextStyle(color: mutedInk, fontSize: 10),
                     );
                   },
                 ),
@@ -101,7 +107,7 @@ class PriceChartWidget extends StatelessWidget {
                       radius: 4,
                       color: lineColor,
                       strokeWidth: 2,
-                      strokeColor: Colors.white,
+                      strokeColor: theme.colorScheme.surface,
                     );
                   },
                 ),
@@ -109,8 +115,8 @@ class PriceChartWidget extends StatelessWidget {
                   show: true,
                   gradient: LinearGradient(
                     colors: [
-                      lineColor.withValues(alpha: 0.3),
-                      lineColor.withValues(alpha: 0.0),
+                      valueGreenSoft,
+                      valueGreenSoft.withValues(alpha: 0.0),
                     ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
@@ -125,7 +131,7 @@ class PriceChartWidget extends StatelessWidget {
                     final point = points[touchedSpot.x.toInt()];
                     return LineTooltipItem(
                       '${_formatDate(point.date)}\n₹${point.price.toStringAsFixed(2)}',
-                      const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                      TextStyle(color: theme.colorScheme.surface, fontWeight: FontWeight.bold),
                     );
                   }).toList();
                 },
