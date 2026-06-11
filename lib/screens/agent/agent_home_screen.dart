@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/colors.dart';
-import '../../core/text_styles.dart';
+
 import '../../providers/auth_provider.dart';
 import '../../providers/agent_provider.dart';
 import '../../widgets/price_edit_dialog.dart';

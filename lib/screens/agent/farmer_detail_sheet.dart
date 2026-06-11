@@ -270,7 +270,7 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                         prefixStyle: TextStyle(color: ink),
                         enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
                         focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
-                        disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+                        disabledBorder: const UnderlineInputBorder(borderSide: BorderSide.none),
                         filled: !_useCustomPrice,
                         fillColor: _useCustomPrice ? Colors.transparent : inputFill,
                       ),

@@ -49,8 +49,8 @@ class NotificationService {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(width: 4, color: valueGreen),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Center(child: Icon(Icons.notifications, color: AppColors.primary)),
                     ),
                     Expanded(
