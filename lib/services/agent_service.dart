@@ -22,9 +22,10 @@ class AgentService {
     });
   }
 
-  Future<void> updateOpenMarketPrice(String agentId, double price) async {
+  Future<void> updateOpenMarketPrice(String agentId, double rss4, double rss5) async {
     await _firestore.collection('agent_settings').doc(agentId).update({
-      'openMarketPrice': price,
+      'openMarketPrice': rss4,
+      'openMarketRss5': rss5,
       'lastUpdated': FieldValue.serverTimestamp(),
     });
   }
@@ -93,6 +94,8 @@ class AgentService {
         'agentId': agentId,
         'hasCustomPrice': false,
         'customPrice': null,
+        'canSeeBoardRate': false,
+        'canSeeOpenMarket': false,
         'updatedAt': FieldValue.serverTimestamp(),
       });
       
@@ -106,6 +109,14 @@ class AgentService {
     await _firestore.collection('users').doc(farmerId).update({
       'name': name,
       'location': location,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  Future<void> updateFarmerVisibility(String farmerId, bool canSeeBoardRate, bool canSeeOpenMarket) async {
+    await _firestore.collection('farmer_prices').doc(farmerId).update({
+      'canSeeBoardRate': canSeeBoardRate,
+      'canSeeOpenMarket': canSeeOpenMarket,
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }

@@ -49,16 +49,18 @@ class AgentProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> updatePrice(String type, double price) async {
+  Future<void> updatePrice(String type, double price, [double? price2]) async {
     if (_agentSettings == null) return;
     final agentId = _agentSettings!.agentId;
 
     if (type == 'Open Market Price') {
-      await _agentService.updateOpenMarketPrice(agentId, price);
-      FcmDispatchService().notifyOpenMarketPriceUpdate(agentId, price);
-    } else if (type == 'Company Price') {
+      final rss5 = price2 ?? 0.0;
+      await _agentService.updateOpenMarketPrice(agentId, price, rss5);
+      FcmDispatchService().notifyOpenMarketPriceUpdate(agentId, price, rss5);
+    } else if (type == 'Company Price' || type == 'Board Rate') {
       await _agentService.updateCompanyPrice(agentId, price);
-      FcmDispatchService().notifyCompanyPriceUpdate(agentId, price);
+      // FcmDispatchService().notifyBoardRateUpdate handles this now, but wait, agent doesn't edit Board Rate!
+      // This path won't be called for Board Rate since it's read-only.
     } else if (type == 'Global Agent Price') {
       await _agentService.updateGlobalAgentPrice(agentId, price);
       FcmDispatchService().notifyAgentPriceUpdate(agentId, price);

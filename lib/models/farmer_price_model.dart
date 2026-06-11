@@ -5,6 +5,8 @@ class FarmerPriceModel {
   final String agentId;
   final double? customPrice;
   final bool hasCustomPrice;
+  final bool canSeeBoardRate;
+  final bool canSeeOpenMarket;
   final Timestamp updatedAt;
 
   FarmerPriceModel({
@@ -12,6 +14,8 @@ class FarmerPriceModel {
     required this.agentId,
     this.customPrice,
     required this.hasCustomPrice,
+    required this.canSeeBoardRate,
+    required this.canSeeOpenMarket,
     required this.updatedAt,
   });
 
@@ -21,6 +25,8 @@ class FarmerPriceModel {
       'agentId': agentId,
       'customPrice': customPrice,
       'hasCustomPrice': hasCustomPrice,
+      'canSeeBoardRate': canSeeBoardRate,
+      'canSeeOpenMarket': canSeeOpenMarket,
       'updatedAt': updatedAt,
     };
   }
@@ -31,6 +37,8 @@ class FarmerPriceModel {
       agentId: map['agentId'] ?? '',
       customPrice: map['customPrice'] != null ? (map['customPrice'] as num).toDouble() : null,
       hasCustomPrice: map['hasCustomPrice'] ?? false,
+      canSeeBoardRate: map['canSeeBoardRate'] ?? false,
+      canSeeOpenMarket: map['canSeeOpenMarket'] ?? false,
       updatedAt: map['updatedAt'] ?? Timestamp.now(),
     );
   }

@@ -31,6 +31,7 @@ class PriceHistoryService {
       }
 
       final points = snapshot.docs
+          .where((doc) => doc.data().containsKey('agentGlobalPrice') && doc.data()['agentGlobalPrice'] != null)
           .map((doc) => PricePoint.fromMap(doc.data()))
           .toList()
           .reversed

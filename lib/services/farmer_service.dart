@@ -6,8 +6,10 @@ import '../models/user_model.dart';
 class EffectivePriceResult {
   final double price;
   final bool isCustom;
+  final bool canSeeBoardRate;
+  final bool canSeeOpenMarket;
 
-  EffectivePriceResult(this.price, this.isCustom);
+  EffectivePriceResult(this.price, this.isCustom, this.canSeeBoardRate, this.canSeeOpenMarket);
 }
 
 class FarmerService {
@@ -23,6 +25,8 @@ class FarmerService {
       (DocumentSnapshot farmerDoc, DocumentSnapshot agentDoc) {
         double effectivePrice = 0.0;
         bool isCustom = false;
+        bool canSeeBoardRate = false;
+        bool canSeeOpenMarket = false;
 
         if (agentDoc.exists) {
           final agentData = agentDoc.data() as Map<String, dynamic>?;
@@ -32,6 +36,8 @@ class FarmerService {
             final farmerData = farmerDoc.data() as Map<String, dynamic>?;
             final hasCustomPrice = farmerData?['hasCustomPrice'] == true;
             final customPrice = farmerData?['customPrice'];
+            canSeeBoardRate = farmerData?['canSeeBoardRate'] == true;
+            canSeeOpenMarket = farmerData?['canSeeOpenMarket'] == true;
 
             if (hasCustomPrice && customPrice != null) {
               effectivePrice = (customPrice as num).toDouble();
@@ -49,7 +55,7 @@ class FarmerService {
           isCustom = false;
         }
 
-        return EffectivePriceResult(effectivePrice, isCustom);
+        return EffectivePriceResult(effectivePrice, isCustom, canSeeBoardRate, canSeeOpenMarket);
       },
     );
   }

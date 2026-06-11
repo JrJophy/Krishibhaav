@@ -67,14 +67,30 @@ class FcmDispatchService {
     return tokens;
   }
 
-  Future<void> notifyOpenMarketPriceUpdate(String agentId, double price) async {
+  Future<void> notifyOpenMarketPriceUpdate(String agentId, double rss4, double rss5) async {
     try {
-      final tokens = await _getAllFarmerTokens(agentId);
-      for (final token in tokens) {
+      final firestore = FirebaseFirestore.instance;
+      final usersSnap = await firestore.collection('users')
+          .where('agentId', isEqualTo: agentId)
+          .where('role', isEqualTo: 'farmer')
+          .get();
+
+      List<String> targetTokens = [];
+      for (final doc in usersSnap.docs) {
+        final token = doc.data()['fcmToken'] as String?;
+        if (token != null && token.isNotEmpty) {
+          final priceDoc = await firestore.collection('farmer_prices').doc(doc.id).get();
+          if (priceDoc.exists && priceDoc.data()?['canSeeOpenMarket'] == true) {
+            targetTokens.add(token);
+          }
+        }
+      }
+
+      for (final token in targetTokens) {
         await sendNotification(
           token: token,
           title: 'Open Market Price Updated',
-          body: 'Price: ₹${price.toStringAsFixed(2)}/kg',
+          body: 'RSS4 ₹${rss4.toStringAsFixed(2)} · RSS5 ₹${rss5.toStringAsFixed(2)} /kg',
         );
       }
     } catch (e) {
@@ -82,18 +98,34 @@ class FcmDispatchService {
     }
   }
 
-  Future<void> notifyCompanyPriceUpdate(String agentId, double price) async {
+  Future<void> notifyBoardRateUpdate(String agentId, double rss4, double rss5) async {
     try {
-      final tokens = await _getAllFarmerTokens(agentId);
-      for (final token in tokens) {
+      final firestore = FirebaseFirestore.instance;
+      final usersSnap = await firestore.collection('users')
+          .where('agentId', isEqualTo: agentId)
+          .where('role', isEqualTo: 'farmer')
+          .get();
+
+      List<String> targetTokens = [];
+      for (final doc in usersSnap.docs) {
+        final token = doc.data()['fcmToken'] as String?;
+        if (token != null && token.isNotEmpty) {
+          final priceDoc = await firestore.collection('farmer_prices').doc(doc.id).get();
+          if (priceDoc.exists && priceDoc.data()?['canSeeBoardRate'] == true) {
+            targetTokens.add(token);
+          }
+        }
+      }
+
+      for (final token in targetTokens) {
         await sendNotification(
           token: token,
-          title: 'Company Price Updated',
-          body: 'Price: ₹${price.toStringAsFixed(2)}/kg',
+          title: 'Board Rate Updated',
+          body: 'RSS4 ₹${rss4.toStringAsFixed(2)} · RSS5 ₹${rss5.toStringAsFixed(2)} /kg',
         );
       }
     } catch (e) {
-      debugPrint('[FcmDispatchService] Company update query error: $e');
+      debugPrint('[FcmDispatchService] Board rate update query error: $e');
     }
   }
 
