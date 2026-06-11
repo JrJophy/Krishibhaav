@@ -181,7 +181,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('YOUR PRICE TODAY', style: TextStyle(
+                        Text("Today's Rate", style: TextStyle(
                           color: isDark ? AppColors.darkPrimary : Colors.white, 
                           fontSize: 12, 
                           letterSpacing: 1.5, 
@@ -194,14 +194,6 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                             fontSize: 44, 
                             fontWeight: FontWeight.bold
                           )),
-                        const SizedBox(height: 8),
-                        Text(
-                          provider.hasCustomPrice ? 'Special price set by your agent' : 'Standard agent price',
-                          style: TextStyle(
-                            color: isDark ? ink.withValues(alpha: 0.7) : Colors.white.withValues(alpha: 0.7), 
-                            fontSize: 14
-                          ),
-                        ),
                       ],
                     ),
                   ),
