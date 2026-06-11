@@ -17,7 +17,7 @@ Last Updated: 2026-06-11T12:35:00+05:30
 | 8.5 | UI Restyle (Stitch designs) | COMPLETED | - |
 | 9a | App-Side Spec Changes | COMPLETED | - |
 | 9b | WhatsApp Paste-Parser | COMPLETED | - |
-| 9c | Python Scraper Repo & EOD Recorder | NOT STARTED | - |
+| 9c | Python Scraper Repo & EOD Recorder | COMPLETED | - |
 | 9d | Deployment & Chart Polish | NOT STARTED | - |
 | 10 | Build & Deploy | NOT STARTED | - |
 
@@ -25,9 +25,9 @@ Last Updated: 2026-06-11T12:35:00+05:30
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: Phase 9c (Python Scraper Repo)
+Phase: Phase 9d (Deployment & Chart Polish)
 Started: 2026-06-11
-Last activity: Phase 9b COMPLETED. Phase 9c ready to start.
+Last activity: Phase 9c COMPLETED. Phase 9d ready to start.
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED

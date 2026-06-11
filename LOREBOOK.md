@@ -49,3 +49,4 @@ The grand academic vision of Krishibhaav is within reach!
 ### Current Chapter (live)
 - **Phase 9a:** (COMPLETED) Executed the "App-Side Spec Changes", overhauling models and services to support dual RSS4/RSS5 Open Market pricing, migrating the "Company Price" to a read-only "Board Rate" model, adding visibility switches to the Farmer Detail Sheet, and restructuring the Agent/Farmer dashboards to match the new spec.
 - **Phase 9b:** (COMPLETED) Built a regex-powered WhatsApp paste-parser to extract Open Market prices and seamlessly integrated it into the Agent dashboard with a preview and confirm flow.
+- **Phase 9c:** (COMPLETED) Created a separate Python scraper repository with a GitHub Actions cron schedule to fetch domestic market prices from the Rubber Board website, process holidays, sync to Firebase, and dispatch FCM notifications.

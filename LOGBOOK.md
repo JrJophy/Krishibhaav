@@ -184,4 +184,10 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 9b polish round | lib/widgets/price_edit_dialog.dart | Refactor | Removed dead dual-input branch and all associated plumbing
 [2026-06-11] | Phase 9b polish round | lib/widgets/paste_market_message_sheet.dart | UX | Applied opaque theme surface background with drag handle and filled input background, fixed const constructor
 [2026-06-11] | Phase 9b final crumb | lib/widgets/paste_market_message_sheet.dart | Code Cleanup | Removed unused surfaceTintB local variable
+[2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\scraper.py | Creation | Python script to fetch domestic market prices, parse via BS4, write to Firebase, and send FCMs
+[2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\seed_history.py | Creation | One-off backfill script for historical price data
+[2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\requirements.txt | Creation | Project dependencies (requests, beautifulsoup4, firebase-admin)
+[2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\.gitignore | Creation | Gitignore for pycache and service account json
+[2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\.github\workflows\scraper.yml | Creation | GitHub actions cron workflow schedule
+[2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\README.md | Creation | README documentation
 ---
