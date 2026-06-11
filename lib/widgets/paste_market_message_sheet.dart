@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/market_message_parser.dart';
 import '../../providers/agent_provider.dart';
-import '../../utils/theme.dart';
+import '../../core/colors.dart';
 
 class PasteMarketMessageSheet extends StatefulWidget {
   final double currentRss4;
@@ -22,7 +22,6 @@ class _PasteMarketMessageSheetState extends State<PasteMarketMessageSheet> {
   final TextEditingController _controller = TextEditingController();
   MarketMessageResult? _result;
   String? _errorText;
-  bool _isParsing = false;
 
   void _parse() {
     setState(() {
@@ -54,8 +53,8 @@ class _PasteMarketMessageSheetState extends State<PasteMarketMessageSheet> {
     
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Open Market Price updated successfully'),
+      SnackBar(
+        content: const Text('Open Market Price updated successfully'),
         backgroundColor: AppColors.primary,
       ),
     );
