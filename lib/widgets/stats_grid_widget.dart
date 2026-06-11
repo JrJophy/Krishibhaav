@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../services/price_history_service.dart';
+import '../services/farmer_history_service.dart';
 import '../core/colors.dart';
 
 class StatsGridWidget extends StatelessWidget {
-  final PriceStats? stats;
+  final FarmerPriceStats? stats;
 
   const StatsGridWidget({super.key, this.stats});
 

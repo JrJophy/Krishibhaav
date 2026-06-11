@@ -60,10 +60,17 @@ class PriceChartWidget extends StatelessWidget {
                     final index = value.toInt();
                     if (index < 0 || index >= points.length) return const SizedBox.shrink();
                     
-                    if (index == 0 || index == points.length - 1 || index == points.length ~/ 2) {
-                      return Text(
-                        _formatDate(points[index].date),
-                        style: TextStyle(color: mutedInk, fontSize: 10),
+                    final labelCount = 6;
+                    final step = (points.length / labelCount).ceil().clamp(1, points.length);
+                    
+                    // Always show first, last, and points that fall on the step interval
+                    if (index == 0 || index == points.length - 1 || (index % step == 0 && index < points.length - (step / 2))) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 4.0),
+                        child: Text(
+                          _formatDate(points[index].date),
+                          style: TextStyle(color: mutedInk, fontSize: 10),
+                        ),
                       );
                     }
                     return const SizedBox.shrink();

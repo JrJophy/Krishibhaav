@@ -5,7 +5,7 @@ import '../../core/market_status.dart';
 import '../../providers/farmer_provider.dart';
 import '../../widgets/price_chart_widget.dart';
 import '../../widgets/stats_grid_widget.dart';
-import '../../services/price_history_service.dart';
+import '../../services/farmer_history_service.dart';
 import '../../models/price_point.dart';
 import '../../services/notification_service.dart';
 import '../../widgets/profile_sheet.dart';
@@ -20,7 +20,7 @@ class FarmerHomeScreen extends StatefulWidget {
 
 class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
   Future<List<PricePoint>>? _priceHistoryFuture;
-  final PriceHistoryService _priceHistoryService = PriceHistoryService();
+  final FarmerHistoryService _historyService = FarmerHistoryService();
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
     if (!mounted) return;
     NotificationService().init(context, widget.farmerId);
     setState(() {
-      _priceHistoryFuture = _priceHistoryService.fetchPriceHistory();
+      _priceHistoryFuture = _historyService.fetchHistory(widget.farmerId);
     });
   }
 
@@ -312,7 +312,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                       );
                     }
 
-                    final stats = _priceHistoryService.computeStats(points);
+                    final stats = _historyService.computeStats(points);
                     
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

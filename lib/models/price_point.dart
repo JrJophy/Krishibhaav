@@ -5,7 +5,7 @@ class PricePoint {
   PricePoint({required this.date, required this.price});
 
   factory PricePoint.fromMap(Map<String, dynamic> map) {
-    final raw = map['agentGlobalPrice'];
+    final raw = map['effectivePrice'] ?? map['agentGlobalPrice'];
     double parsed = 0.0;
     if (raw is num) {
       parsed = raw.toDouble();
