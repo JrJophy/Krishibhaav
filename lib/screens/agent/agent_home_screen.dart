@@ -12,6 +12,7 @@ import 'add_farmer_sheet.dart';
 import 'farmer_detail_sheet.dart';
 import '../../services/notification_service.dart';
 import '../../widgets/profile_sheet.dart';
+import '../../widgets/paste_market_message_sheet.dart';
 import '../../models/board_rate_model.dart';
 import '../../services/board_rate_service.dart';
 
@@ -110,12 +111,12 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     );
   }
 
-  Widget _buildDualPriceRow(String label, double rss4, double rss5, Color surfaceTintA, Color valueGreen, Color ink, {bool editable = true, String? caption}) {
+  Widget _buildDualPriceRow(String label, double rss4, double rss5, Color surfaceTint, Color valueGreen, Color ink, {bool editable = true, String? caption, bool showPaste = false}) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6.0),
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: surfaceTintA.withValues(alpha: 0.15),
+        color: surfaceTint.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -145,6 +146,22 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                 ),
               ),
               if (editable) ...[
+                if (showPaste) ...[
+                  const SizedBox(width: 12),
+                  IconButton(
+                    icon: const Icon(Icons.content_paste, size: 18, color: AppColors.primary),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => PasteMarketMessageSheet(currentRss4: rss4, currentRss5: rss5),
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
                 const SizedBox(width: 12),
                 IconButton(
                   icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
@@ -292,7 +309,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                             );
                           },
                         ),
-                        _buildDualPriceRow('Open Market Price', settings.openMarketPrice, settings.openMarketRss5, surfaceTintA, valueGreen, ink),
+                        _buildDualPriceRow('Open Market Price', settings.openMarketPrice, settings.openMarketRss5, surfaceTintA, valueGreen, ink, showPaste: true),
                         _buildSinglePriceRow('Global Agent Price', settings.globalAgentPrice, surfaceTintA, valueGreen, ink),
                       ] else ...[
                         const Center(child: CircularProgressIndicator()),

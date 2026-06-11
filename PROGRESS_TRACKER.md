@@ -16,7 +16,7 @@ Last Updated: 2026-06-11T12:35:00+05:30
 | 8 | Profile Panels & Polish | COMPLETED | - |
 | 8.5 | UI Restyle (Stitch designs) | COMPLETED | - |
 | 9a | App-Side Spec Changes | COMPLETED | - |
-| 9b | WhatsApp Paste-Parser | IN PROGRESS | - |
+| 9b | WhatsApp Paste-Parser | COMPLETED | - |
 | 9c | Python Scraper Repo & EOD Recorder | NOT STARTED | - |
 | 9d | Deployment & Chart Polish | NOT STARTED | - |
 | 10 | Build & Deploy | NOT STARTED | - |
@@ -25,9 +25,9 @@ Last Updated: 2026-06-11T12:35:00+05:30
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: Phase 9b (WhatsApp Paste-Parser)
+Phase: Phase 9c (Python Scraper Repo)
 Started: 2026-06-11
-Last activity: Phase 9a COMPLETED. Phase 9b starting.
+Last activity: Phase 9b COMPLETED. Phase 9c ready to start.
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
@@ -71,5 +71,8 @@ test/router_redirect_test.dart (Phase 8)
 assets/branding/ (Phase 8.5)
 lib/models/board_rate_model.dart (Phase 9a)
 lib/services/board_rate_service.dart (Phase 9a)
+lib/core/market_message_parser.dart (Phase 9b)
+test/market_message_parser_test.dart (Phase 9b)
+lib/widgets/paste_market_message_sheet.dart (Phase 9b)
 ---
 
