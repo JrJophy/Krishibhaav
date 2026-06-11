@@ -180,4 +180,7 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 9b | lib/widgets/paste_market_message_sheet.dart | Creation | Built UI for pasting and previewing market message
 [2026-06-11] | Phase 9b | lib/screens/agent/agent_home_screen.dart | Modification | Added paste icon button to Open Market row
 [2026-06-11] | Phase 9b fix round | lib/widgets/paste_market_message_sheet.dart | Bug fix | Imported colors.dart for AppColors, removed const on SnackBar, deleted unused _isParsing field
+[2026-06-11] | Phase 9b polish round | lib/screens/agent/agent_home_screen.dart | Spec Change | Removed manual edit pencil from Open Market row, making paste the only way to update it
+[2026-06-11] | Phase 9b polish round | lib/widgets/price_edit_dialog.dart | Refactor | Removed dead dual-input branch and all associated plumbing
+[2026-06-11] | Phase 9b polish round | lib/widgets/paste_market_message_sheet.dart | UX | Applied opaque theme surface background with drag handle and filled input background, fixed const constructor
 ---
