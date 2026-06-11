@@ -50,22 +50,7 @@ class FcmDispatchService {
     }
   }
 
-  Future<List<String>> _getAllFarmerTokens(String agentId) async {
-    final firestore = FirebaseFirestore.instance;
-    final usersSnap = await firestore.collection('users')
-        .where('agentId', isEqualTo: agentId)
-        .where('role', isEqualTo: 'farmer')
-        .get();
-        
-    List<String> tokens = [];
-    for (final doc in usersSnap.docs) {
-      final token = doc.data()['fcmToken'] as String?;
-      if (token != null && token.isNotEmpty) {
-        tokens.add(token);
-      }
-    }
-    return tokens;
-  }
+
 
   Future<void> notifyOpenMarketPriceUpdate(String agentId, double rss4, double rss5) async {
     try {

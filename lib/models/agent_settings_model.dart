@@ -11,7 +11,7 @@ class AgentSettingsModel {
   AgentSettingsModel({
     required this.agentId,
     required this.openMarketPrice,
-    required this.openMarketRss5,
+    this.openMarketRss5 = 0.0,
     required this.companyPrice,
     required this.globalAgentPrice,
     required this.lastUpdated,
