@@ -53,8 +53,8 @@ class _PasteMarketMessageSheetState extends State<PasteMarketMessageSheet> {
     
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Open Market Price updated successfully'),
+      const SnackBar(
+        content: Text('Open Market Price updated successfully'),
         backgroundColor: AppColors.primary,
       ),
     );
@@ -68,23 +68,34 @@ class _PasteMarketMessageSheetState extends State<PasteMarketMessageSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
-    final surfaceTintB = isDark ? AppColors.darkSurfaceTintB : AppColors.lightSurfaceTintB;
-    final valueGreen = isDark ? AppColors.darkValueGreen : AppColors.lightValueGreen;
+    final surface = theme.colorScheme.surface;
+    final inputFill = isDark ? Colors.grey.shade900 : Colors.grey.shade100;
 
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
-        left: 24,
-        right: 24,
-        top: 24,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+      child: Container(
+        padding: const EdgeInsets.all(24.0),
+        decoration: BoxDecoration(
+          color: surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -101,7 +112,7 @@ class _PasteMarketMessageSheetState extends State<PasteMarketMessageSheet> {
             decoration: InputDecoration(
               hintText: 'Paste the WhatsApp market message here...',
               filled: true,
-              fillColor: surfaceTintB.withValues(alpha: 0.1),
+              fillColor: inputFill,
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
               errorText: _errorText,
             ),
@@ -175,6 +186,6 @@ class _PasteMarketMessageSheetState extends State<PasteMarketMessageSheet> {
           const SizedBox(height: 24),
         ],
       ),
-    );
+    ));
   }
 }

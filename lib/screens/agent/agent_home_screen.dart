@@ -57,18 +57,14 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     super.dispose();
   }
 
-  void _showPriceDialog(String type, double currentValue, [double? currentValue2]) async {
-    final newPrices = await showDialog<List<double>>(
+  void _showPriceDialog(String type, double currentValue) async {
+    final newPrice = await showDialog<double>(
       context: context,
-      builder: (context) => PriceEditDialog(priceName: type, currentValue: currentValue, currentValue2: currentValue2),
+      builder: (context) => PriceEditDialog(priceName: type, currentValue: currentValue),
     );
-    if (newPrices != null && newPrices.isNotEmpty) {
+    if (newPrice != null) {
       if (mounted) {
-        if (type == 'Open Market Price' && newPrices.length > 1) {
-          Provider.of<AgentProvider>(context, listen: false).updatePrice(type, newPrices[0], newPrices[1]);
-        } else {
-          Provider.of<AgentProvider>(context, listen: false).updatePrice(type, newPrices[0]);
-        }
+        Provider.of<AgentProvider>(context, listen: false).updatePrice(type, newPrice);
       }
     }
   }
@@ -111,7 +107,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     );
   }
 
-  Widget _buildDualPriceRow(String label, double rss4, double rss5, Color surfaceTint, Color valueGreen, Color ink, {bool editable = true, String? caption, bool showPaste = false}) {
+  Widget _buildDualPriceRow(String label, double rss4, double rss5, Color surfaceTint, Color valueGreen, Color ink, {String? caption, bool showPaste = false}) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
       margin: const EdgeInsets.only(bottom: 12),
@@ -145,27 +141,18 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   ],
                 ),
               ),
-              if (editable) ...[
-                if (showPaste) ...[
-                  const SizedBox(width: 12),
-                  IconButton(
-                    icon: const Icon(Icons.content_paste, size: 18, color: AppColors.primary),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) => PasteMarketMessageSheet(currentRss4: rss4, currentRss5: rss5),
-                      );
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
+              if (showPaste) ...[
                 const SizedBox(width: 12),
                 IconButton(
-                  icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
-                  onPressed: () => _showPriceDialog(label, rss4, rss5),
+                  icon: const Icon(Icons.content_paste, size: 18, color: AppColors.primary),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => PasteMarketMessageSheet(currentRss4: rss4, currentRss5: rss5),
+                    );
+                  },
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
@@ -304,7 +291,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                               surfaceTintA, 
                               valueGreen, 
                               ink, 
-                              editable: false,
+                              showPaste: false,
                               caption: 'auto · ${br.date}',
                             );
                           },
