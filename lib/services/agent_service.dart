@@ -114,27 +114,30 @@ class AgentService {
   }
 
   Future<void> updateFarmerVisibility(String farmerId, bool canSeeBoardRate, bool canSeeOpenMarket) async {
-    await _firestore.collection('farmer_prices').doc(farmerId).update({
+    // Owns: canSeeBoardRate, canSeeOpenMarket, updatedAt
+    await _firestore.collection('farmer_prices').doc(farmerId).set({
       'canSeeBoardRate': canSeeBoardRate,
       'canSeeOpenMarket': canSeeOpenMarket,
       'updatedAt': FieldValue.serverTimestamp(),
-    });
+    }, SetOptions(merge: true));
   }
 
   Future<void> setCustomPrice(String farmerId, double price) async {
-    await _firestore.collection('farmer_prices').doc(farmerId).update({
+    // Owns: hasCustomPrice, customPrice, updatedAt
+    await _firestore.collection('farmer_prices').doc(farmerId).set({
       'hasCustomPrice': true,
       'customPrice': price,
       'updatedAt': FieldValue.serverTimestamp(),
-    });
+    }, SetOptions(merge: true));
   }
 
   Future<void> clearCustomPrice(String farmerId) async {
-    await _firestore.collection('farmer_prices').doc(farmerId).update({
+    // Owns: hasCustomPrice, customPrice, updatedAt
+    await _firestore.collection('farmer_prices').doc(farmerId).set({
       'hasCustomPrice': false,
       'customPrice': null,
       'updatedAt': FieldValue.serverTimestamp(),
-    });
+    }, SetOptions(merge: true));
   }
 
   Future<void> removeFarmer(String farmerId) async {
