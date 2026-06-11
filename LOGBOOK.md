@@ -204,4 +204,6 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 Phase 9 successfully restructured Krishibhaav's core pricing logic to support dual Open Market prices (RSS4 & RSS5) and separated Company Price into a read-only "Board Rate". We implemented a robust WhatsApp paste-parser for easy Agent data entry, built an automated Python web scraper (in an external repository) to sync daily Rubber Board rates to Firebase, and hardened our notification/database paths to ensure data integrity. Finally, we enabled per-farmer Effective Price tracking so every chart reflects customized rates. Phase 9 is now closed, pending cron self-fire verification.
 
 [2026-06-11] | Phase 9d | lib/widgets/price_chart_widget.dart | Code Cleanup | Fixed prefer_const_declarations for labelCount variable
+[2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\.github\workflows\seed.yml | Creation | Added manual GitHub actions workflow for one-off seeding
+[2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\seed_history.py | Modification | Updated mock values to demo-plausible ranges near current real-world prices
 ---
