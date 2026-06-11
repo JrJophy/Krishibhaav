@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/colors.dart';
-import '../../core/text_styles.dart';
 import '../../core/market_status.dart';
 import '../../providers/farmer_provider.dart';
 import '../../widgets/price_chart_widget.dart';
