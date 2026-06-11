@@ -18,16 +18,16 @@ Last Updated: 2026-06-11T12:35:00+05:30
 | 9a | App-Side Spec Changes | COMPLETED | - |
 | 9b | WhatsApp Paste-Parser | COMPLETED | - |
 | 9c | Python Scraper Repo & EOD Recorder | COMPLETED | - |
-| 9d | Deployment & Chart Polish | NOT STARTED | - |
+| 9d | Deployment & Chart Polish | COMPLETED | - |
 | 10 | Build & Deploy | NOT STARTED | - |
 
 ## Status Key
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: Phase 9d (Deployment & Chart Polish)
+Phase: Phase 10 (Build & Deploy)
 Started: 2026-06-11
-Last activity: Phase 9c COMPLETED. Phase 9d ready to start.
+Last activity: Phase 9 COMPLETED (cron self-fire verification pending next market day). Ready for Phase 10.
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
@@ -74,5 +74,11 @@ lib/services/board_rate_service.dart (Phase 9a)
 lib/core/market_message_parser.dart (Phase 9b)
 test/market_message_parser_test.dart (Phase 9b)
 lib/widgets/paste_market_message_sheet.dart (Phase 9b)
+c:\Joel\Projects\KrishibhaavScraper\scraper.py (Phase 9c)
+c:\Joel\Projects\KrishibhaavScraper\seed_history.py (Phase 9c)
+c:\Joel\Projects\KrishibhaavScraper\requirements.txt (Phase 9c)
+c:\Joel\Projects\KrishibhaavScraper\.gitignore (Phase 9c)
+c:\Joel\Projects\KrishibhaavScraper\.github\workflows\scraper.yml (Phase 9c)
+c:\Joel\Projects\KrishibhaavScraper\README.md (Phase 9c)
+lib/services/farmer_history_service.dart (Phase 9d)
 ---
-

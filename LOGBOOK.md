@@ -190,4 +190,17 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\.gitignore | Creation | Gitignore for pycache and service account json
 [2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\.github\workflows\scraper.yml | Creation | GitHub actions cron workflow schedule
 [2026-06-11] | Phase 9c | c:\Joel\Projects\KrishibhaavScraper\README.md | Creation | README documentation
+[2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\scraper.py | Hardening | Converted positional where clauses to FieldFilter, added logic to write per-farmer EOD effectivePrice history
+[2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\seed_history.py | Hardening | Extended seeding script to backfill farmer-specific history for Rajan
+[2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\.github\workflows\scraper.yml | Security | Bumped checkout and setup-python actions to v5 and v6 to support Node 24
+[2026-06-11] | Phase 9d | lib/models/price_point.dart | Refactor | Updated fromMap to fallback to effectivePrice for farmer history compatibility
+[2026-06-11] | Phase 9d | lib/services/farmer_history_service.dart | Creation | Service to fetch per-farmer price history and compute 7/30 day stats
+[2026-06-11] | Phase 9d | lib/widgets/stats_grid_widget.dart | Refactor | Updated to consume FarmerPriceStats
+[2026-06-11] | Phase 9d | lib/screens/farmer/farmer_home_screen.dart | UX | Switched from global price_history to per-farmer FarmerHistoryService
+[2026-06-11] | Phase 9d | lib/widgets/price_chart_widget.dart | UX | Polished chart X-axis density to adaptively display ~6 date labels
+---
+
+## Phase 9 Closure Summary
+Phase 9 successfully restructured Krishibhaav's core pricing logic to support dual Open Market prices (RSS4 & RSS5) and separated Company Price into a read-only "Board Rate". We implemented a robust WhatsApp paste-parser for easy Agent data entry, built an automated Python web scraper (in an external repository) to sync daily Rubber Board rates to Firebase, and hardened our notification/database paths to ensure data integrity. Finally, we enabled per-farmer Effective Price tracking so every chart reflects customized rates. Phase 9 is now closed, pending cron self-fire verification.
+
 ---

@@ -41,12 +41,9 @@ With the brand identity solidified and the UI gleaming in both light and dark, P
 
 **The Road Ahead**
 Our epic approaches its final chapters:
-- **Phase 9:** The Spec Shift. We've embarked on Phase 9, fundamentally restructuring the data models and dashboard UI to support split Open Market pricing (RSS4 and RSS5), automated Board Rates, and robust per-farmer visibility flags.
+- **Phase 9: The Data Evolution**
+  What began as a simple "App-Side Spec Change" evolved into a massive restructure. We split Open Market pricing into RSS4 and RSS5, converted the static Company Price into an automated "Board Rate," and built per-farmer visibility flags. A major triumph was the WhatsApp Paste-Parser—an ingenious regex solution originally planned for V2, pulled into V1 to give the Agent frictionless data entry. We navigated a tricky Firestore merge clobber incident (the "forensics" that exposed visibility flags being overwritten), and built a fully automated Python Scraper running on GitHub Actions. This Azure-server-to-Kerala-phone moment synced the official Rubber Board prices daily via FCM. Finally, a per-farmer pivot was introduced: we hardened the scraper to write per-farmer EOD histories based on their *effective* price, ensuring every farmer's chart reflects their personalized rate.
+
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!
-
-### Current Chapter (live)
-- **Phase 9a:** (COMPLETED) Executed the "App-Side Spec Changes", overhauling models and services to support dual RSS4/RSS5 Open Market pricing, migrating the "Company Price" to a read-only "Board Rate" model, adding visibility switches to the Farmer Detail Sheet, and restructuring the Agent/Farmer dashboards to match the new spec.
-- **Phase 9b:** (COMPLETED) Built a regex-powered WhatsApp paste-parser to extract Open Market prices and seamlessly integrated it into the Agent dashboard with a preview and confirm flow.
-- **Phase 9c:** (COMPLETED) Created a separate Python scraper repository with a GitHub Actions cron schedule to fetch domestic market prices from the Rubber Board website, process holidays, sync to Firebase, and dispatch FCM notifications.
