@@ -137,4 +137,10 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Index | COMMIT_INDEX.md | Creation | Mapped git commits to LOGBOOK entries
 [2026-06-11] | Index | generate_index.py | Deletion | Removed stray helper script
 [2026-06-11] | Phase 8.5b | lib/screens/farmer/farmer_home_screen.dart | Bug fix | Removed unused core/text_styles.dart import
+[2026-06-11] | Phase 8.5c | lib/screens/agent/agent_home_screen.dart | Modification | Restyled layout and tokens for light/dark theme support
+[2026-06-11] | Phase 8.5c | lib/widgets/farmer_list_card.dart | Modification | Restyled to match Stitch design and fixed withOpacity deprecation
+[2026-06-11] | Phase 8.5c | lib/widgets/profile_sheet.dart | Modification | Restyled profile sheet with theme tokens
+[2026-06-11] | Phase 8.5c | lib/screens/agent/farmer_detail_sheet.dart | Modification | Restyled and fixed switch activeColor deprecation
+[2026-06-11] | Phase 8.5c | lib/screens/agent/add_farmer_sheet.dart | Modification | Styled inputs and success dialog to match Stitch design
+[2026-06-11] | Phase 8.5c | lib/services/notification_service.dart | Modification | Replaced SnackBar with custom theme-aware floating toast Overlay
 ---

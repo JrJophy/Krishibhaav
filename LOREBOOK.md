@@ -37,4 +37,4 @@ The grand academic vision of Krishibhaav is within reach!
 ## Current Chapter (live)
 [2026-06-11] 8.5a: Restyled core tokens and fixed Flutter 3.44 API changes for theme sub-components.
 [2026-06-11] 8.5b: Restyled Farmer Home Screen to match Stitch design, introducing theme-aware UI elements.
-
+[2026-06-11] 8.5c: Restyled all remaining agent surfaces (dashboard, sheets, dialogs) and notification toast to match Stitch design.
