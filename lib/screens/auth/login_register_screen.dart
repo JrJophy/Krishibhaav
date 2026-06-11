@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:math';
 import '../../core/colors.dart';
-import '../../core/text_styles.dart';
+
 import '../../providers/auth_provider.dart';
 import '../../app_router.dart';
 
