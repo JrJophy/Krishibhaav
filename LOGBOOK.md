@@ -147,4 +147,6 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 8.5d | lib/screens/auth/otp_screen.dart | Modification | Restyled OTP screen and fixed final withOpacity deprecation
 [2026-06-11] | Phase 8.5d | lib/widgets/profile_sheet.dart | Modification | Added ThemeProvider toggle switch
 [2026-06-11] | Phase 8.5 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated for Phase 8.5 closure
+[2026-06-11] | Phase 8.5d | lib/providers/theme_provider.dart | Bug fix | Updated toggleTheme signature to accept explicit bool state
+[2026-06-11] | Phase 8.5d | lib/screens/auth/login_register_screen.dart | Bug fix | Removed unused core/text_styles.dart import
 ---
