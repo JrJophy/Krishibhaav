@@ -134,4 +134,6 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 8.5b | lib/screens/farmer/farmer_home_screen.dart | Modification | Restyled UI to match Stitch design using theme-aware colors
 [2026-06-11] | Phase 8.5b | lib/widgets/price_chart_widget.dart | Modification | Restyled chart to use theme-aware colors and soft gradient
 [2026-06-11] | Phase 8.5b | Summary | Modification | Skipped adding 'Last Updated' to Farmer home as data was not natively present in the existing screen
+[2026-06-11] | Index | COMMIT_INDEX.md | Creation | Mapped git commits to LOGBOOK entries
+[2026-06-11] | Index | generate_index.py | Deletion | Removed stray helper script
 ---
