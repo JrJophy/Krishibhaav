@@ -5,6 +5,8 @@ import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 import 'providers/agent_provider.dart';
 import 'providers/farmer_provider.dart';
+import 'providers/theme_provider.dart';
+import 'utils/theme.dart';
 import 'app_router.dart';
 
 void main() async {
@@ -26,11 +28,19 @@ class KrishibhaavApp extends StatelessWidget {
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<AgentProvider>(create: (_) => AgentProvider()),
         ChangeNotifierProvider<FarmerProvider>(create: (_) => FarmerProvider()),
+        ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp.router(
-        title: 'Krishibhaav',
-        debugShowCheckedModeBanner: false,
-        routerConfig: appRouter,
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp.router(
+            title: 'Krishibhaav',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.themeMode,
+            routerConfig: appRouter,
+          );
+        },
       ),
     );
   }

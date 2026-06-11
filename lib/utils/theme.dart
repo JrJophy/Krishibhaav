@@ -1,34 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../core/colors.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(0xFF2E7D32); // Deep Green for Agriculture
-  static const Color accentColor = Color(0xFFFFC107); // Amber
-  static const Color backgroundColor = Color(0xFFF5F5F5);
-
   static ThemeData get lightTheme {
     return ThemeData(
-      primaryColor: primaryColor,
-      scaffoldBackgroundColor: backgroundColor,
+      useMaterial3: true,
+      brightness: Brightness.light,
+      primaryColor: AppColors.lightPrimary,
+      scaffoldBackgroundColor: AppColors.lightBackground,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.lightPrimary,
+        brightness: Brightness.light,
+        primary: AppColors.lightPrimary,
+        surface: AppColors.lightSurface,
+        error: AppColors.lightDanger,
+      ),
+      textTheme: GoogleFonts.workSansTextTheme(ThemeData.light().textTheme).apply(
+        bodyColor: AppColors.lightInk,
+        displayColor: AppColors.lightInk,
+      ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: primaryColor,
+        backgroundColor: AppColors.lightPrimary,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
       ),
+      cardTheme: CardTheme(
+        color: AppColors.lightSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: primaryColor,
+          backgroundColor: AppColors.lightPrimary,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
         ),
       ),
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: primaryColor,
-        secondary: accentColor,
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: AppColors.lightInk,
+        contentTextStyle: TextStyle(color: Colors.white),
       ),
+      dialogTheme: DialogTheme(
+        backgroundColor: AppColors.lightSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        border: UnderlineInputBorder(),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.lightSurfaceTintA),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.lightPrimary, width: 2),
+        ),
+      ),
+    );
+  }
+
+  static ThemeData get darkTheme {
+    return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
+      primaryColor: AppColors.darkPrimary,
+      scaffoldBackgroundColor: AppColors.darkBackground,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.darkPrimary,
+        brightness: Brightness.dark,
+        primary: AppColors.darkPrimary,
+        surface: AppColors.darkSurface,
+        error: AppColors.darkDanger,
+      ),
+      textTheme: GoogleFonts.workSansTextTheme(ThemeData.dark().textTheme).apply(
+        bodyColor: AppColors.darkInk,
+        displayColor: AppColors.darkInk,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.darkSurface,
+        foregroundColor: AppColors.darkPrimary,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      cardTheme: CardTheme(
+        color: AppColors.darkSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.darkPrimary,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+      snackBarTheme: const SnackBarThemeData(
+        backgroundColor: AppColors.darkInk,
+        contentTextStyle: TextStyle(color: AppColors.darkBackground),
+      ),
+      dialogTheme: DialogTheme(
+        backgroundColor: AppColors.darkSurface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        border: UnderlineInputBorder(),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.darkSurfaceTintA),
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: AppColors.darkPrimary, width: 2),
+        ),
+      ),
     );
   }
 }
