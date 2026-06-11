@@ -154,4 +154,6 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 8.5 polish | lib/widgets/stats_grid_widget.dart | Bug fix | Restyled to be theme-aware
 [2026-06-11] | Phase 8.5 polish | lib/utils/theme.dart | Bug fix | Added FloatingLabelBehavior.auto to inputDecorationTheme to fix double text ghosting
 [2026-06-11] | Phase 8.5 polish | lib/screens/auth/login_register_screen.dart | Bug fix | Fixed dark mode login lockup contrast
+[2026-06-11] | Phase 8.5 polish | Input Fields | Defect | Known cosmetic defect deferred to V2: input label/hint ghosting (diagnosis on file: hintText in price_edit_dialog never floats + FloatingLabelBehavior; 2-line fix identified but deferred by user ruling)
+[2026-06-11] | Phase 8.5 polish | LOREBOOK.md | Documentation | LOREBOOK.md regenerated through Phase 8.5 including polish and deferred ghost defect
 ---
