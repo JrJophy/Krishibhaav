@@ -26,15 +26,20 @@ Simultaneously, we unified the identity management. We forged a dynamic, multi-r
 
 But Phase 8 had one final twist: the Records Saga. A silent editor-buffer conflict threatened to destroy our tracking history, overwriting `PROGRESS_TRACKER.md` with stale data. We caught the discrepancy, forced a complete disk-read verification, and established a new, unshakeable law: all tracking documents must be verified from the disk immediately after every write. The truth lives on the disk.
 
+**The Brand Forge (Phase 8.5)**
+Before moving towards deployment, the UI demanded an aesthetic overhaul to match the ambitious academic scope of Krishibhaav. Enter Phase 8.5: the Stitch Designs Restyle. We faced a crucial design decision and emerged with a hybrid teal/green aesthetic, preserving the legacy "Krishibhaav Green" for positive values while painting the core app in a modern, vibrant teal with comprehensive dark mode support. 
+
+To execute this, we exercised strict "strip-list discipline", ruthlessly breaking the massive overhaul down into self-contained sub-phases while maintaining an absolute "zero logic changes" mandate. What was originally scoped as seven sub-phases was expertly compressed into four highly focused strikes:
+- **8.5a:** Tokenized the color palettes (Light/Dark) and established the ThemeProvider.
+- **8.5b:** Restyled the Farmer Home Screen and Price Chart to strictly match the Stitch renders.
+- **8.5c:** Overhauled all Agent surfaces (dashboard, sheets, dialogs), and crucially, replaced the generic SnackBar with a custom, theme-aware floating Overlay toast for notifications.
+- **8.5d:** Applied the new brand assets (symbol, lockup), injected the dark theme toggle into the Profile Sheet, and configured the launcher icons.
+
+With the brand identity solidified and the UI gleaming in both light and dark, Phase 8.5 concluded smoothly.
+
 **The Road Ahead**
 Our epic approaches its final chapters:
-- **Phase 8.5:** A brief intermission for final polish.
 - **Phase 9:** A Python web scraper will be unleashed into the wild, hosted on Render.com, to autonomously fetch official Kottayam RSS4 updates.
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!
-
-## Current Chapter (live)
-[2026-06-11] 8.5a: Restyled core tokens and fixed Flutter 3.44 API changes for theme sub-components.
-[2026-06-11] 8.5b: Restyled Farmer Home Screen to match Stitch design, introducing theme-aware UI elements.
-[2026-06-11] 8.5c: Restyled all remaining agent surfaces (dashboard, sheets, dialogs) and notification toast to match Stitch design.

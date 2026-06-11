@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../models/user_model.dart';
 import '../providers/auth_provider.dart';
+import '../providers/theme_provider.dart';
 import '../core/colors.dart';
 
 class ProfileSheet extends StatefulWidget {
@@ -237,6 +238,21 @@ class _ProfileSheetState extends State<ProfileSheet> {
                           ),
                         ),
                         const SizedBox(height: 32),
+                        
+                        Consumer<ThemeProvider>(
+                          builder: (context, themeProvider, _) {
+                            return SwitchListTile(
+                              title: Text('Dark Theme', style: TextStyle(color: ink, fontWeight: FontWeight.bold)),
+                              value: themeProvider.themeMode == ThemeMode.dark,
+                              activeThumbColor: AppColors.primary,
+                              contentPadding: EdgeInsets.zero,
+                              onChanged: (val) {
+                                themeProvider.toggleTheme(val);
+                              },
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 16),
                         
                         ElevatedButton(
                           onPressed: _isSaving ? null : _saveProfile,

@@ -14,7 +14,7 @@ Last Updated: 2026-06-10T22:59:10+05:30
 | 6 | Agent Farmer Management | COMPLETED | - |
 | 7 | Push Notifications | COMPLETED | - |
 | 8 | Profile Panels & Polish | COMPLETED | - |
-| 8.5 | UI Restyle (Stitch designs) | IN PROGRESS | - |
+| 8.5 | UI Restyle (Stitch designs) | COMPLETED | - |
 | 9 | Python Scraper | NOT STARTED | - |
 | 10 | Build & Deploy | NOT STARTED | - |
 
@@ -22,9 +22,9 @@ Last Updated: 2026-06-10T22:59:10+05:30
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: Phase 8.5 (sub-phase 8.5c)
-Started: 2026-06-11T11:28:52+05:30
-Last activity: Phase 8.5 IN PROGRESS (sub-phase 8.5c).
+Phase: Phase 8.5 (UI Restyle)
+Started: 2026-06-11
+Last activity: Phase 8.5 COMPLETED.
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
@@ -65,5 +65,6 @@ lib/services/notification_service.dart (Phase 7)
 lib/services/fcm_dispatch_service.dart (Phase 7)
 lib/widgets/profile_sheet.dart (Phase 8)
 test/router_redirect_test.dart (Phase 8)
+assets/branding/ (Phase 8.5)
 ---
 

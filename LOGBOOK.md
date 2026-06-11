@@ -140,8 +140,11 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 8.5c | lib/screens/agent/agent_home_screen.dart | Modification | Restyled layout and tokens for light/dark theme support
 [2026-06-11] | Phase 8.5c | lib/widgets/farmer_list_card.dart | Modification | Restyled to match Stitch design and fixed withOpacity deprecation
 [2026-06-11] | Phase 8.5c | lib/widgets/profile_sheet.dart | Modification | Restyled profile sheet with theme tokens
-[2026-06-11] | Phase 8.5c | lib/screens/agent/farmer_detail_sheet.dart | Modification | Restyled and fixed switch activeColor deprecation
-[2026-06-11] | Phase 8.5c | lib/screens/agent/add_farmer_sheet.dart | Modification | Styled inputs and success dialog to match Stitch design
-[2026-06-11] | Phase 8.5c | lib/services/notification_service.dart | Modification | Replaced SnackBar with custom theme-aware floating toast Overlay
 [2026-06-11] | Phase 8.5c | Multiple | Bug fix | Analyzer sweep: removed unused import and added const modifiers
+[2026-06-11] | Phase 8.5d | pubspec.yaml | Modification | Added branding assets and flutter_launcher_icons config
+[2026-06-11] | Phase 8.5d | lib/screens/splash_screen.dart | Modification | Replaced old logo with brand assets and gradient
+[2026-06-11] | Phase 8.5d | lib/screens/auth/login_register_screen.dart | Modification | Restyled auth screen with theme tokens and brand lockup
+[2026-06-11] | Phase 8.5d | lib/screens/auth/otp_screen.dart | Modification | Restyled OTP screen and fixed final withOpacity deprecation
+[2026-06-11] | Phase 8.5d | lib/widgets/profile_sheet.dart | Modification | Added ThemeProvider toggle switch
+[2026-06-11] | Phase 8.5 | LOREBOOK.md | Documentation | LOREBOOK.md regenerated for Phase 8.5 closure
 ---

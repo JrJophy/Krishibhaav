@@ -73,17 +73,28 @@ class _OtpScreenState extends State<OtpScreen> {
       ? '+91 XXXXXX${mobile.substring(6)}' 
       : '+91 $mobile';
 
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+    final surfaceTintA = isDark ? AppColors.darkSurfaceTintA : AppColors.lightSurfaceTintA;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Verify OTP')),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        title: Text('Verify OTP', style: TextStyle(color: ink, fontWeight: FontWeight.bold)),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
-            Text('Sending to $maskedMobile', style: const TextStyle(fontSize: 18)),
+            Text('Sending to $maskedMobile', style: TextStyle(fontSize: 18, color: ink.withValues(alpha: 0.7))),
             const SizedBox(height: 24),
             Container(
               padding: const EdgeInsets.all(16),
-              color: AppColors.secondary.withOpacity(0.2),
+              decoration: BoxDecoration(
+                color: surfaceTintA.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Text(
                 'Your OTP is: ${widget.otpGenerated}',
                 style: const TextStyle(fontSize: 20, color: AppColors.primary, fontWeight: FontWeight.bold),
@@ -101,20 +112,28 @@ class _OtpScreenState extends State<OtpScreen> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     maxLength: 1,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    decoration: const InputDecoration(counterText: ''),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: ink),
+                    decoration: InputDecoration(
+                      counterText: '',
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
+                    ),
                     onChanged: (val) => _onChanged(val, index),
                   ),
                 );
               }),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 48),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
                 onPressed: _verifyOtp,
-                child: const Text('Verify & Continue', style: TextStyle(color: Colors.white)),
+                child: const Text('Verify & Continue', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ),
             const SizedBox(height: 16),
@@ -129,7 +148,7 @@ class _OtpScreenState extends State<OtpScreen> {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () => context.pop(),
-              child: const Text('← Change Details'),
+              child: Text('← Change Details', style: TextStyle(color: ink.withValues(alpha: 0.6))),
             ),
           ],
         ),
