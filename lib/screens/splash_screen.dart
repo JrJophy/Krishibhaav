@@ -32,33 +32,41 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFF2E7D32),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.eco, size: 80, color: Colors.white),
-            SizedBox(height: 20),
-            Text(
-              'Krishibhaav',
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xFF249BB3), Color(0xFF1B7B8E)], // Primary teal to deeper teal
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/branding/symbol_white.png', width: 120),
+              const SizedBox(height: 24),
+              const Text(
+                'Krishibhaav',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'Kerala Rubber Price Intelligence',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white70,
+              const SizedBox(height: 8),
+              const Text(
+                'Rubber Price Intelligence',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white70,
+                ),
               ),
-            ),
-            SizedBox(height: 40),
-            CircularProgressIndicator(color: Colors.white),
-          ],
+              const SizedBox(height: 48),
+              const CircularProgressIndicator(color: Colors.white, strokeWidth: 2.0),
+            ],
+          ),
         ),
       ),
     );

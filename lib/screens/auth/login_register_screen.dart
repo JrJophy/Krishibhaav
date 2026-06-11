@@ -113,7 +113,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
     }
   }
 
-  Widget _buildSignInTab() {
+  Widget _buildSignInTab(ThemeData theme, bool isDark, Color ink) {
     return AnimatedBuilder(
       animation: _shakeController,
       builder: (context, child) {
@@ -124,23 +124,33 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
         );
       },
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           children: [
             TextField(
               controller: _signInMobileController,
               keyboardType: TextInputType.number,
               maxLength: 10,
-              decoration: const InputDecoration(labelText: 'Mobile Number'),
+              style: TextStyle(color: ink),
+              decoration: InputDecoration(
+                labelText: 'Mobile Number',
+                labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
+              ),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _signInPasswordController,
               obscureText: _obscureSignInPassword,
+              style: TextStyle(color: ink),
               decoration: InputDecoration(
                 labelText: 'Password',
+                labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
                 suffixIcon: IconButton(
-                  icon: Icon(_obscureSignInPassword ? Icons.visibility : Icons.visibility_off),
+                  icon: Icon(_obscureSignInPassword ? Icons.visibility : Icons.visibility_off, color: ink.withValues(alpha: 0.5)),
                   onPressed: () {
                     setState(() {
                       _obscureSignInPassword = !_obscureSignInPassword;
@@ -149,13 +159,17 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
                 onPressed: _handleSignIn,
-                child: const Text('Sign In', style: TextStyle(color: Colors.white)),
+                child: const Text('Sign In', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
               ),
             ),
             Consumer<AuthProvider>(
@@ -175,30 +189,46 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
     );
   }
 
-  Widget _buildRegisterTab() {
+  Widget _buildRegisterTab(ThemeData theme, bool isDark, Color ink) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(24.0),
       child: Column(
         children: [
           TextField(
             controller: _regNameController,
-            decoration: const InputDecoration(labelText: 'Full Name'),
+            style: TextStyle(color: ink),
+            decoration: InputDecoration(
+              labelText: 'Full Name',
+              labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+              focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
+            ),
           ),
           const SizedBox(height: 16),
           TextField(
             controller: _regMobileController,
             keyboardType: TextInputType.number,
             maxLength: 10,
-            decoration: const InputDecoration(labelText: 'Mobile Number'),
+            style: TextStyle(color: ink),
+            decoration: InputDecoration(
+              labelText: 'Mobile Number',
+              labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+              focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
+            ),
           ),
           const SizedBox(height: 16),
           TextField(
             controller: _regPasswordController,
             obscureText: _obscureRegPassword,
+            style: TextStyle(color: ink),
             decoration: InputDecoration(
               labelText: 'Password (min 6 chars)',
+              labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+              focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
               suffixIcon: IconButton(
-                icon: Icon(_obscureRegPassword ? Icons.visibility : Icons.visibility_off),
+                icon: Icon(_obscureRegPassword ? Icons.visibility : Icons.visibility_off, color: ink.withValues(alpha: 0.5)),
                 onPressed: () {
                   setState(() {
                     _obscureRegPassword = !_obscureRegPassword;
@@ -210,15 +240,28 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
           const SizedBox(height: 16),
           TextField(
             controller: _regLocationController,
-            decoration: const InputDecoration(labelText: 'Location'),
+            style: TextStyle(color: ink),
+            decoration: InputDecoration(
+              labelText: 'Location',
+              labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+              focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ChoiceChip(
                 label: const Text('I am a Farmer'),
                 selected: _selectedRole == 'farmer',
+                selectedColor: AppColors.primary.withValues(alpha: 0.2),
+                checkmarkColor: AppColors.primary,
+                labelStyle: TextStyle(color: _selectedRole == 'farmer' ? AppColors.primary : ink, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(color: _selectedRole == 'farmer' ? AppColors.primary : ink.withValues(alpha: 0.2)),
+                ),
                 onSelected: (val) {
                   if (val) setState(() => _selectedRole = 'farmer');
                 },
@@ -227,19 +270,30 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
               ChoiceChip(
                 label: const Text('I am an Agent'),
                 selected: _selectedRole == 'agent',
+                selectedColor: AppColors.primary.withValues(alpha: 0.2),
+                checkmarkColor: AppColors.primary,
+                labelStyle: TextStyle(color: _selectedRole == 'agent' ? AppColors.primary : ink, fontWeight: FontWeight.bold),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(color: _selectedRole == 'agent' ? AppColors.primary : ink.withValues(alpha: 0.2)),
+                ),
                 onSelected: (val) {
                   if (val) setState(() => _selectedRole = 'agent');
                 },
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 32),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              ),
               onPressed: _handleRegister,
-              child: const Text('Send OTP', style: TextStyle(color: Colors.white)),
+              child: const Text('Send OTP', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ),
           Consumer<AuthProvider>(
@@ -260,23 +314,41 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Welcome', style: AppTextStyles.poppinsHeading),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Sign In'),
-            Tab(text: 'Register'),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 48),
+            Image.asset('assets/branding/lockup.png', width: 220),
+            const SizedBox(height: 48),
+            TabBar(
+              controller: _tabController,
+              labelColor: AppColors.primary,
+              unselectedLabelColor: ink.withValues(alpha: 0.5),
+              indicatorColor: AppColors.primary,
+              indicatorWeight: 3,
+              labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              tabs: const [
+                Tab(text: 'Sign In'),
+                Tab(text: 'Register'),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildSignInTab(theme, isDark, ink),
+                  _buildRegisterTab(theme, isDark, ink),
+                ],
+              ),
+            ),
           ],
         ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildSignInTab(),
-          _buildRegisterTab(),
-        ],
       ),
     );
   }
