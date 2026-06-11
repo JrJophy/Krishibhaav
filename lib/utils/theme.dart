@@ -52,6 +52,7 @@ class AppTheme {
         ),
       ),
       inputDecorationTheme: const InputDecorationTheme(
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
         border: UnderlineInputBorder(),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: AppColors.lightSurfaceTintA),
@@ -112,6 +113,7 @@ class AppTheme {
         ),
       ),
       inputDecorationTheme: const InputDecorationTheme(
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
         border: UnderlineInputBorder(),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: AppColors.darkSurfaceTintA),

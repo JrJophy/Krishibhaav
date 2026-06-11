@@ -324,7 +324,16 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
         child: Column(
           children: [
             const SizedBox(height: 48),
-            Image.asset('assets/branding/lockup.png', width: 220),
+            isDark 
+              ? Column(
+                  children: [
+                    Image.asset('assets/branding/symbol.png', width: 48),
+                    const SizedBox(height: 12),
+                    Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32, color: ink)),
+                    Text('RUBBER PRICE INTELLIGENCE', style: TextStyle(fontSize: 12, color: ink.withValues(alpha: 0.5), letterSpacing: 1.2)),
+                  ],
+                )
+              : Image.asset('assets/branding/lockup.png', width: 220),
             const SizedBox(height: 48),
             TabBar(
               controller: _tabController,

@@ -43,3 +43,6 @@ Our epic approaches its final chapters:
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!
+
+## Current Chapter (live)
+[2026-06-11] 8.5 polish: Executed final visual polish pass (app bar branding, stats grid theme-awareness, input field ghosting fixes, and dark mode login contrast).
