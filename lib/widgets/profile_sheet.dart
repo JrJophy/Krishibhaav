@@ -119,15 +119,23 @@ class _ProfileSheetState extends State<ProfileSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final surface = theme.colorScheme.surface;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+    final surfaceTintB = isDark ? AppColors.darkSurfaceTintB : AppColors.lightSurfaceTintB;
+    final danger = isDark ? AppColors.darkDanger : AppColors.lightDanger;
+    final inputFill = isDark ? Colors.grey.shade900 : Colors.grey.shade100;
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
         padding: const EdgeInsets.all(24.0),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: SingleChildScrollView(
           child: _isLoading
@@ -138,10 +146,32 @@ class _ProfileSheetState extends State<ProfileSheet> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        Center(
+                          child: Container(
+                            width: 40,
+                            height: 4,
+                            margin: const EdgeInsets.only(bottom: 24),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withValues(alpha: 0.5),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Text('Profile', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                            CircleAvatar(
+                              radius: 28,
+                              backgroundColor: surfaceTintB.withValues(alpha: 0.2),
+                              child: Text(
+                                _user != null && _user!.name.isNotEmpty ? _user!.name[0].toUpperCase() : '?',
+                                style: const TextStyle(color: AppColors.primary, fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text('Profile', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: ink)),
+                            ),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                               decoration: BoxDecoration(
@@ -152,22 +182,28 @@ class _ProfileSheetState extends State<ProfileSheet> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 32),
                         
                         TextField(
                           controller: _nameController,
+                          style: TextStyle(color: ink),
                           decoration: InputDecoration(
                             labelText: 'Name',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                            focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
                           ),
                         ),
                         const SizedBox(height: 16),
                         
                         TextField(
                           controller: _locationController,
+                          style: TextStyle(color: ink),
                           decoration: InputDecoration(
                             labelText: 'Location',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                            focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -175,9 +211,12 @@ class _ProfileSheetState extends State<ProfileSheet> {
                         if (_user!.role == 'farmer') ...[
                           TextField(
                             controller: _cropController,
+                            style: TextStyle(color: ink),
                             decoration: InputDecoration(
                               labelText: 'Crop',
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                              labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                              focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -187,11 +226,14 @@ class _ProfileSheetState extends State<ProfileSheet> {
                         TextField(
                           controller: TextEditingController(text: _user!.mobile),
                           readOnly: true,
+                          style: TextStyle(color: ink.withValues(alpha: 0.7)),
                           decoration: InputDecoration(
                             labelText: 'Mobile Number',
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                            prefixIcon: Icon(Icons.lock, size: 16, color: ink.withValues(alpha: 0.4)),
                             filled: true,
-                            fillColor: Colors.grey.shade100,
+                            fillColor: inputFill,
+                            border: UnderlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                           ),
                         ),
                         const SizedBox(height: 32),
@@ -212,10 +254,12 @@ class _ProfileSheetState extends State<ProfileSheet> {
                         
                         TextButton.icon(
                           onPressed: _handleLogout,
-                          icon: const Icon(Icons.logout, color: AppColors.danger),
-                          label: const Text('Log Out', style: TextStyle(color: AppColors.danger, fontSize: 16, fontWeight: FontWeight.bold)),
+                          icon: Icon(Icons.logout, color: danger),
+                          label: Text('Log Out', style: TextStyle(color: danger, fontSize: 16, fontWeight: FontWeight.bold)),
                           style: TextButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
+                            side: BorderSide(color: danger.withValues(alpha: 0.5)),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                         ),
                       ],

@@ -29,26 +29,39 @@ class FarmerListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+    final surfaceTintB = isDark ? AppColors.darkSurfaceTintB : AppColors.lightSurfaceTintB;
+    final surface = theme.colorScheme.surface;
+
     return Card(
+      color: surface,
+      elevation: isDark ? 0 : 1,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: isDark ? BorderSide(color: Colors.grey.shade800) : BorderSide.none,
+      ),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: AppColors.primary.withOpacity(0.2),
-                child: Text(_getInitials(farmer.name), style: const TextStyle(color: AppColors.primary)),
+                backgroundColor: surfaceTintB.withValues(alpha: 0.2),
+                child: Text(_getInitials(farmer.name), style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(farmer.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Text(farmer.name, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ink)),
                     const SizedBox(height: 4),
-                    Text('${farmer.location} • ${farmer.mobile}', style: const TextStyle(color: Colors.grey)),
+                    Text('${farmer.location} • ${farmer.mobile}', style: TextStyle(color: ink.withValues(alpha: 0.5))),
                   ],
                 ),
               ),
@@ -72,14 +85,14 @@ class FarmerListCard extends StatelessWidget {
                       return Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: isCustom ? Colors.amber.shade100 : Colors.grey.shade200,
+                          color: isCustom ? const Color(0xFFF9A825).withValues(alpha: 0.2) : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           '${isCustom ? 'Custom' : 'Global'} ₹${displayPrice.toStringAsFixed(2)}',
                           style: TextStyle(
                             fontSize: 12,
-                            color: isCustom ? Colors.amber.shade900 : Colors.grey.shade800,
+                            color: isCustom ? (isDark ? Colors.amber.shade300 : Colors.amber.shade900) : (isDark ? Colors.grey.shade300 : Colors.grey.shade800),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -90,7 +103,7 @@ class FarmerListCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               IconButton(
-                icon: const Icon(Icons.close, color: Colors.grey),
+                icon: Icon(Icons.close, color: ink.withValues(alpha: 0.4)),
                 onPressed: onRemove,
               ),
             ],

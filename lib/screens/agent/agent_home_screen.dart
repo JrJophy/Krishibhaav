@@ -74,19 +74,31 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     }
   }
 
-  Widget _buildPriceRow(String label, double value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+  Widget _buildPriceRow(String label, double value, Color surfaceTintA, Color valueGreen, Color ink) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: surfaceTintA.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
+          Expanded(child: Text(label, style: TextStyle(fontSize: 14, color: ink.withValues(alpha: 0.7)))),
           Row(
             children: [
-              Text('₹${value.toStringAsFixed(2)} /kg', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              const SizedBox(width: 8),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(text: '₹${value.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: valueGreen)),
+                    TextSpan(text: ' /kg', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
               IconButton(
-                icon: const Icon(Icons.edit, size: 20, color: AppColors.primary),
+                icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
                 onPressed: () => _showPriceDialog(label, value),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
@@ -107,19 +119,27 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final valueGreen = isDark ? AppColors.darkValueGreen : AppColors.lightValueGreen;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+    final surfaceTintA = isDark ? AppColors.darkSurfaceTintA : AppColors.lightSurfaceTintA;
+    final danger = isDark ? AppColors.darkDanger : AppColors.lightDanger;
+    final surface = theme.colorScheme.surface;
+
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Krishibhaav', style: AppTextStyles.poppinsHeading.copyWith(fontSize: 20)),
-            Text('${_getGreeting()}, $_agentName', style: const TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
+            Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
+            Text('${_getGreeting()}, $_agentName', style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.account_circle, size: 28),
+            icon: Icon(Icons.account_circle, size: 28, color: theme.appBarTheme.foregroundColor),
             onPressed: () {
               final authProvider = Provider.of<AuthProvider>(context, listen: false);
               if (authProvider.userId != null) {
@@ -148,38 +168,39 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
               padding: const EdgeInsets.all(16.0),
               children: [
                 // Price Control Panel
-                Card(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Today's Prices", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                        const Divider(),
-                        if (settings != null) ...[
-                          _buildPriceRow('Open Market Price', settings.openMarketPrice),
-                          _buildPriceRow('Company Price', settings.companyPrice),
-                          _buildPriceRow('Global Agent Price', settings.globalAgentPrice),
-                        ] else ...[
-                          const Center(child: CircularProgressIndicator()),
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    color: surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: isDark ? Border.all(color: surfaceTintA.withValues(alpha: 0.3)) : Border.all(color: Colors.transparent),
+                    boxShadow: isDark ? [] : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Today's Prices", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: ink)),
+                          Text('Last Updated: $lastUpdatedText', style: TextStyle(color: ink.withValues(alpha: 0.5), fontSize: 12)),
                         ],
-                        const SizedBox(height: 8),
-                        Text('Last Updated: $lastUpdatedText', style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                      ),
+                      const SizedBox(height: 16),
+                      if (settings != null) ...[
+                        _buildPriceRow('Open Market Price', settings.openMarketPrice, surfaceTintA, valueGreen, ink),
+                        _buildPriceRow('Company Price', settings.companyPrice, surfaceTintA, valueGreen, ink),
+                        _buildPriceRow('Global Agent Price', settings.globalAgentPrice, surfaceTintA, valueGreen, ink),
+                      ] else ...[
+                        const Center(child: CircularProgressIndicator()),
                       ],
-                    ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
                 
                 // Stats Strip
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Total Farmers: ${agentProvider.farmerList.length}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                    Text('Last Updated: $lastUpdatedText', style: const TextStyle(color: Colors.grey, fontSize: 12)),
-                  ],
-                ),
+                Text('Total Farmers: ${agentProvider.farmerList.length}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ink)),
                 const SizedBox(height: 16),
 
                 // Search Bar
@@ -187,10 +208,11 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Search by name or location...',
-                    prefixIcon: const Icon(Icons.search),
+                    hintStyle: TextStyle(color: ink.withValues(alpha: 0.5)),
+                    prefixIcon: Icon(Icons.search, color: ink.withValues(alpha: 0.5)),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
-                            icon: const Icon(Icons.clear),
+                            icon: Icon(Icons.clear, color: ink.withValues(alpha: 0.5)),
                             onPressed: () {
                               _searchController.clear();
                               agentProvider.setSearchQuery('');
@@ -198,8 +220,9 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                           )
                         : null,
                     filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                    fillColor: surfaceTintA.withValues(alpha: 0.1),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none),
                   ),
                   onChanged: (val) => agentProvider.setSearchQuery(val),
                 ),
@@ -209,14 +232,15 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('All Farmers (${farmers.length})', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                    Text('All Farmers (${farmers.length})', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: ink)),
                     TextButton.icon(
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Farmer'),
+                      icon: const Icon(Icons.add, color: AppColors.primary),
+                      label: const Text('Add Farmer', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
                           builder: (context) => const AddFarmerSheet(),
                         );
                       },
@@ -230,7 +254,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   ...List.generate(3, (index) => Container(
                     height: 80,
                     margin: const EdgeInsets.symmetric(vertical: 8),
-                    decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(12)),
+                    decoration: BoxDecoration(color: surfaceTintA.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(12)),
                   ))
                 else if (farmers.isEmpty)
                   Padding(
@@ -241,6 +265,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                             ? "No farmers match your search." 
                             : "No farmers yet. Tap + Add Farmer to begin.", 
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: ink.withValues(alpha: 0.6)),
                       ),
                     ),
                   )
@@ -259,16 +284,17 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                       showDialog(
                         context: context,
                         builder: (ctx) => AlertDialog(
-                          title: Text('Remove ${farmer.name}?'),
-                          content: const Text('They will no longer see your prices.'),
+                          title: Text('Remove ${farmer.name}?', style: TextStyle(color: ink)),
+                          content: Text('They will no longer see your prices.', style: TextStyle(color: ink.withValues(alpha: 0.7))),
+                          backgroundColor: surface,
                           actions: [
-                            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel', style: TextStyle(color: Colors.grey))),
+                            TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Cancel', style: TextStyle(color: ink.withValues(alpha: 0.5)))),
                             TextButton(
                               onPressed: () {
                                 agentProvider.removeFarmer(farmer.uid);
                                 Navigator.pop(ctx);
                               },
-                              child: const Text('Remove', style: TextStyle(color: AppColors.danger)),
+                              child: Text('Remove', style: TextStyle(color: danger, fontWeight: FontWeight.bold)),
                             ),
                           ],
                         ),
@@ -277,36 +303,47 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   )),
                 const SizedBox(height: 24),
                 // Expansion tile for the chart
-                ExpansionTile(
-                  title: const Text('30-Day Market Trend', style: TextStyle(fontWeight: FontWeight.bold)),
-                  children: [
-                    FutureBuilder<List<PricePoint>>(
-                      future: _priceHistoryFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
-                          return const Padding(
-                            padding: EdgeInsets.all(32.0),
-                            child: Center(child: CircularProgressIndicator()),
-                          );
-                        }
+                Container(
+                  decoration: BoxDecoration(
+                    color: surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                  ),
+                  child: ExpansionTile(
+                    title: Text('30-Day Market Trend', style: TextStyle(fontWeight: FontWeight.bold, color: ink)),
+                    shape: const RoundedRectangleBorder(side: BorderSide.none),
+                    children: [
+                      FutureBuilder<List<PricePoint>>(
+                        future: _priceHistoryFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
+                            return const Padding(
+                              padding: EdgeInsets.all(32.0),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
+                          }
 
-                        final points = snapshot.data!;
-                        final stats = _priceHistoryService.computeStats(points);
-                        
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              PriceChartWidget(points: points),
-                              const SizedBox(height: 16),
-                              StatsGridWidget(stats: stats),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+                          final points = snapshot.data!;
+                          final stats = _priceHistoryService.computeStats(points);
+                          
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                PriceChartWidget(points: points),
+                                const SizedBox(height: 16),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                                  child: StatsGridWidget(stats: stats),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             );

@@ -118,6 +118,13 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
   @override
   Widget build(BuildContext context) {
     final globalPrice = Provider.of<AgentProvider>(context).agentSettings?.globalAgentPrice ?? 0.0;
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final surface = theme.colorScheme.surface;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+    final surfaceTintB = isDark ? AppColors.darkSurfaceTintB : AppColors.lightSurfaceTintB;
+    final danger = isDark ? AppColors.darkDanger : AppColors.lightDanger;
+    final inputFill = isDark ? Colors.grey.shade900 : Colors.grey.shade100;
     
     return Padding(
       padding: EdgeInsets.only(
@@ -125,21 +132,32 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
       ),
       child: Container(
         padding: const EdgeInsets.all(24.0),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        decoration: BoxDecoration(
+          color: surface,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 24),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
               // Header
               Row(
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.2),
+                    backgroundColor: surfaceTintB.withValues(alpha: 0.2),
                     child: Text(_getInitials(widget.farmer.name), style: const TextStyle(color: AppColors.primary, fontSize: 24, fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(width: 16),
@@ -147,9 +165,9 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.farmer.name, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                        Text(widget.farmer.name, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: ink)),
                         const SizedBox(height: 4),
-                        Text(widget.farmer.mobile, style: const TextStyle(color: Colors.grey, fontSize: 16)),
+                        Text('${widget.farmer.location} • ${widget.farmer.mobile}', style: TextStyle(color: ink.withValues(alpha: 0.5), fontSize: 14)),
                       ],
                     ),
                   ),
@@ -159,39 +177,65 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                       color: AppColors.primaryLight.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Text('Rubber', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                    child: const Text('Rubber', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold, fontSize: 12)),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              const Divider(),
+              Divider(color: ink.withValues(alpha: 0.1)),
               const SizedBox(height: 16),
               
               // Editable Profile
-              const Text('Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              Text('Profile', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ink)),
               const SizedBox(height: 12),
               TextField(
                 controller: _nameController,
+                style: TextStyle(color: ink),
                 decoration: InputDecoration(
                   labelText: 'Name',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                  focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
                 ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _locationController,
+                style: TextStyle(color: ink),
                 decoration: InputDecoration(
                   labelText: 'Location',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                  focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
                 ),
               ),
               
               const SizedBox(height: 24),
-              const Divider(),
+              Divider(color: ink.withValues(alpha: 0.1)),
               const SizedBox(height: 16),
               
               // Custom Price Section
-              const Text('Pricing', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Pricing', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ink)),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: _useCustomPrice ? const Color(0xFFF9A825).withValues(alpha: 0.2) : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      _useCustomPrice ? 'Custom' : 'Global',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: _useCustomPrice ? (isDark ? Colors.amber.shade300 : Colors.amber.shade900) : (isDark ? Colors.grey.shade300 : Colors.grey.shade800),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
               const SizedBox(height: 12),
               if (_isLoading)
                 const Center(child: CircularProgressIndicator())
@@ -200,9 +244,9 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SwitchListTile(
-                      title: const Text('Use custom price for this farmer'),
+                      title: Text('Use custom price for this farmer', style: TextStyle(color: ink)),
                       value: _useCustomPrice,
-                      activeColor: AppColors.primary,
+                      activeThumbColor: AppColors.primary,
                       contentPadding: EdgeInsets.zero,
                       onChanged: (val) {
                         setState(() {
@@ -217,20 +261,25 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                     TextField(
                       controller: _priceController,
                       enabled: _useCustomPrice,
+                      style: TextStyle(color: ink),
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
                         labelText: 'Custom Price',
+                        labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
                         prefixText: '₹ ',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        prefixStyle: TextStyle(color: ink),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: ink.withValues(alpha: 0.2))),
+                        focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary, width: 2)),
+                        disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
                         filled: !_useCustomPrice,
-                        fillColor: _useCustomPrice ? Colors.transparent : Colors.grey.shade100,
+                        fillColor: _useCustomPrice ? Colors.transparent : inputFill,
                       ),
                     ),
                     const SizedBox(height: 8),
                     if (!_useCustomPrice)
                       Text(
                         'Using global price: ₹${globalPrice.toStringAsFixed(2)}',
-                        style: const TextStyle(color: Colors.grey, fontSize: 12),
+                        style: TextStyle(color: ink.withValues(alpha: 0.5), fontSize: 12),
                       ),
                   ],
                 ),
@@ -250,11 +299,38 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
                     : const Text('Save Changes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               ),
-              const SizedBox(height: 8),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Close', style: TextStyle(color: Colors.grey)),
+              const SizedBox(height: 16),
+              TextButton.icon(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text('Remove ${widget.farmer.name}?', style: TextStyle(color: ink)),
+                      content: Text('They will no longer see your prices.', style: TextStyle(color: ink.withValues(alpha: 0.7))),
+                      backgroundColor: surface,
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Cancel', style: TextStyle(color: ink.withValues(alpha: 0.5)))),
+                        TextButton(
+                          onPressed: () {
+                            Provider.of<AgentProvider>(context, listen: false).removeFarmer(widget.farmer.uid);
+                            Navigator.pop(ctx);
+                            Navigator.pop(context);
+                          },
+                          child: Text('Remove', style: TextStyle(color: danger, fontWeight: FontWeight.bold)),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                icon: Icon(Icons.delete, color: danger),
+                label: Text('Remove Farmer', style: TextStyle(color: danger, fontSize: 16, fontWeight: FontWeight.bold)),
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  side: BorderSide(color: danger.withValues(alpha: 0.5)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
               ),
+              const SizedBox(height: 8),
             ],
           ),
         ),
