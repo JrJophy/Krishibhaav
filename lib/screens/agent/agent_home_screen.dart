@@ -211,12 +211,14 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
           children: [
             Image.asset(isDark ? 'assets/branding/symbol.png' : 'assets/branding/symbol_white.png', width: 32),
             const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
-                Text('${_getGreeting()}, $_agentName', style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
-              ],
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Krishibhaav', overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
+                  Text('${_getGreeting()}, $_agentName', overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
+                ],
+              ),
             ),
           ],
         ),

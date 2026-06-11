@@ -172,4 +172,7 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 9a fix round | lib/models/agent_settings_model.dart | Bug fix | Made openMarketRss5 non-required with default 0.0 to fix compilation errors at existing construction sites
 [2026-06-11] | Phase 9a fix round | lib/services/fcm_dispatch_service.dart | Bug fix | Removed unused _getAllFarmerTokens method
 [2026-06-11] | Phase 9a final round | lib/screens/farmer/farmer_home_screen.dart | UX | Changed hero card title to "Today's Rate" and removed caption line per user request
+[2026-06-11] | Phase 9a fix | lib/services/agent_service.dart | Bug fix | Changed farmer_prices updates to use SetOptions(merge:true) to prevent visibility flag clobbering
+[2026-06-11] | Phase 9a fix | lib/screens/farmer/farmer_home_screen.dart | UX | Fixed RenderFlex overflow on app bar by wrapping title column in Flexible and using TextOverflow.ellipsis
+[2026-06-11] | Phase 9a fix | lib/screens/agent/agent_home_screen.dart | UX | Fixed RenderFlex overflow on app bar by wrapping title column in Flexible and using TextOverflow.ellipsis
 ---
