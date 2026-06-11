@@ -33,3 +33,6 @@ Our epic approaches its final chapters:
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!
+
+## Current Chapter (live)
+[2026-06-11] 8.5a: Restyled core tokens and fixed Flutter 3.44 API changes for theme sub-components.
