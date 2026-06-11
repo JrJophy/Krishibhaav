@@ -208,54 +208,68 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                   const SizedBox(height: 16),
 
                   // Secondary Price Cards
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: isDark ? surface : Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                  if (provider.canSeeBoardRate || provider.canSeeOpenMarket) ...[
+                    Row(
+                      children: [
+                        if (provider.canSeeBoardRate)
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: isDark ? surface : Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Board Rate', style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 13)),
+                                  const SizedBox(height: 8),
+                                  if (provider.boardRate != null) ...[
+                                    Text('RSS4 ₹${provider.boardRate!.rss4.toStringAsFixed(2)}', 
+                                      style: TextStyle(color: valueGreen, fontSize: 16, fontWeight: FontWeight.bold)),
+                                    const SizedBox(height: 4),
+                                    Text('RSS5 ₹${provider.boardRate!.rss5.toStringAsFixed(2)}', 
+                                      style: TextStyle(color: valueGreen, fontSize: 16, fontWeight: FontWeight.bold)),
+                                  ] else
+                                    Text('Awaiting data', style: TextStyle(color: ink.withValues(alpha: 0.5), fontSize: 14, fontStyle: FontStyle.italic)),
+                                ],
+                              ),
+                            ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Company Price', style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 13)),
-                              const SizedBox(height: 8),
-                              Text('₹${provider.companyPrice.toStringAsFixed(2)}/kg', 
-                                style: TextStyle(color: valueGreen, fontSize: 20, fontWeight: FontWeight.bold)),
-                            ],
+                        if (provider.canSeeBoardRate && provider.canSeeOpenMarket)
+                          const SizedBox(width: 16),
+                        if (provider.canSeeOpenMarket)
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: isDark ? surface : Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Open Market Price', style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 13)),
+                                  const SizedBox(height: 8),
+                                  Text('RSS4 ₹${provider.openMarketPrice.toStringAsFixed(2)}', 
+                                    style: TextStyle(color: valueGreen, fontSize: 16, fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 4),
+                                  Text('RSS5 ₹${provider.openMarketRss5.toStringAsFixed(2)}', 
+                                    style: TextStyle(color: valueGreen, fontSize: 16, fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: isDark ? surface : Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Open Market Price', style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 13)),
-                              const SizedBox(height: 8),
-                              Text('₹${provider.openMarketPrice.toStringAsFixed(2)}/kg', 
-                                style: TextStyle(color: valueGreen, fontSize: 20, fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
+                  ],
                 ],
                 const SizedBox(height: 32),
 
                 // Price Trend section
-                Text('30-Day Market Trend', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink)),
+                Text('Agent Price Trend', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink)),
                 const SizedBox(height: 16),
                 FutureBuilder<List<PricePoint>>(
                   future: _priceHistoryFuture,
@@ -287,6 +301,22 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                     }
 
                     final points = snapshot.data!;
+                    if (points.isEmpty) {
+                      return Container(
+                        padding: const EdgeInsets.all(32),
+                        decoration: BoxDecoration(
+                          color: isDark ? surface : Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Price tracking starts soon',
+                          style: TextStyle(color: ink.withValues(alpha: 0.5), fontStyle: FontStyle.italic),
+                        ),
+                      );
+                    }
+
                     final stats = _priceHistoryService.computeStats(points);
                     
                     return Column(

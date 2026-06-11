@@ -156,4 +156,17 @@ V1 = current 10-phase spec (locked). V2 Phase 1 reserved: WhatsApp market-messag
 [2026-06-11] | Phase 8.5 polish | lib/screens/auth/login_register_screen.dart | Bug fix | Fixed dark mode login lockup contrast
 [2026-06-11] | Phase 8.5 polish | Input Fields | Defect | Known cosmetic defect deferred to V2: input label/hint ghosting (diagnosis on file: hintText in price_edit_dialog never floats + FloatingLabelBehavior; 2-line fix identified but deferred by user ruling)
 [2026-06-11] | Phase 8.5 polish | LOREBOOK.md | Documentation | LOREBOOK.md regenerated through Phase 8.5 including polish and deferred ghost defect
+[2026-06-11] | Phase 9a | Core Models | Creation | Created board_rate_model.dart and board_rate_service.dart
+[2026-06-11] | Phase 9a | Core Models | Modification | Added openMarketRss5 to AgentSettingsModel and visibility flags to FarmerPriceModel
+[2026-06-11] | Phase 9a | lib/models/price_point.dart | Modification | Extracted agentGlobalPrice to fix chart source
+[2026-06-11] | Phase 9a | lib/services/price_history_service.dart | Modification | Skipped docs without agentGlobalPrice
+[2026-06-11] | Phase 9a | lib/services/agent_service.dart | Modification | Added dual Open Market field updates and visibility flag updates
+[2026-06-11] | Phase 9a | lib/services/farmer_service.dart | Modification | Piped visibility flags into EffectivePriceResult
+[2026-06-11] | Phase 9a | lib/services/fcm_dispatch_service.dart | Modification | Filtered Open Market and Board Rate push queries by visibility flags and updated body copy
+[2026-06-11] | Phase 9a | lib/providers/agent_provider.dart | Modification | Handled dual values for Open Market Price
+[2026-06-11] | Phase 9a | lib/providers/farmer_provider.dart | Modification | Integrated BoardRateService stream and tracked new fields
+[2026-06-11] | Phase 9a | lib/widgets/price_edit_dialog.dart | Modification | Conditionally rendered a second input for RSS5
+[2026-06-11] | Phase 9a | lib/screens/agent/agent_home_screen.dart | Modification | Restructured dashboard (read-only Board Rate stream, dual OM fields, removed chart)
+[2026-06-11] | Phase 9a | lib/screens/agent/farmer_detail_sheet.dart | Modification | Added visibility switches for Board Rate and Open Market
+[2026-06-11] | Phase 9a | lib/screens/farmer/farmer_home_screen.dart | Modification | Conditionally rendered secondary cards, supported dual OM fields, adapted empty chart state
 ---

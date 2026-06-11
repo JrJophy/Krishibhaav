@@ -10,12 +10,10 @@ import '../../widgets/price_edit_dialog.dart';
 import '../../widgets/farmer_list_card.dart';
 import 'add_farmer_sheet.dart';
 import 'farmer_detail_sheet.dart';
-import '../../widgets/price_chart_widget.dart';
-import '../../widgets/stats_grid_widget.dart';
-import '../../services/price_history_service.dart';
-import '../../models/price_point.dart';
 import '../../services/notification_service.dart';
 import '../../widgets/profile_sheet.dart';
+import '../../models/board_rate_model.dart';
+import '../../services/board_rate_service.dart';
 
 class AgentHomeScreen extends StatefulWidget {
   const AgentHomeScreen({super.key});
@@ -26,8 +24,7 @@ class AgentHomeScreen extends StatefulWidget {
 
 class _AgentHomeScreenState extends State<AgentHomeScreen> {
   final TextEditingController _searchController = TextEditingController();
-  Future<List<PricePoint>>? _priceHistoryFuture;
-  final PriceHistoryService _priceHistoryService = PriceHistoryService();
+  final BoardRateService _boardRateService = BoardRateService();
   String _agentName = 'Agent';
 
   @override
@@ -51,9 +48,6 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
       agentProvider.loadAgent(authProvider.userId!);
       NotificationService().init(context, authProvider.userId!);
     }
-    setState(() {
-      _priceHistoryFuture = _priceHistoryService.fetchPriceHistory();
-    });
   }
 
   @override
@@ -62,19 +56,23 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     super.dispose();
   }
 
-  void _showPriceDialog(String type, double currentValue) async {
-    final newPrice = await showDialog<double>(
+  void _showPriceDialog(String type, double currentValue, [double? currentValue2]) async {
+    final newPrices = await showDialog<List<double>>(
       context: context,
-      builder: (context) => PriceEditDialog(priceName: type, currentValue: currentValue),
+      builder: (context) => PriceEditDialog(priceName: type, currentValue: currentValue, currentValue2: currentValue2),
     );
-    if (newPrice != null) {
+    if (newPrices != null && newPrices.isNotEmpty) {
       if (mounted) {
-        Provider.of<AgentProvider>(context, listen: false).updatePrice(type, newPrice);
+        if (type == 'Open Market Price' && newPrices.length > 1) {
+          Provider.of<AgentProvider>(context, listen: false).updatePrice(type, newPrices[0], newPrices[1]);
+        } else {
+          Provider.of<AgentProvider>(context, listen: false).updatePrice(type, newPrices[0]);
+        }
       }
     }
   }
 
-  Widget _buildPriceRow(String label, double value, Color surfaceTintA, Color valueGreen, Color ink) {
+  Widget _buildSinglePriceRow(String label, double value, Color surfaceTintA, Color valueGreen, Color ink, {bool editable = true}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6.0),
       padding: const EdgeInsets.all(16.0),
@@ -96,15 +94,93 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
-              IconButton(
-                icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
-                onPressed: () => _showPriceDialog(label, value),
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-              ),
+              if (editable) ...[
+                const SizedBox(width: 12),
+                IconButton(
+                  icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
+                  onPressed: () => _showPriceDialog(label, value),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
             ],
           )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDualPriceRow(String label, double rss4, double rss5, Color surfaceTintA, Color valueGreen, Color ink, {bool editable = true, String? caption}) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: surfaceTintA.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(label, style: TextStyle(fontSize: 14, color: ink.withValues(alpha: 0.7))),
+                if (caption != null)
+                  Text(caption, style: TextStyle(fontSize: 11, color: ink.withValues(alpha: 0.4))),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(text: 'RSS4 ', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                    TextSpan(text: '₹${rss4.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: valueGreen)),
+                    TextSpan(text: ' · RSS5 ', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                    TextSpan(text: '₹${rss5.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: valueGreen)),
+                    TextSpan(text: ' /kg', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                  ],
+                ),
+              ),
+              if (editable) ...[
+                const SizedBox(width: 12),
+                IconButton(
+                  icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
+                  onPressed: () => _showPriceDialog(label, rss4, rss5),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBoardRatePlaceholder(Color surfaceTintA, Color ink) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 6.0),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: surfaceTintA.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Board Rate', style: TextStyle(fontSize: 14, color: ink.withValues(alpha: 0.7))),
+                Text('auto · awaiting scraper', style: TextStyle(fontSize: 11, color: ink.withValues(alpha: 0.4))),
+              ],
+            ),
+          ),
+          Text('—', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: ink.withValues(alpha: 0.3))),
         ],
       ),
     );
@@ -195,9 +271,27 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                       ),
                       const SizedBox(height: 16),
                       if (settings != null) ...[
-                        _buildPriceRow('Open Market Price', settings.openMarketPrice, surfaceTintA, valueGreen, ink),
-                        _buildPriceRow('Company Price', settings.companyPrice, surfaceTintA, valueGreen, ink),
-                        _buildPriceRow('Global Agent Price', settings.globalAgentPrice, surfaceTintA, valueGreen, ink),
+                        StreamBuilder<BoardRateModel?>(
+                          stream: _boardRateService.streamBoardRate(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.data == null) {
+                              return _buildBoardRatePlaceholder(surfaceTintA, ink);
+                            }
+                            final br = snapshot.data!;
+                            return _buildDualPriceRow(
+                              'Board Rate', 
+                              br.rss4, 
+                              br.rss5, 
+                              surfaceTintA, 
+                              valueGreen, 
+                              ink, 
+                              editable: false,
+                              caption: 'auto · ${br.date}',
+                            );
+                          },
+                        ),
+                        _buildDualPriceRow('Open Market Price', settings.openMarketPrice, settings.openMarketRss5, surfaceTintA, valueGreen, ink),
+                        _buildSinglePriceRow('Global Agent Price', settings.globalAgentPrice, surfaceTintA, valueGreen, ink),
                       ] else ...[
                         const Center(child: CircularProgressIndicator()),
                       ],
@@ -309,49 +403,6 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                     },
                   )),
                 const SizedBox(height: 24),
-                // Expansion tile for the chart
-                Container(
-                  decoration: BoxDecoration(
-                    color: surface,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                  ),
-                  child: ExpansionTile(
-                    title: Text('30-Day Market Trend', style: TextStyle(fontWeight: FontWeight.bold, color: ink)),
-                    shape: const RoundedRectangleBorder(side: BorderSide.none),
-                    children: [
-                      FutureBuilder<List<PricePoint>>(
-                        future: _priceHistoryFuture,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
-                            return const Padding(
-                              padding: EdgeInsets.all(32.0),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
-                          }
-
-                          final points = snapshot.data!;
-                          final stats = _priceHistoryService.computeStats(points);
-                          
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                PriceChartWidget(points: points),
-                                const SizedBox(height: 16),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                                  child: StatsGridWidget(stats: stats),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
               ],
             );
           },
@@ -360,3 +411,4 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     );
   }
 }
+

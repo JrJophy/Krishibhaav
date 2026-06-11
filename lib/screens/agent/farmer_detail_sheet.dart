@@ -24,6 +24,8 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
   late TextEditingController _priceController;
   
   bool _useCustomPrice = false;
+  bool _canSeeBoardRate = false;
+  bool _canSeeOpenMarket = false;
   bool _isLoading = true;
   bool _isSaving = false;
 
@@ -43,6 +45,8 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
         final data = doc.data()!;
         setState(() {
           _useCustomPrice = data['hasCustomPrice'] ?? false;
+          _canSeeBoardRate = data['canSeeBoardRate'] ?? false;
+          _canSeeOpenMarket = data['canSeeOpenMarket'] ?? false;
           if (data['customPrice'] != null) {
             _priceController.text = data['customPrice'].toString();
           }
@@ -99,7 +103,9 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
         await _agentService.clearCustomPrice(widget.farmer.uid);
         FcmDispatchService().notifyCustomPriceReverted(widget.farmer.uid, globalPrice);
       }
-      
+
+      await _agentService.updateFarmerVisibility(widget.farmer.uid, _canSeeBoardRate, _canSeeOpenMarket);
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Farmer updated successfully'), backgroundColor: AppColors.primary));
         Navigator.pop(context);
@@ -284,6 +290,43 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                   ],
                 ),
                 
+              const SizedBox(height: 24),
+              Divider(color: ink.withValues(alpha: 0.1)),
+              const SizedBox(height: 16),
+              
+              // Visibility Section
+              Text('Visibility', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ink)),
+              const SizedBox(height: 12),
+              if (_isLoading)
+                const Center(child: CircularProgressIndicator())
+              else
+                Column(
+                  children: [
+                    SwitchListTile(
+                      title: Text('Show Board Rate', style: TextStyle(color: ink)),
+                      value: _canSeeBoardRate,
+                      activeThumbColor: AppColors.primary,
+                      contentPadding: EdgeInsets.zero,
+                      onChanged: (val) {
+                        setState(() {
+                          _canSeeBoardRate = val;
+                        });
+                      },
+                    ),
+                    SwitchListTile(
+                      title: Text('Show Open Market Price', style: TextStyle(color: ink)),
+                      value: _canSeeOpenMarket,
+                      activeThumbColor: AppColors.primary,
+                      contentPadding: EdgeInsets.zero,
+                      onChanged: (val) {
+                        setState(() {
+                          _canSeeOpenMarket = val;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+
               const SizedBox(height: 32),
               
               // Buttons

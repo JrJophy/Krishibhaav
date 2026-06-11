@@ -41,7 +41,10 @@ With the brand identity solidified and the UI gleaming in both light and dark, P
 
 **The Road Ahead**
 Our epic approaches its final chapters:
-- **Phase 9:** A Python web scraper will be unleashed into the wild, hosted on Render.com, to autonomously fetch official Kottayam RSS4 updates.
+- **Phase 9:** The Spec Shift. We've embarked on Phase 9, fundamentally restructuring the data models and dashboard UI to support split Open Market pricing (RSS4 and RSS5), automated Board Rates, and robust per-farmer visibility flags.
 - **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
 
 The grand academic vision of Krishibhaav is within reach!
+
+### Current Chapter (live)
+- **Phase 9a:** (COMPLETED) Executed the "App-Side Spec Changes", overhauling models and services to support dual RSS4/RSS5 Open Market pricing, migrating the "Company Price" to a read-only "Board Rate" model, adding visibility switches to the Farmer Detail Sheet, and restructuring the Agent/Farmer dashboards to match the new spec.
