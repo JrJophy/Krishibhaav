@@ -14,6 +14,7 @@ Last Updated: 2026-06-10T22:59:10+05:30
 | 6 | Agent Farmer Management | COMPLETED | - |
 | 7 | Push Notifications | COMPLETED | - |
 | 8 | Profile Panels & Polish | COMPLETED | - |
+| 8.5 | UI Restyle (Stitch designs) | IN PROGRESS | - |
 | 9 | Python Scraper | NOT STARTED | - |
 | 10 | Build & Deploy | NOT STARTED | - |
 
@@ -21,9 +22,9 @@ Last Updated: 2026-06-10T22:59:10+05:30
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: Phase 8
-Started: 2026-06-10T22:36:00+05:30
-Last activity: Phase 8 COMPLETED (2026-06-10T23:19:42+05:30).
+Phase: Phase 8.5 (sub-phase 8.5a)
+Started: 2026-06-11T07:24:33+05:30
+Last activity: Phase 8.5 IN PROGRESS (sub-phase 8.5a).
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
