@@ -71,7 +71,6 @@ class _PasteMarketMessageSheetState extends State<PasteMarketMessageSheet> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
-    final surfaceTintB = isDark ? AppColors.darkSurfaceTintB : AppColors.lightSurfaceTintB;
     final valueGreen = isDark ? AppColors.darkValueGreen : AppColors.lightValueGreen;
     final surface = theme.colorScheme.surface;
     final inputFill = isDark ? Colors.grey.shade900 : Colors.grey.shade100;
