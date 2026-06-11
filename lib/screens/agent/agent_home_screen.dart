@@ -130,11 +130,18 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        centerTitle: false,
+        title: Row(
           children: [
-            Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
-            Text('${_getGreeting()}, $_agentName', style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
+            Image.asset(isDark ? 'assets/branding/symbol.png' : 'assets/branding/symbol_white.png', width: 32),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
+                Text('${_getGreeting()}, $_agentName', style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
+              ],
+            ),
           ],
         ),
         actions: [

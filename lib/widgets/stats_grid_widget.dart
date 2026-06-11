@@ -9,6 +9,13 @@ class StatsGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final valueGreen = isDark ? AppColors.darkValueGreen : AppColors.lightValueGreen;
+    final danger = isDark ? AppColors.darkDanger : AppColors.lightDanger;
+    final surface = theme.colorScheme.surface;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
@@ -17,24 +24,24 @@ class StatsGridWidget extends StatelessWidget {
       mainAxisSpacing: 8,
       crossAxisSpacing: 8,
       children: [
-        _buildStatCard('7-Day High', stats?.sevenDayHigh, AppColors.priceGreen),
-        _buildStatCard('7-Day Low', stats?.sevenDayLow, AppColors.priceRed),
-        _buildStatCard('30-Day High', stats?.thirtyDayHigh, AppColors.priceGreen),
-        _buildStatCard('30-Day Low', stats?.thirtyDayLow, AppColors.priceRed),
+        _buildStatCard('7-Day High', stats?.sevenDayHigh, valueGreen, surface, ink, isDark),
+        _buildStatCard('7-Day Low', stats?.sevenDayLow, danger, surface, ink, isDark),
+        _buildStatCard('30-Day High', stats?.thirtyDayHigh, valueGreen, surface, ink, isDark),
+        _buildStatCard('30-Day Low', stats?.thirtyDayLow, danger, surface, ink, isDark),
       ],
     );
   }
 
-  Widget _buildStatCard(String label, double? value, Color valueColor) {
+  Widget _buildStatCard(String label, double? value, Color valueColor, Color surface, Color ink, bool isDark) {
     final displayValue = (value == null || value == 0) ? '—' : '₹${value.toStringAsFixed(2)}';
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: surface,
         borderRadius: BorderRadius.circular(8),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.1),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -49,7 +56,7 @@ class StatsGridWidget extends StatelessWidget {
           children: [
             Text(
               label, 
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
+              style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 12),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

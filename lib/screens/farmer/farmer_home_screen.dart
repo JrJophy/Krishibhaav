@@ -79,14 +79,21 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
+        centerTitle: false,
         title: Consumer<FarmerProvider>(
           builder: (context, provider, _) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            return Row(
               children: [
-                Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
-                Text('${_getGreeting()}, ${provider.farmerName.isNotEmpty ? provider.farmerName : 'Farmer'}', 
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
+                Image.asset(isDark ? 'assets/branding/symbol.png' : 'assets/branding/symbol_white.png', width: 32),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Krishibhaav', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: theme.appBarTheme.foregroundColor)),
+                    Text('${_getGreeting()}, ${provider.farmerName.isNotEmpty ? provider.farmerName : 'Farmer'}', 
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: isDark ? Colors.grey.shade400 : Colors.white)),
+                  ],
+                ),
               ],
             );
           },
