@@ -64,14 +64,13 @@ class AuthProvider extends ChangeNotifier {
         location: location,
       );
       _userId = _authService.getCurrentUser()?.uid;
-      _isLoading = false;
-      notifyListeners();
       return otp;
     } catch (e) {
       _errorMessage = _mapFirebaseError(e);
+      return null;
+    } finally {
       _isLoading = false;
       notifyListeners();
-      return null;
     }
   }
 
@@ -116,14 +115,13 @@ class AuthProvider extends ChangeNotifier {
     try {
       _userRole = await _authService.signIn(mobile: mobile, password: password);
       _userId = _authService.getCurrentUser()?.uid;
-      _isLoading = false;
-      notifyListeners();
       return true;
     } catch (e) {
       _errorMessage = _mapFirebaseError(e);
+      return false;
+    } finally {
       _isLoading = false;
       notifyListeners();
-      return false;
     }
   }
 
