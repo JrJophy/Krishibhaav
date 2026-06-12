@@ -30,3 +30,4 @@ doc/api/
 
 # Security
 assets/service_account.json
+web/downloads/*.apk
