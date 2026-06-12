@@ -6,6 +6,9 @@ import '../models/user_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/theme_provider.dart';
 import '../core/colors.dart';
+import 'package:flutter/foundation.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ProfileSheet extends StatefulWidget {
   final String uid;
@@ -24,6 +27,8 @@ class _ProfileSheetState extends State<ProfileSheet> {
   late TextEditingController _locationController;
   late TextEditingController _cropController;
 
+  String _appVersion = '';
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +36,18 @@ class _ProfileSheetState extends State<ProfileSheet> {
     _locationController = TextEditingController();
     _cropController = TextEditingController();
     _loadProfile();
+    _initVersion();
+  }
+
+  Future<void> _initVersion() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      if (mounted) {
+        setState(() {
+          _appVersion = 'Version ${info.version} (build ${info.buildNumber})';
+        });
+      }
+    } catch (_) {}
   }
 
   Future<void> _loadProfile() async {
@@ -278,6 +295,33 @@ class _ProfileSheetState extends State<ProfileSheet> {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
                         ),
+                        if (kIsWeb) ...[
+                          const SizedBox(height: 32),
+                          OutlinedButton.icon(
+                            onPressed: () {
+                              launchUrl(
+                                Uri.parse('https://github.com/JrJophy/krishibhaav-releases/releases/latest/download/krishibhaav.apk'),
+                                mode: LaunchMode.externalApplication,
+                              );
+                            },
+                            icon: const Icon(Icons.android, size: 18),
+                            label: const Text('Download Android App'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: ink.withValues(alpha: 0.6),
+                              side: BorderSide(color: ink.withValues(alpha: 0.2)),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            ),
+                          ),
+                        ],
+                        if (_appVersion.isNotEmpty) ...[
+                          const SizedBox(height: 16),
+                          Center(
+                            child: Text(
+                              _appVersion,
+                              style: TextStyle(color: ink.withValues(alpha: 0.4), fontSize: 12),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
         ),
