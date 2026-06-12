@@ -110,6 +110,12 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "ffi_leak_tracker",
+      "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/ffi_leak_tracker-0.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
       "name": "file",
       "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/file-7.0.1",
       "packageUri": "lib/",
@@ -348,6 +354,18 @@
       "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/package_config-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "package_info_plus",
+      "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus-10.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
+    },
+    {
+      "name": "package_info_plus_platform_interface",
+      "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/package_info_plus_platform_interface-4.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
     },
     {
       "name": "path",
@@ -594,6 +612,12 @@
       "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/web-1.1.1",
       "packageUri": "lib/",
       "languageVersion": "3.4"
+    },
+    {
+      "name": "win32",
+      "rootUri": "file:///C:/Users/sijor/AppData/Local/Pub/Cache/hosted/pub.dev/win32-6.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.10"
     },
     {
       "name": "xdg_directories",
