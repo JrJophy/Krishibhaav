@@ -363,7 +363,10 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
                 padding: const EdgeInsets.only(bottom: 24.0),
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    launchUrl(Uri.parse('/downloads/krishibhaav.apk'));
+                    launchUrl(
+                      Uri.parse('https://github.com/JrJophy/krishibhaav-releases/releases/latest/download/krishibhaav.apk'),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                   icon: const Icon(Icons.android, size: 18),
                   label: const Text('Download Android App'),

@@ -1,17 +1,36 @@
-# Krishibhaav
+# Krishibhaav — Kerala Rubber Price Intelligence
 
-A new Flutter project.
+3-tier rubber price visibility (Board Rate scraped from the Rubber Board / Open Market via agent WhatsApp parsing / per-farmer agent prices) for Kerala rubber farmers and agents. Built initially as an MCA academic project (V1), it is evolving toward a free real-world application for the rubber farming community.
+
+## Features
+- **Role-based Auth:** Distinct experiences and controls for Farmers and Agents.
+- **Live Board Rate Scraping:** Automated daily fetching of RSS4/RSS5 rates with holiday carry-forward logic.
+- **WhatsApp Paste-Parser:** Smart parsing of Open Market prices directly from agent WhatsApp messages.
+- **Granular Pricing:** Per-farmer custom prices and visibility controls managed by agents.
+- **Analytics:** Farmer effective-price history chart with 7-day and 30-day statistical insights.
+- **Push Notifications:** Real-time FCM push notifications for price updates.
+- **Cross-Platform:** Available on Flutter Web and Android.
+- **Theming:** Full Light/Dark theme support.
+
+## Architecture
+- **Frontend:** Flutter (State management via Provider + RxDart, routing via `go_router`, charting via `fl_chart`).
+- **Backend:** Firebase Spark Plan (Firebase Auth, Firestore hosted in `asia-south1`, Firebase Cloud Messaging).
+- **Data Pipeline:** Companion Python scraper repository (`KrishibhaavScraper`) running on a GitHub Actions cron job, automatically writing to `board_rates` and `price_history` collections.
+
+## Live Demo
+[https://krishibhaav.web.app](https://krishibhaav.web.app) *(demo/test access only)*
 
 ## Getting Started
+```bash
+flutter pub get
+flutter run -d chrome
+```
+*Note:* Local execution requires `assets/service_account.json` and `android/app/google-services.json`, which are required but intentionally gitignored for security.
 
-This project is a starting point for a Flutter application.
+## Status
+**V1 Complete (Academic).**
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+*Known limitations scheduled for resolution in V2:*
+- Firestore security rules are currently in test mode.
+- Simulated OTP for authentication.
+- Client-side FCM dispatch.
