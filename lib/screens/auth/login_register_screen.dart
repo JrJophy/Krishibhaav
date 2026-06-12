@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/foundation.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:math';
 import '../../core/colors.dart';
 
@@ -356,6 +358,22 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
                 ],
               ),
             ),
+            if (kIsWeb)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24.0),
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    launchUrl(Uri.parse('/downloads/krishibhaav.apk'));
+                  },
+                  icon: const Icon(Icons.android, size: 18),
+                  label: const Text('Download Android App'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: ink.withValues(alpha: 0.6),
+                    side: BorderSide(color: ink.withValues(alpha: 0.2)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
