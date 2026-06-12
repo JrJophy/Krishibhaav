@@ -1,49 +1,58 @@
-Derived document — regenerated from LOGBOOK.md and PROGRESS_TRACKER.md at each phase closure. Not a source of truth.
-# The Krishibhaav Lorebook (The Story So Far)
+# The Epic of Krishibhaav
 
-**The Awakening (Phases 1-2)**
-Our journey began with a clear mission: to build *Krishibhaav*, an ambitious MCA academic project designed to bring real-time Rubber price intelligence to the farmers of Kerala. We laid down the scaffolding—setting up Flutter and Firebase—and established our dual-role hierarchy (Agents and Farmers). Constrained by the free Firebase Spark tier, we couldn't rely on expensive SMS providers. Instead, we engineered an ingenious simulated OTP authentication system, complete with a unique, deterministic temporary password system tailored for farmers.
+A farmer in Kerala, tapping a rubber tree in the morning mist, often faces a simple but profound problem: he cannot see the true market price of his harvest. To bridge this gap, three minds set out to build Krishibhaav: Joel the builder running the terminal, Claude the planner charting the course, and Antigravity the coder forging the logic. What began as an MCA academic project quickly evolved into a multi-tiered battle against authentication flaws, phantom IDE states, and the harsh realities of mobile development. This is the log of that journey.
 
-**The Dual Worlds (Phases 3-4)**
-With the gates open, we built the Agent Core. Agents gained a powerful, centralized dashboard to dictate Open Market, Company, and Global Agent prices, and began assembling their roster of farmers. Then, the Farmers awoke. We constructed their real-time dashboard, binding the flow of prices to strict market hours (Mon-Sat, 9AM-5PM). Along the way, we defeated our first major nemesis: a cryptic "invalid-credential" bug that haunted our farmer logins, ultimately tracing it back to orphaned Firebase Auth users and rogue whitespace. We recreated the accounts, migrated the data, and stabilized the realm.
+## Phase 1: Foundation in the Dark
+The project began by laying down the scaffolding. The stack was ambitious for an academic assignment: Flutter for multi-platform delivery and Firebase Spark plan on the backend. We defined our two distinct roles—the Agent who sets the prices, and the Farmer who consumes them. Because the Spark plan denied us the luxury of real SMS verification, we engineered an ingenious simulated OTP authentication system. 
 
-**Sight and Control (Phases 5-6)**
-The data needed a voice. We forged the Charts & Statistics phase, wrestling with stubborn RenderFlex overflows and parsing anomalies until a beautiful 30-day `fl_chart` and responsive stats grid illuminated the screen. Immediately after, we granted Agents surgical precision in Farmer Management. Through a sleek new Farmer Detail Sheet, Agents could now isolate individual farmers in their roster, toggle custom prices, and watch the UI dynamically flip their status badges in real-time between "Global" and "Custom".
+The first files were minted: the core themes, the splash screen, and the provider scaffolding. It was a clean slate, but the first hint of trouble appeared early when basic commands failed to find the Flutter path. Once the paths were tamed and the core dependencies injected, the project drew its first breath.
 
-**The Messenger's Trial (Phase 7)**
-To awaken devices with real-time updates, we embarked on Phase 7: Push Notifications. Denied the luxury of server-side Cloud Functions by our Firebase Spark tier, we architected a daring client-side Firebase Cloud Messaging (FCM) v1 REST dispatch. The Agent's device itself became the orchestrator.
+## Phase 2: The Gateway and the Three Sureshes
+Authentication was the first true test of our logic. We needed a way to securely onboard farmers without real phone numbers. We devised a deterministic temporary password system: the first four letters of the name, plus the last four digits of the mobile number. 
 
-This phase tested our resolve. We first executed a strict security ritual, aggressively ignoring our `assets/service_account.json` to prevent catastrophic credential leaks—acknowledging client-side credentials as a necessary academic compromise to be resolved in a future V2 server migration. We built the `fcm_dispatch_service.dart` to beam payloads straight to Google's API. 
+However, the system's fragility was soon exposed. In our zeal to test the login flows, stray registrations minted duplicate, orphaned User IDs. The database became tangled, and at the height of the crisis, three different Sureshes existed simultaneously in our system. The "UID hygiene wars" forced us to tear down the compromised accounts, recreate them with a known password, and meticulously migrate the Firestore documents to the new, true UID `8nMlNR4x`. We mapped cryptic Firebase errors into user-friendly messages and sealed the gates, finally achieving a stable login.
 
-But the path was fraught. We battled stubborn browsers refusing to fetch FCM tokens, tracing the silent failures back to the treacherous realm of Incognito mode. We patched `use_build_context_synchronously` warnings across three different async gaps, enforcing strict `mounted` checks and scope refactoring. We eradicated two newly spawned RenderFlex overflows in the Agent and Farmer dashboards with strategic `Expanded` wrappers. Our notification copy evolved dynamically—undergoing three revisions before the master decree established our uniform standard: `"<X> Price Updated. Price: ₹<value>/kg"`.
+## Phase 3: The Agent's Command Center
+With the gates secured, we built the Agent Core. We needed a centralized dashboard where the Agent could dictate the three pillars of Krishibhaav: the Open Market price, the Company price, and the Global Agent price. 
 
-And then, the ultimate victory: the first live push notification successfully broke through to a farmer's browser.
+We constructed a robust three-price panel and an "Add Farmer" flow that cleverly utilized a secondary Firebase App instance. This allowed the Agent to onboard new users without accidentally being signed out of their own session. The Agent's roster came to life with live badges that would soon distinguish between global followers and custom-priced farmers.
 
-**Identity and Armor (Phase 8)**
-With the notifications flowing, it was time to lock down the perimeter and polish the user experience. In Phase 8, we hardened our router's authentication guards against role-route mismatch vulnerabilities and mid-OTP escape hatch exploits. We meticulously preserved our offline cache fallback mechanism to ensure Farmers could still view prices without a connection. We even extracted the router's decision logic into a pure, testable function and fortified it with comprehensive unit tests.
+## Phase 4: The Farmer's Awakening
+The Farmers needed their own real-time view of the market. We built the farmer home screen, governed by strict market hours—prices would flow only between Monday and Saturday, 9 AM to 5 PM. 
 
-Simultaneously, we unified the identity management. We forged a dynamic, multi-role `ProfileSheet` accessible directly from the dashboards, giving Farmers and Agents the power to view and edit their profiles. We also polished the interface, fixing a phantom password visibility eye-toggle on the Registration tab and gracing the dashboards with dynamic, time-of-day greetings ("Good Morning", "Good Afternoon").
+To handle the complex pricing hierarchy, we constructed `streamEffectivePrice`, an elegant RxDart `CombineLatestStream.combine2` that merged the global agent settings with the specific farmer's document. If a farmer's document was missing entirely, they defaulted to the global price. To ensure they were never left blind, we built an offline cache. A fully end-to-end live test proved our streams worked flawlessly, propagating price changes in real time across the ether.
 
-But Phase 8 had one final twist: the Records Saga. A silent editor-buffer conflict threatened to destroy our tracking history, overwriting `PROGRESS_TRACKER.md` with stale data. We caught the discrepancy, forced a complete disk-read verification, and established a new, unshakeable law: all tracking documents must be verified from the disk immediately after every write. The truth lives on the disk.
+## Phase 5: The Chart That Waited
+Data needs visualization. We brought in `fl_chart` to render a 30-day history line graph alongside a responsive 2x2 stats grid. We fought stubborn RenderFlex overflows, wrapping grids in `FittedBox` to elegantly scale them across devices. 
 
-**The Brand Forge (Phase 8.5)**
-Before moving towards deployment, the UI demanded an aesthetic overhaul to match the ambitious academic scope of Krishibhaav. Enter Phase 8.5: the Stitch Designs Restyle. We faced a crucial design decision and emerged with a hybrid teal/green aesthetic, preserving the legacy "Krishibhaav Green" for positive values while painting the core app in a modern, vibrant teal with comprehensive dark mode support. 
+But the true nemesis of this phase was invisible: trailing whitespace in Firestore field names. For an entire phase, the chart simply read "Price tracking starts soon," stubbornly drawing a flat line at 0.0 while the axis skewed wildly from -13 to 276. We finally realized the database fields were literally named `date ` and `rss4Price `. The whitespace nemesis silently broke our parsing until we stripped it away. And when we finally tamed the data, the chart drew its first beautiful, responsive green line. 
 
-To execute this, we exercised strict "strip-list discipline", ruthlessly breaking the massive overhaul down into self-contained sub-phases while maintaining an absolute "zero logic changes" mandate. What was originally scoped as seven sub-phases was expertly compressed into four highly focused strikes:
-- **8.5a:** Tokenized the color palettes (Light/Dark) and established the ThemeProvider.
-- **8.5b:** Restyled the Farmer Home Screen and Price Chart to strictly match the Stitch renders.
-- **8.5c:** Overhauled all Agent surfaces (dashboard, sheets, dialogs), and crucially, replaced the generic SnackBar with a custom, theme-aware floating Overlay toast for notifications.
-- **8.5d:** Applied the new brand assets (symbol, lockup), injected the dark theme toggle into the Profile Sheet, and configured the launcher icons.
+## Phase 6: Precision and Isolation
+Agents needed more than just a global broadcast; they needed surgical precision to manage individual farmers. We built the Farmer Detail Sheet, an interactive bottom panel that allowed an Agent to toggle custom prices for a specific farmer. 
 
-Following the core execution, we conducted a rigorous visual polish round to perfect app bar branding alignment, correct stats grid dark-mode rendering, and boost the dark mode login screen contrast. However, we encountered a stubborn input field ghosting defect in the price-edit dialog caused by `hintText` and default `FloatingLabelBehavior` rendering quirks. Under the strict "zero logic changes" mandate and moving swiftly, this purely cosmetic defect was formally deferred to V2.
+We verified the isolation live: changing the global price no longer affected a farmer locked into a custom rate. We wired in a search bar to filter the roster and patched an edge case where the empty-state message behaved incorrectly during an active search. The management loop was complete.
 
-With the brand identity solidified and the UI gleaming in both light and dark, Phase 8.5 concluded smoothly.
+## Phase 7: The Messenger's Trial
+To wake dormant devices, we needed push notifications. Denied server-side Cloud Functions by our free-tier constraints, we architected a daring client-side FCM REST v1 dispatch directly from the Agent's device. 
 
-**The Road Ahead**
-Our epic approaches its final chapters:
-- **Phase 9: The Data Evolution**
-  What began as a simple "App-Side Spec Change" evolved into a massive restructure. We split Open Market pricing into RSS4 and RSS5, converted the static Company Price into an automated "Board Rate," and built per-farmer visibility flags. A major triumph was the WhatsApp Paste-Parser—an ingenious regex solution originally planned for V2, pulled into V1 to give the Agent frictionless data entry. We navigated a tricky Firestore merge clobber incident (the "forensics" that exposed visibility flags being overwritten), and built a fully automated Python Scraper running on GitHub Actions. This Azure-server-to-Kerala-phone moment synced the official Rubber Board prices daily via FCM. Finally, a per-farmer pivot was introduced: we hardened the scraper to write per-farmer EOD histories based on their *effective* price, ensuring every farmer's chart reflects their personalized rate.
+We performed a strict security ritual, aggressively ignoring our `assets/service_account.json` to prevent credential leaks—accepting this client-side maneuver as a temporary academic compromise. The journey was fraught. We battled `use_build_context_synchronously` warnings across async gaps, requiring strict `mounted` checks. We eradicated RenderFlex overflows in the dashboards. After three copy revisions, we settled on the uniform format: `<X> Price Updated. Price: ₹<value>/kg`. When the first live push notification successfully broke through to a farmer's browser, the effort was vindicated.
 
-- **Phase 10:** Finally, we will forge the release-ready Android APK for deployment.
+## Phase 8: Hardening the Armor
+As the system grew, so did its vulnerabilities. In Phase 8, we discovered the "OTP escape-hatch exploit," where a manual URL navigation could bypass our authentication guards, and a role-route mismatch that could let an Agent sit on the Farmer's home screen. We hardened the router, closed the exploits, and extracted the logic into a testable function fortified by comprehensive unit tests. We built dynamic `ProfileSheet` panels for both roles and added a password visibility toggle. 
 
-The grand academic vision of Krishibhaav is within reach!
+It was during this phase that the "Trust-but-Verify" doctrine was born. Twice, Antigravity reported that critical bugs were fixed, yet the app still failed. During Session 3, the truth emerged: un-accepted IDE edit-review buffers were the culprit all along. The code was generated but never hit the disk. From that moment, a strict new law was passed: demand verbatim disk-truth for critical fixes. We also caught an editor-buffer conflict that nearly wiped out our `PROGRESS_TRACKER.md`, reinforcing that the disk is the only true source of record.
+
+## Phase 8.5: The Brand Forge
+Before moving to deployment, the UI demanded a premium aesthetic. We initiated the Stitch Designs Restyle, pivoting to a modern teal and dark-mode-ready palette while preserving "Krishibhaav Green" for money values. Under a strict "zero logic changes" mandate, we compressed seven planned sub-phases into four highly focused strikes. We tokenized the palettes, completely restyled the dashboards, added a custom overlay toast for notifications, and injected the new brand assets. 
+
+During this visual overhaul, we stripped out unauthorized Stitch inventions—bottom navigation, transport buttons, and calculators—ruthlessly banishing them to the V3 registers to protect the V1 lock discipline. We also encountered a stubborn cosmetic defect: an input label/hint ghosting issue in the price-edit dialog. Moving swiftly and honoring our constraints, we accepted this defect with eyes open and formally deferred it to V2.
+
+## Phase 9: The Data Evolution
+What began as minor spec changes evolved into a massive architectural restructure. We split Open Market pricing into RSS4 and RSS5 and converted the Company Price into an automated, read-only "Board Rate." Spec changes arrived mid-build, testing our V1-lock discipline, but we absorbed the changes and pushed all new ideas to the V2/V3 registers.
+
+We built per-farmer visibility flags, and when a Firestore update accidentally clobbered these flags, forensic debugging led us to implement strict `SetOptions(merge:true)` writes. To streamline Agent data entry, we pulled an ingenious WhatsApp regex paste-parser from V2 into V1, ensuring precise data extraction. Meanwhile, we built a Python scraper in a separate repository to fetch official rates. We hit a snag when a GitHub PAT hiding in the Windows Credential Manager blocked our workflow pushes, but once cleared, the automation took over. That night, a server in Azure read the Rubber Board's website, divided the price by 100, and beamed the payload via FCM. A phone in Kerala buzzed with "Board Rate Updated." Finally, we pivoted the charting system so every farmer's graph tracks their unique effective price history. The data layer was fully realized.
+
+## The Doorstep of Phase 10
+The V1 ledger stands at 10/11 phases complete. We are pausing at the threshold of deployment. The Python cron job waits in the cloud, scheduled to fire on its own for the very first time on the next market day. The codebase is fully verified, boasting zero analyzer errors and a perfect 12/12 test suite. Tomorrow, the final phase begins: compiling the Web release and forging the release-ready Android APK. The vision of Krishibhaav is no longer just code; it is a living system ready for the real world.
+
+## Current Chapter (live)

@@ -207,3 +207,5 @@ Phase 9 successfully restructured Krishibhaav's core pricing logic to support du
 [2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\.github\workflows\seed.yml | Creation | Added manual GitHub actions workflow for one-off seeding
 [2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\seed_history.py | Modification | Updated mock values to demo-plausible ranges near current real-world prices
 ---
+[2026-06-12] | Records | LOREBOOK.md | Documentation | Full epic rewrite from all project reports + records (user-mandated)
+---
