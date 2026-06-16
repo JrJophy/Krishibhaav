@@ -149,12 +149,11 @@ class _ProfileSheetState extends State<ProfileSheet> {
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: Container(
-        padding: const EdgeInsets.all(24.0),
-        decoration: BoxDecoration(
-          color: surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        ),
+      child: Material(
+        color: surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
           child: _isLoading
               ? const Center(child: Padding(padding: EdgeInsets.all(32.0), child: CircularProgressIndicator()))
@@ -324,6 +323,7 @@ class _ProfileSheetState extends State<ProfileSheet> {
                         ],
                       ],
                     ),
+        ),
         ),
       ),
     );

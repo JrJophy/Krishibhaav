@@ -7,6 +7,7 @@ import '../../widgets/price_chart_widget.dart';
 import '../../widgets/stats_grid_widget.dart';
 import '../../services/farmer_history_service.dart';
 import '../../models/price_point.dart';
+import '../../models/open_market_price_point.dart';
 import '../../services/notification_service.dart';
 import '../../widgets/profile_sheet.dart';
 
@@ -20,6 +21,8 @@ class FarmerHomeScreen extends StatefulWidget {
 
 class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
   Future<List<PricePoint>>? _priceHistoryFuture;
+  Future<List<OpenMarketPricePoint>>? _openMarketHistoryFuture;
+  ChartMode _chartMode = ChartMode.agent;
   final FarmerHistoryService _historyService = FarmerHistoryService();
 
   @override
@@ -37,6 +40,11 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
     NotificationService().init(context, widget.farmerId);
     setState(() {
       _priceHistoryFuture = _historyService.fetchHistory(widget.farmerId);
+      if (provider.canSeeOpenMarket) {
+        _openMarketHistoryFuture = _historyService.fetchOpenMarketHistory();
+      } else {
+        _openMarketHistoryFuture = Future.value([]);
+      }
     });
   }
 
@@ -264,78 +272,101 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                 const SizedBox(height: 32),
 
                 // Price Trend section
-                Text('Agent Price Trend', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink)),
+                Builder(builder: (context) {
+                  // Only render the segmented button if the farmer can see the Open Market
+                  if (provider.canSeeOpenMarket) {
+                    return SegmentedButton<ChartMode>(
+                      segments: const [
+                        ButtonSegment(value: ChartMode.agent, label: Text('Agent')),
+                        ButtonSegment(value: ChartMode.openMarket, label: Text('Open Market')),
+                      ],
+                      selected: {_chartMode},
+                      onSelectionChanged: (Set<ChartMode> newSelection) {
+                        setState(() {
+                          _chartMode = newSelection.first;
+                        });
+                      },
+                      style: SegmentedButton.styleFrom(
+                        selectedBackgroundColor: valueGreenSoft,
+                        selectedForegroundColor: valueGreen,
+                      ),
+                    );
+                  }
+                  // If not, return empty container
+                  return const SizedBox.shrink();
+                }),
+                const SizedBox(height: 16),
+                Text(
+                  _chartMode == ChartMode.agent ? 'Agent Price Trend' : 'Open Market Price Trend', 
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink)
+                ),
                 const SizedBox(height: 16),
                 FutureBuilder<List<PricePoint>>(
                   future: _priceHistoryFuture,
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData) {
-                      return Column(
-                        children: [
-                          Container(
-                            height: 200,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: isDark ? surface : Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            height: 120,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: isDark ? surface : Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                            ),
-                          ),
-                        ],
-                      );
-                    }
+                    return FutureBuilder<List<OpenMarketPricePoint>>(
+                      future: _openMarketHistoryFuture,
+                      builder: (context, omSnapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData || (provider.canSeeOpenMarket && (omSnapshot.connectionState == ConnectionState.waiting || !omSnapshot.hasData))) {
+                          return Column(
+                            children: [
+                              Container(
+                                height: 200,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: isDark ? surface : Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                height: 120,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: isDark ? surface : Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
 
-                    final points = snapshot.data!;
-                    if (points.isEmpty) {
-                      return Container(
-                        padding: const EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: isDark ? surface : Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'Price tracking starts soon',
-                          style: TextStyle(color: ink.withValues(alpha: 0.5), fontStyle: FontStyle.italic),
-                        ),
-                      );
-                    }
+                        final points = snapshot.data!;
+                        final omPoints = omSnapshot.data;
 
-                    final stats = _historyService.computeStats(points);
-                    
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: isDark ? surface : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                          ),
-                          child: PriceChartWidget(points: points),
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: isDark ? surface : Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                          ),
-                          child: StatsGridWidget(stats: stats),
-                        ),
-                      ],
+                        // We render the widget structure without returning empty early, so the empty state appears within the styled container
+                        final stats = _historyService.computeStats(points);
+                        
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: isDark ? surface : Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                              ),
+                              child: PriceChartWidget(
+                                points: points,
+                                openMarketPoints: omPoints,
+                                mode: _chartMode,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: isDark ? surface : Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                              ),
+                              child: StatsGridWidget(stats: stats),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                 ),

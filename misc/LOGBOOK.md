@@ -208,4 +208,18 @@ Phase 9 successfully restructured Krishibhaav's core pricing logic to support du
 [2026-06-11] | Phase 9d | c:\Joel\Projects\KrishibhaavScraper\seed_history.py | Modification | Updated mock values to demo-plausible ranges near current real-world prices
 ---
 [2026-06-12] | Records | LOREBOOK.md | Documentation | Full epic rewrite from all project reports + records (user-mandated)
+[2026-06-13] | Phase 10 | c:\Joel\Projects\Reports\krishibhaav_v1_final_report.json | Creation | Generated structured summary of V1 deliverable
+[2026-06-13] | Phase 10 | PROGRESS_TRACKER.md | Modification | Marked Phase 10 as COMPLETED and added V2 phases table
+[2026-06-13] | Phase 10 | c:\Joel\Projects\Krishibhaav\misc\V2_SPEC.md | Creation | Locked V2 specification phase list
+---
+[2026-06-15] | Feature | lib/models/open_market_price_point.dart | Creation | Created OpenMarketPricePoint model
+[2026-06-15] | Feature | lib/services/farmer_history_service.dart | Modification | Added fetchOpenMarketHistory method
+[2026-06-15] | Feature | lib/widgets/price_chart_widget.dart | Modification | Added dual-mode support (Agent vs Open Market) with red/blue lines and legend
+[2026-06-15] | Feature | lib/screens/farmer/farmer_home_screen.dart | Modification | Added SegmentedButton toggle visible if canSeeOpenMarket is true, wired dual FutureBuilders
+---
+[2026-06-16] | V1.1 Post-Release | lib/services/farmer_service.dart | Bug fix | Hoisted visibility flags in streamEffectivePrice to prevent fallback clobbering
+[2026-06-16] | V1.1 Post-Release | lib/services/board_rate_service.dart | Bug fix | Auth-gated the board_rates stream to prevent transient startup permission-denied errors
+[2026-06-16] | V1.1 Post-Release | Profile & Detail Sheets | Bug fix | Swapped Container for Material to provide ink splash canvas and fix ListTile repeating errors
+[2026-06-16] | V1.1 Post-Release | Agent Dashboard & Farmer List | UX | Fixed 4 RenderFlex overflows by wrapping wide price text in Flexible with TextOverflow.ellipsis
+[2026-06-16] | V1.1 Post-Release | lib/screens/farmer/farmer_home_screen.dart | Code Cleanup | Removed leftover 'TOGGLE BLOCK REACHED' debugPrint
 ---

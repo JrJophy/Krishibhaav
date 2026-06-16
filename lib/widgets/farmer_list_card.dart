@@ -66,40 +66,44 @@ class FarmerListCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance.collection('farmer_prices').doc(farmer.uid).snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) return const SizedBox(width: 80, height: 20);
-                  final data = snapshot.data!.data() as Map<String, dynamic>?;
-                  if (data == null) return const SizedBox.shrink();
-                  
-                  final priceModel = FarmerPriceModel.fromMap(data, snapshot.data!.id);
-                  
-                  return Consumer<AgentProvider>(
-                    builder: (context, agentProvider, _) {
-                      final globalPrice = agentProvider.agentSettings?.globalAgentPrice ?? 0.0;
-                      
-                      final isCustom = priceModel.hasCustomPrice;
-                      final displayPrice = isCustom ? (priceModel.customPrice ?? 0.0) : globalPrice;
-                      
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: isCustom ? const Color(0xFFF9A825).withValues(alpha: 0.2) : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          '${isCustom ? 'Custom' : 'Global'} ₹${displayPrice.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: isCustom ? (isDark ? Colors.amber.shade300 : Colors.amber.shade900) : (isDark ? Colors.grey.shade300 : Colors.grey.shade800),
-                            fontWeight: FontWeight.bold,
+              Flexible(
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: FirebaseFirestore.instance.collection('farmer_prices').doc(farmer.uid).snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) return const SizedBox(width: 80, height: 20);
+                    final data = snapshot.data!.data() as Map<String, dynamic>?;
+                    if (data == null) return const SizedBox.shrink();
+                    
+                    final priceModel = FarmerPriceModel.fromMap(data, snapshot.data!.id);
+                    
+                    return Consumer<AgentProvider>(
+                      builder: (context, agentProvider, _) {
+                        final globalPrice = agentProvider.agentSettings?.globalAgentPrice ?? 0.0;
+                        
+                        final isCustom = priceModel.hasCustomPrice;
+                        final displayPrice = isCustom ? (priceModel.customPrice ?? 0.0) : globalPrice;
+                        
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: isCustom ? const Color(0xFFF9A825).withValues(alpha: 0.2) : (isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                        ),
-                      );
-                    },
-                  );
-                },
+                          child: Text(
+                            '${isCustom ? 'Custom' : 'Global'} ₹${displayPrice.toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: isCustom ? (isDark ? Colors.amber.shade300 : Colors.amber.shade900) : (isDark ? Colors.grey.shade300 : Colors.grey.shade800),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
               const SizedBox(width: 8),
               IconButton(

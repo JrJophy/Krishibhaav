@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/price_point.dart';
+import '../models/open_market_price_point.dart';
 
 class FarmerPriceStats {
   final double sevenDayHigh;
@@ -35,6 +36,31 @@ class FarmerHistoryService {
       final points = snapshot.docs
           .where((doc) => doc.data().containsKey('effectivePrice') && doc.data()['effectivePrice'] != null)
           .map((doc) => PricePoint.fromMap(doc.data()))
+          .toList()
+          .reversed
+          .toList();
+          
+      return points;
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<List<OpenMarketPricePoint>> fetchOpenMarketHistory({int days = 30}) async {
+    try {
+      final snapshot = await _firestore
+          .collection('price_history')
+          .orderBy('date', descending: true)
+          .limit(days)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        return [];
+      }
+
+      final points = snapshot.docs
+          .where((doc) => doc.data().containsKey('openMarketPrice') && doc.data()['openMarketPrice'] != null && doc.data().containsKey('openMarketRss5') && doc.data()['openMarketRss5'] != null)
+          .map((doc) => OpenMarketPricePoint.fromMap(doc.data()))
           .toList()
           .reversed
           .toList();

@@ -81,26 +81,34 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: Text(label, style: TextStyle(fontSize: 14, color: ink.withValues(alpha: 0.7)))),
-          Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(text: '₹${value.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: valueGreen)),
-                    TextSpan(text: ' /kg', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
-                  ],
+          const SizedBox(width: 8),
+          Flexible(
+            flex: 2,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(text: '₹${value.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: valueGreen)),
+                        TextSpan(text: ' /kg', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              if (editable) ...[
-                const SizedBox(width: 12),
-                IconButton(
-                  icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
-                  onPressed: () => _showPriceDialog(label, value),
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
+                if (editable) ...[
+                  const SizedBox(width: 12),
+                  IconButton(
+                    icon: const Icon(Icons.edit, size: 18, color: AppColors.primary),
+                    onPressed: () => _showPriceDialog(label, value),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
               ],
-            ],
+            ),
           )
         ],
       ),
@@ -128,36 +136,44 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
               ],
             ),
           ),
-          Row(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(text: 'RSS4 ', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
-                    TextSpan(text: '₹${rss4.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: valueGreen)),
-                    TextSpan(text: ' · RSS5 ', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
-                    TextSpan(text: '₹${rss5.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: valueGreen)),
-                    TextSpan(text: ' /kg', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
-                  ],
+          const SizedBox(width: 8),
+          Flexible(
+            flex: 2,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(text: 'RSS4 ', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                        TextSpan(text: '₹${rss4.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: valueGreen)),
+                        TextSpan(text: ' · RSS5 ', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                        TextSpan(text: '₹${rss5.toStringAsFixed(2)}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: valueGreen)),
+                        TextSpan(text: ' /kg', style: TextStyle(fontSize: 12, color: valueGreen.withValues(alpha: 0.7))),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              if (showPaste) ...[
-                const SizedBox(width: 12),
-                IconButton(
-                  icon: const Icon(Icons.content_paste, size: 18, color: AppColors.primary),
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) => PasteMarketMessageSheet(currentRss4: rss4, currentRss5: rss5),
-                    );
-                  },
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
-                ),
+                if (showPaste) ...[
+                  const SizedBox(width: 12),
+                  IconButton(
+                    icon: const Icon(Icons.content_paste, size: 18, color: AppColors.primary),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => PasteMarketMessageSheet(currentRss4: rss4, currentRss5: rss5),
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                ],
               ],
-            ],
+            ),
           )
         ],
       ),

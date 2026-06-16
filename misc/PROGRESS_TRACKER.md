@@ -19,15 +19,26 @@ Last Updated: 2026-06-11T12:35:00+05:30
 | 9b | WhatsApp Paste-Parser | COMPLETED | - |
 | 9c | Python Scraper Repo & EOD Recorder | COMPLETED | - |
 | 9d | Deployment & Chart Polish | COMPLETED | - |
-| 10 | Build & Deploy | NOT STARTED | - |
+| 10 | Build & Deploy | COMPLETED | - |
+| V1.1 | Post-Release Polish & Fixes | COMPLETED | - |
 
 ## Status Key
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: Phase 10 (Build & Deploy)
-Started: 2026-06-11
-Last activity: Phase 9 COMPLETED (cron self-fire verification pending next market day). Ready for Phase 10.
+Phase: V1.1 (Post-Release)
+Started: 2026-06-15
+Last activity: V1.1 COMPLETED. Open-market chart toggle and runtime fixes applied.
+
+## V2 Phases
+| Phase | Name |
+|-------|------|
+| 1 | Firestore Security Rules + role enforcement |
+| 2 | Server-side FCM dispatch (remove client service-account) |
+| 3 | Production auth decision |
+| 4 | Farmer self-registration + join requests |
+| 5 | Admin + agent verification |
+| 6-13 | As listed in the handover register. |
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED

@@ -28,6 +28,14 @@ class FarmerService {
         bool canSeeBoardRate = false;
         bool canSeeOpenMarket = false;
 
+        // 1. Always evaluate farmer visibility flags if farmer_prices doc exists
+        if (farmerDoc.exists) {
+          final farmerData = farmerDoc.data() as Map<String, dynamic>?;
+          canSeeBoardRate = farmerData?['canSeeBoardRate'] == true;
+          canSeeOpenMarket = farmerData?['canSeeOpenMarket'] == true;
+        }
+
+        // 2. Evaluate effective pricing depending on both docs
         if (agentDoc.exists) {
           final agentData = agentDoc.data() as Map<String, dynamic>?;
           final globalAgentPrice = agentData?['globalAgentPrice'] ?? 0.0;
@@ -36,8 +44,6 @@ class FarmerService {
             final farmerData = farmerDoc.data() as Map<String, dynamic>?;
             final hasCustomPrice = farmerData?['hasCustomPrice'] == true;
             final customPrice = farmerData?['customPrice'];
-            canSeeBoardRate = farmerData?['canSeeBoardRate'] == true;
-            canSeeOpenMarket = farmerData?['canSeeOpenMarket'] == true;
 
             if (hasCustomPrice && customPrice != null) {
               effectivePrice = (customPrice as num).toDouble();

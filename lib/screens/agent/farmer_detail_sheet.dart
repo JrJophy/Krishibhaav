@@ -136,12 +136,11 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: Container(
-        padding: const EdgeInsets.all(24.0),
-        decoration: BoxDecoration(
-          color: surface,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        ),
+      child: Material(
+        color: surface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -376,6 +375,7 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
               const SizedBox(height: 8),
             ],
           ),
+        ),
         ),
       ),
     );
