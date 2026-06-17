@@ -224,4 +224,10 @@ Phase 9 successfully restructured Krishibhaav's core pricing logic to support du
 [2026-06-16] | V1.1 Post-Release | lib/screens/farmer/farmer_home_screen.dart | Code Cleanup | Removed leftover 'TOGGLE BLOCK REACHED' debugPrint
 ---
 [2026-06-17] | V2 Planning | misc/V2_SPEC.md, misc/PROGRESS_TRACKER.md | Specification | Updated project records to reflect the new strict 10-phase V2 roadmap.
----
+[2026-06-17] | V2 Phase 1 | lib/models/barrel_stock_model.dart | Creation | BarrelStockModel: agentId, totalBarrels, availableBarrels, lastUpdated
+[2026-06-17] | V2 Phase 1 | lib/models/barrel_booking_model.dart | Creation | BarrelBookingModel: booking fields + lifecycle timestamps + cancelReason
+[2026-06-17] | V2 Phase 1 | lib/services/barrel_service.dart | Creation | CRUD + transactional stock math (deduct-on-approve, refund-on-return/cancel, idempotency + overbooking guards)
+[2026-06-17] | V2 Phase 1 | Summary | Deferred | (1) upsertStock can drive availableBarrels negative if total reduced below outstanding — guard in Phase 2. (2) toMap() writes nulls — caution with merge:true in P2/P3. (3) denormalization backfill -> V3.
+[2026-06-17] | V2 Phase 1 | lib/models/barrel_stock_model.dart | Creation | BarrelStockModel: agentId, totalBarrels, availableBarrels, lastUpdated
+[2026-06-17] | V2 Phase 1 | lib/models/barrel_booking_model.dart | Creation | BarrelBookingModel: full lifecycle fields + denormalized farmerName/location
+[2026-06-17] | V2 Phase 1 | lib/services/barrel_service.dart | Creation | CRUD + transactional stock math (approve-deduct, return/cancel-refund, upsert delta)
