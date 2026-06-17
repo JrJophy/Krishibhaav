@@ -21,14 +21,15 @@ Last Updated: 2026-06-11T12:35:00+05:30
 | 9d | Deployment & Chart Polish | COMPLETED | - |
 | 10 | Build & Deploy | COMPLETED | - |
 | V1.1 | Post-Release Polish & Fixes | COMPLETED | - |
+| V2 1 | Barrel Schema Design & Tests | COMPLETED | - |
 
 ## Status Key
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: V1.1 (Post-Release)
-Started: 2026-06-15
-Last activity: V1.1 COMPLETED. Open-market chart toggle and runtime fixes applied.
+Phase: V2 Phase 1
+Started: 2026-06-17
+Last activity: V2 Phase 1 COMPLETED. Barrel schema, pure-logic extraction, and tests.
 
 ## V2 Phases
 | Phase | Name |

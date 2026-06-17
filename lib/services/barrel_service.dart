@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/barrel_stock_model.dart';
 import '../models/barrel_booking_model.dart';
+import '../core/barrel_logic.dart';
 
 class BarrelService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+  BarrelService({FirebaseFirestore? firestore})
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<void> createBooking({
     required String bookingId,
@@ -36,10 +39,7 @@ class BarrelService {
       if (!bookingSnapshot.exists) throw Exception('Booking not found');
 
       final bookingData = bookingSnapshot.data()!;
-      if (bookingData['status'] != 'requested') {
-        return; // Idempotency: abort if not 'requested'
-      }
-
+      final currentStatus = bookingData['status'] as String;
       final quantity = ((bookingData['quantity'] ?? 0) as num).toInt();
 
       final stockSnapshot = await transaction.get(stockRef);
@@ -48,17 +48,18 @@ class BarrelService {
       final stockData = stockSnapshot.data()!;
       final availableBarrels = ((stockData['availableBarrels'] ?? 0) as num).toInt();
 
-      if (availableBarrels < quantity) {
-        throw Exception('Not enough available barrels');
+      final decision = decideApprove(currentStatus, quantity, availableBarrels);
+      if (decision.newStatus == null) return; // No-op
+
+      if (decision.availableDelta != 0) {
+        transaction.update(stockRef, {
+          'availableBarrels': FieldValue.increment(decision.availableDelta),
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
       }
 
-      transaction.update(stockRef, {
-        'availableBarrels': FieldValue.increment(-quantity),
-        'lastUpdated': FieldValue.serverTimestamp(),
-      });
-
       transaction.set(bookingRef, {
-        'status': 'approved',
+        'status': decision.newStatus,
         'approvedAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
@@ -71,12 +72,13 @@ class BarrelService {
     
     if (!bookingSnapshot.exists) throw Exception('Booking not found');
     final bookingData = bookingSnapshot.data()!;
-    if (bookingData['status'] != 'approved') {
-      return; // Abort
-    }
+    final currentStatus = bookingData['status'] as String;
+
+    final decision = decideDispatch(currentStatus);
+    if (decision.newStatus == null) return; // No-op
 
     await bookingRef.set({
-      'status': 'dispatched',
+      'status': decision.newStatus,
       'dispatchedAt': FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
@@ -91,19 +93,21 @@ class BarrelService {
       if (!bookingSnapshot.exists) throw Exception('Booking not found');
 
       final bookingData = bookingSnapshot.data()!;
-      if (bookingData['status'] != 'dispatched') {
-        return; // Abort
-      }
-
+      final currentStatus = bookingData['status'] as String;
       final quantity = ((bookingData['quantity'] ?? 0) as num).toInt();
 
-      transaction.update(stockRef, {
-        'availableBarrels': FieldValue.increment(quantity),
-        'lastUpdated': FieldValue.serverTimestamp(),
-      });
+      final decision = decideReturn(currentStatus, quantity);
+      if (decision.newStatus == null) return; // No-op
+
+      if (decision.availableDelta != 0) {
+        transaction.update(stockRef, {
+          'availableBarrels': FieldValue.increment(decision.availableDelta),
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
+      }
 
       transaction.set(bookingRef, {
-        'status': 'returned',
+        'status': decision.newStatus,
         'returnedAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
@@ -119,23 +123,21 @@ class BarrelService {
       if (!bookingSnapshot.exists) throw Exception('Booking not found');
 
       final bookingData = bookingSnapshot.data()!;
-      final status = bookingData['status'];
-
-      if (status != 'requested' && status != 'approved') {
-        return; // Abort
-      }
-
+      final currentStatus = bookingData['status'] as String;
       final quantity = ((bookingData['quantity'] ?? 0) as num).toInt();
 
-      if (status == 'approved') {
+      final decision = decideCancel(currentStatus, quantity);
+      if (decision.newStatus == null) return; // No-op
+
+      if (decision.availableDelta != 0) {
         transaction.update(stockRef, {
-          'availableBarrels': FieldValue.increment(quantity),
+          'availableBarrels': FieldValue.increment(decision.availableDelta),
           'lastUpdated': FieldValue.serverTimestamp(),
         });
       }
 
       transaction.set(bookingRef, {
-        'status': 'cancelled',
+        'status': decision.newStatus,
         'cancelReason': cancelReason,
         'cancelledAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
@@ -161,13 +163,17 @@ class BarrelService {
         // Update of existing
         final stockData = stockSnapshot.data()!;
         final oldTotal = ((stockData['totalBarrels'] ?? 0) as num).toInt();
-        final delta = newTotalBarrels - oldTotal;
+        final delta = upsertAvailableDelta(oldTotal, newTotalBarrels);
 
-        transaction.set(stockRef, {
+        final updateData = <String, dynamic>{
           'totalBarrels': newTotalBarrels,
-          'availableBarrels': FieldValue.increment(delta),
           'lastUpdated': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
+        };
+        if (delta != 0) {
+          updateData['availableBarrels'] = FieldValue.increment(delta);
+        }
+
+        transaction.set(stockRef, updateData, SetOptions(merge: true));
       }
     });
   }

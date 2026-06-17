@@ -231,3 +231,10 @@ Phase 9 successfully restructured Krishibhaav's core pricing logic to support du
 [2026-06-17] | V2 Phase 1 | lib/models/barrel_stock_model.dart | Creation | BarrelStockModel: agentId, totalBarrels, availableBarrels, lastUpdated
 [2026-06-17] | V2 Phase 1 | lib/models/barrel_booking_model.dart | Creation | BarrelBookingModel: full lifecycle fields + denormalized farmerName/location
 [2026-06-17] | V2 Phase 1 | lib/services/barrel_service.dart | Creation | CRUD + transactional stock math (approve-deduct, return/cancel-refund, upsert delta)
+[2026-06-17] | V2 Phase 1.5 | test/barrel_service_test.dart | Creation | Created test file skeleton (blocked by hardcoded FirebaseFirestore.instance + fake_cloud_firestore version conflicts)
+[2026-06-17] | V2 Phase 1.5 | lib/services/barrel_service.dart | Modification | Added constructor injection for FirebaseFirestore (B16 fix)
+[2026-06-17] | V2 Phase 1.5 | pubspec.yaml | Build | Attempted flutter pub add --dev fake_cloud_firestore:4.1.1 but pub refused due to rxdart version conflict (B17 fix failed)
+[2026-06-17] | V2 Phase 1.5 | Summary | Blocked | No compatible fake_cloud_firestore version exists. Awaiting manager approval for hand mock fallback.
+[2026-06-17] | V2 Phase 1.5 | lib/core/barrel_logic.dart | Creation | Created pure-logic decision functions for barrel stock management
+[2026-06-17] | V2 Phase 1.5 | lib/services/barrel_service.dart | Modification | Rewired inline transaction logic to call pure decision functions
+[2026-06-17] | V2 Phase 1.5 | test/barrel_logic_test.dart | Creation | Created pure unit tests (10 groups) for barrel logic, deleted old mock skeleton

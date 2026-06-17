@@ -1,0 +1,76 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:krishibhaav/core/barrel_logic.dart';
+
+void main() {
+  group('BarrelLogic', () {
+    test('1 decideApprove from requested, available>=qty -> approved, -qty', () {
+      final decision = decideApprove('requested', 5, 10);
+      expect(decision.newStatus, 'approved');
+      expect(decision.availableDelta, -5);
+    });
+
+    test('2 decideApprove from approved -> null, 0 (idempotent)', () {
+      final decision = decideApprove('approved', 5, 10);
+      expect(decision.newStatus, isNull);
+      expect(decision.availableDelta, 0);
+    });
+
+    test('3 decideApprove from requested, available<qty -> throws overbooking', () {
+      expect(() => decideApprove('requested', 15, 10), throwsArgumentError);
+    });
+
+    test('4 decideApprove from cancelled/dispatched -> null, 0', () {
+      final dec1 = decideApprove('cancelled', 5, 10);
+      expect(dec1.newStatus, isNull);
+      expect(dec1.availableDelta, 0);
+
+      final dec2 = decideApprove('dispatched', 5, 10);
+      expect(dec2.newStatus, isNull);
+      expect(dec2.availableDelta, 0);
+    });
+
+    test('5 decideDispatch approved -> dispatched, 0; other -> null, 0', () {
+      final dec1 = decideDispatch('approved');
+      expect(dec1.newStatus, 'dispatched');
+      expect(dec1.availableDelta, 0);
+
+      final dec2 = decideDispatch('requested');
+      expect(dec2.newStatus, isNull);
+      expect(dec2.availableDelta, 0);
+    });
+
+    test('6 decideReturn dispatched -> returned, qty; other -> null, 0', () {
+      final dec1 = decideReturn('dispatched', 5);
+      expect(dec1.newStatus, 'returned');
+      expect(dec1.availableDelta, 5);
+
+      final dec2 = decideReturn('approved', 5);
+      expect(dec2.newStatus, isNull);
+      expect(dec2.availableDelta, 0);
+    });
+
+    test('7 decideCancel requested -> cancelled, 0', () {
+      final decision = decideCancel('requested', 5);
+      expect(decision.newStatus, 'cancelled');
+      expect(decision.availableDelta, 0);
+    });
+
+    test('8 decideCancel approved -> cancelled, qty', () {
+      final decision = decideCancel('approved', 5);
+      expect(decision.newStatus, 'cancelled');
+      expect(decision.availableDelta, 5);
+    });
+
+    test('9 decideCancel dispatched -> null, 0', () {
+      final decision = decideCancel('dispatched', 5);
+      expect(decision.newStatus, isNull);
+      expect(decision.availableDelta, 0);
+    });
+
+    test('10 upsertAvailableDelta logic', () {
+      expect(upsertAvailableDelta(0, 5), 5);
+      expect(upsertAvailableDelta(5, 8), 3);
+      expect(upsertAvailableDelta(10, 4), -6);
+    });
+  });
+}

@@ -18,6 +18,9 @@ Last updated: 2026-06-12 (V1 complete, V1.1 polish). Severity: H/M/L/C(osmetic).
 | B13 | L | OPEN | Build | Release APK signed with DEBUG keystore — fine for sideload, blocks Play Store | V2 #18 |
 | B14 | L | OPEN | Code | 16 debugPrint calls in lib/ incl. FCM token log — dev-log only, wrap in kDebugMode | V2 #17 |
 | B15 | L | OPEN | Perf | FCM token fan-out is N+1 Firestore queries per notification trigger | V2 planning |
+| B16 | H | FIXED | Code | BarrelService hardcodes FirebaseFirestore.instance. Cannot inject fake_cloud_firestore for tests. Blocked. | Constructor injection added |
+| B17 | H | WONTFIX | Build | fake_cloud_firestore version solving fails with cloud_firestore ^6.5.0 and rxdart ^0.27.7. Cannot add dev_dependency. | Dependency locked. Superseded by B18. |
+| B18 | H | FIXED | Build | No compatible fake_cloud_firestore version exists. 4.1.1 requires rxdart ^0.28.0 (project has ^0.27.7). Fallback to hand mock required. | Pure-logic refactor (no fake lib needed). |
 
 ## Process lessons (recurring failure modes)
 - Phantom fixes: Antigravity edit-review buffers must be ACCEPTED before any gate/build/commit; verify with findstr; a "1 file changed" commit that should contain more is the tell.
