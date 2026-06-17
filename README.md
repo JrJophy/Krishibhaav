@@ -28,7 +28,7 @@ flutter run -d chrome
 *Note:* Local execution requires `assets/service_account.json` and `android/app/google-services.json`, which are required but intentionally gitignored for security.
 
 ## Status
-**V1 Complete (Academic).**
+**V1 Completed (Full Release).**
 
 *Known limitations scheduled for resolution in V2:*
 - Firestore security rules are currently in test mode.

@@ -33,12 +33,16 @@ Last activity: V1.1 COMPLETED. Open-market chart toggle and runtime fixes applie
 ## V2 Phases
 | Phase | Name |
 |-------|------|
-| 1 | Firestore Security Rules + role enforcement |
-| 2 | Server-side FCM dispatch (remove client service-account) |
-| 3 | Production auth decision |
-| 4 | Farmer self-registration + join requests |
-| 5 | Admin + agent verification |
-| 6-13 | As listed in the handover register. |
+| 1 | Barrel Schema Design (Agent inventory and Farmer requests) |
+| 2 | Agent Stock Management UI |
+| 3 | Farmer Barrel Booking Form |
+| 4 | Real-Time State Sync |
+| 5 | Dynamic Price Chart Resizing |
+| 6 | Live Open-Market Data Verification |
+| 7 | Comprehensive Integration Testing |
+| 8 | Service Worker and UI Polish |
+| 9 | Bug Resolution and Edge Case Squashing |
+| 10 | Version Two Release Production Build |
 
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED

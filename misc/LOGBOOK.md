@@ -223,3 +223,5 @@ Phase 9 successfully restructured Krishibhaav's core pricing logic to support du
 [2026-06-16] | V1.1 Post-Release | Agent Dashboard & Farmer List | UX | Fixed 4 RenderFlex overflows by wrapping wide price text in Flexible with TextOverflow.ellipsis
 [2026-06-16] | V1.1 Post-Release | lib/screens/farmer/farmer_home_screen.dart | Code Cleanup | Removed leftover 'TOGGLE BLOCK REACHED' debugPrint
 ---
+[2026-06-17] | V2 Planning | misc/V2_SPEC.md, misc/PROGRESS_TRACKER.md | Specification | Updated project records to reflect the new strict 10-phase V2 roadmap.
+---
