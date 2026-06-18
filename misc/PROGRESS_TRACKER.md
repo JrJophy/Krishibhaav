@@ -1,7 +1,7 @@
 ---
 # Krishibhaav Progress Tracker
 
-Last Updated: 2026-06-11T12:35:00+05:30
+Last Updated: 2026-06-18T15:25:00+05:30
 
 ## Phase Status
 | Phase | Name | Status | Blocker |
@@ -23,12 +23,16 @@ Last Updated: 2026-06-11T12:35:00+05:30
 | V1.1 | Post-Release Polish & Fixes | COMPLETED | - |
 | V2-1 | Barrel Schema Design & Tests | COMPLETED | - |
 | V2-2 | Agent Stock Management UI    | COMPLETED | - |
+| V2-3 | Farmer Barrel Booking Form | COMPLETED | - |
+| V2-4 | Real-Time State Sync | COMPLETED | - |
+| V2-5 | Dynamic Price Chart Resizing | COMPLETED | - |
+| V2-6 | Live Open-Market Data Verification | IN PROGRESS | Awaiting manual verification of live data parsing logic. |
 
 ## Status Key
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: V2 Phase 2 COMPLETED; next V2 Phase 3.
+Phase: V2 Phase 6 — code-path audit and fixes done; AWAITING manual live-data verification by user before closure.
 
 ## V2 Phases
 | Phase | Name |
@@ -47,6 +51,7 @@ Phase: V2 Phase 2 COMPLETED; next V2 Phase 3.
 ## Blockers & Issues Log
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
 [2026-06-10] | Phase 4 | Farmer sign-in with temp password fails (invalid-credential) | Auth user recreated and Firestore docs migrated to correct UID | RESOLVED
+[2026-06-18] | V2-2 | Active-list terminal filter added to agent and farmer views | - | COMPLETED
 
 ## Files Created So Far
 LOGBOOK.md (Phase 1)

@@ -10,6 +10,9 @@ import '../../models/price_point.dart';
 import '../../models/open_market_price_point.dart';
 import '../../services/notification_service.dart';
 import '../../widgets/profile_sheet.dart';
+import 'farmer_barrel_request_sheet.dart';
+import 'farmer_barrel_action_sheet.dart';
+import '../../widgets/farmer_barrel_booking_card.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   final String farmerId;
@@ -23,6 +26,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
   Future<List<PricePoint>>? _priceHistoryFuture;
   Future<List<OpenMarketPricePoint>>? _openMarketHistoryFuture;
   ChartMode _chartMode = ChartMode.agent;
+  bool _chartsExpanded = false;
   final FarmerHistoryService _historyService = FarmerHistoryService();
 
   @override
@@ -210,6 +214,61 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                   ),
                   const SizedBox(height: 16),
 
+                  if (provider.agentId.isNotEmpty) ...[
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => const FarmerBarrelRequestSheet(),
+                        );
+                      },
+                      icon: const Icon(Icons.add_shopping_cart),
+                      label: const Text('Request Barrels', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
+                  // My Barrel Requests Section
+                  Text(
+                    'My Barrel Requests',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink),
+                  ),
+                  const SizedBox(height: 16),
+                  ...(() {
+                    final activeBookings = provider.barrelBookings.where((b) => !['returned_empty', 'returned_filled', 'cancelled', 'returned'].contains(b.status)).toList();
+                    if (activeBookings.isEmpty) {
+                      return [
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: Text('No barrel requests yet.', style: TextStyle(color: ink.withValues(alpha: 0.5), fontStyle: FontStyle.italic)),
+                          ),
+                        )
+                      ];
+                    }
+                    activeBookings.sort((a, b) => b.requestedAt.compareTo(a.requestedAt));
+                    return activeBookings.map((booking) => FarmerBarrelBookingCard(
+                          booking: booking,
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => FarmerBarrelActionSheet(booking: booking),
+                            );
+                          },
+                        )).toList();
+                  })(),
+                  const SizedBox(height: 32),
+
                   // Secondary Price Cards
                   if (provider.canSeeBoardRate || provider.canSeeOpenMarket) ...[
                     Row(
@@ -267,109 +326,139 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                           ),
                       ],
                     ),
+                    const SizedBox(height: 32),
                   ],
-                ],
-                const SizedBox(height: 32),
-
-                // Price Trend section
-                Builder(builder: (context) {
-                  // Only render the segmented button if the farmer can see the Open Market
-                  if (provider.canSeeOpenMarket) {
-                    return SegmentedButton<ChartMode>(
-                      segments: const [
-                        ButtonSegment(value: ChartMode.agent, label: Text('Agent')),
-                        ButtonSegment(value: ChartMode.openMarket, label: Text('Open Market')),
-                      ],
-                      selected: {_chartMode},
-                      onSelectionChanged: (Set<ChartMode> newSelection) {
-                        setState(() {
-                          _chartMode = newSelection.first;
-                        });
-                      },
-                      style: SegmentedButton.styleFrom(
-                        selectedBackgroundColor: valueGreenSoft,
-                        selectedForegroundColor: valueGreen,
+                  
+                  // Price Trend section
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _chartsExpanded = !_chartsExpanded;
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Price Trends',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink),
+                          ),
+                          Icon(
+                            _chartsExpanded ? Icons.expand_less : Icons.expand_more,
+                            color: ink,
+                          ),
+                        ],
                       ),
-                    );
-                  }
-                  // If not, return empty container
-                  return const SizedBox.shrink();
-                }),
-                const SizedBox(height: 16),
-                Text(
-                  _chartMode == ChartMode.agent ? 'Agent Price Trend' : 'Open Market Price Trend', 
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: ink)
-                ),
-                const SizedBox(height: 16),
-                FutureBuilder<List<PricePoint>>(
-                  future: _priceHistoryFuture,
-                  builder: (context, snapshot) {
-                    return FutureBuilder<List<OpenMarketPricePoint>>(
-                      future: _openMarketHistoryFuture,
-                      builder: (context, omSnapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData || (provider.canSeeOpenMarket && (omSnapshot.connectionState == ConnectionState.waiting || !omSnapshot.hasData))) {
-                          return Column(
-                            children: [
-                              Container(
-                                height: 200,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: isDark ? surface : Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              Container(
-                                height: 120,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: isDark ? surface : Colors.white,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                                ),
-                              ),
-                            ],
-                          );
-                        }
+                    ),
+                  ),
 
-                        final points = snapshot.data!;
-                        final omPoints = omSnapshot.data;
-
-                        // We render the widget structure without returning empty early, so the empty state appears within the styled container
-                        final stats = _historyService.computeStats(points);
-                        
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: isDark ? surface : Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                              ),
-                              child: PriceChartWidget(
-                                points: points,
-                                openMarketPoints: omPoints,
-                                mode: _chartMode,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: isDark ? surface : Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
-                              ),
-                              child: StatsGridWidget(stats: stats),
-                            ),
+                  if (_chartsExpanded) ...[
+                    const SizedBox(height: 16),
+                    Builder(builder: (context) {
+                      // Only render the segmented button if the farmer can see the Open Market
+                      if (provider.canSeeOpenMarket) {
+                        return SegmentedButton<ChartMode>(
+                          segments: const [
+                            ButtonSegment(value: ChartMode.agent, label: Text('Agent')),
+                            ButtonSegment(value: ChartMode.openMarket, label: Text('Open Market')),
                           ],
+                          selected: {_chartMode},
+                          onSelectionChanged: (Set<ChartMode> newSelection) {
+                            setState(() {
+                              _chartMode = newSelection.first;
+                            });
+                          },
+                          style: SegmentedButton.styleFrom(
+                            selectedBackgroundColor: valueGreenSoft,
+                            selectedForegroundColor: valueGreen,
+                          ),
+                        );
+                      }
+                      // If not, return empty container
+                      return const SizedBox.shrink();
+                    }),
+                    const SizedBox(height: 16),
+                    Text(
+                      _chartMode == ChartMode.agent ? 'Agent Price Trend' : 'Open Market Price Trend', 
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ink.withValues(alpha: 0.8))
+                    ),
+                    const SizedBox(height: 16),
+                    FutureBuilder<List<PricePoint>>(
+                      future: _priceHistoryFuture,
+                      builder: (context, snapshot) {
+                        return FutureBuilder<List<OpenMarketPricePoint>>(
+                          future: _openMarketHistoryFuture,
+                          builder: (context, omSnapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting || !snapshot.hasData || (provider.canSeeOpenMarket && (omSnapshot.connectionState == ConnectionState.waiting || !omSnapshot.hasData))) {
+                              return Column(
+                                children: [
+                                  Container(
+                                    height: 200,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: isDark ? surface : Colors.white,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Container(
+                                    height: 120,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: isDark ? surface : Colors.white,
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }
+
+                            final points = snapshot.data!;
+                            final omPoints = omSnapshot.data;
+
+                            // We render the widget structure without returning empty early, so the empty state appears within the styled container
+                            final stats = _chartMode == ChartMode.agent 
+                                ? FarmerHistoryService.computeStats(points)
+                                : FarmerHistoryService.computeOpenMarketStats(omPoints ?? []);
+                            
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: isDark ? surface : Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                                  ),
+                                  child: PriceChartWidget(
+                                    points: points,
+                                    openMarketPoints: omPoints,
+                                    mode: _chartMode,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Container(
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    color: isDark ? surface : Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                                  ),
+                                  child: StatsGridWidget(stats: stats),
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                ),
+                    ),
+                  ],
+                ],
               ],
             );
           },

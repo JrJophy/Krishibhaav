@@ -46,6 +46,15 @@ class FarmerHistoryService {
     }
   }
 
+  static List<OpenMarketPricePoint> parseOpenMarketHistory(List<Map<String, dynamic>> rawDocs) {
+    return rawDocs
+        .map((data) => OpenMarketPricePoint.fromMap(data))
+        .where((p) => p.rss4 > 0 && p.rss5 > 0)
+        .toList()
+        .reversed
+        .toList();
+  }
+
   Future<List<OpenMarketPricePoint>> fetchOpenMarketHistory({int days = 30}) async {
     try {
       final snapshot = await _firestore
@@ -58,20 +67,41 @@ class FarmerHistoryService {
         return [];
       }
 
-      final points = snapshot.docs
-          .where((doc) => doc.data().containsKey('openMarketPrice') && doc.data()['openMarketPrice'] != null && doc.data().containsKey('openMarketRss5') && doc.data()['openMarketRss5'] != null)
-          .map((doc) => OpenMarketPricePoint.fromMap(doc.data()))
-          .toList()
-          .reversed
-          .toList();
-          
-      return points;
+      final rawDocs = snapshot.docs.map((doc) => doc.data()).toList();
+      return parseOpenMarketHistory(rawDocs);
     } catch (e) {
       return [];
     }
   }
 
-  FarmerPriceStats computeStats(List<PricePoint> points) {
+  static FarmerPriceStats computeOpenMarketStats(List<OpenMarketPricePoint> points) {
+    if (points.isEmpty) {
+      return FarmerPriceStats(
+        sevenDayHigh: 0,
+        sevenDayLow: 0,
+        thirtyDayHigh: 0,
+        thirtyDayLow: 0,
+      );
+    }
+
+    final thirtyDayPrices = points.map((p) => p.rss4).toList();
+    final thirtyDayHigh = thirtyDayPrices.reduce((a, b) => a > b ? a : b);
+    final thirtyDayLow = thirtyDayPrices.reduce((a, b) => a < b ? a : b);
+
+    final recentPoints = points.length > 7 ? points.sublist(points.length - 7) : points;
+    final sevenDayPrices = recentPoints.map((p) => p.rss4).toList();
+    final sevenDayHigh = sevenDayPrices.reduce((a, b) => a > b ? a : b);
+    final sevenDayLow = sevenDayPrices.reduce((a, b) => a < b ? a : b);
+
+    return FarmerPriceStats(
+      sevenDayHigh: sevenDayHigh,
+      sevenDayLow: sevenDayLow,
+      thirtyDayHigh: thirtyDayHigh,
+      thirtyDayLow: thirtyDayLow,
+    );
+  }
+
+  static FarmerPriceStats computeStats(List<PricePoint> points) {
     if (points.isEmpty) {
       return FarmerPriceStats(
         sevenDayHigh: 0,

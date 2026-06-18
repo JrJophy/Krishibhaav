@@ -426,7 +426,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
 
                 // Barrel Bookings Section
                 ...(() {
-                  final activeBookings = agentProvider.barrelBookings.where((b) => b.status != 'returned' && b.status != 'cancelled').toList();
+                  final activeBookings = agentProvider.barrelBookings.where((b) => !['returned_empty', 'returned_filled', 'cancelled', 'returned'].contains(b.status)).toList();
                   activeBookings.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
                   
                   if (activeBookings.isEmpty) return [const SizedBox.shrink()];

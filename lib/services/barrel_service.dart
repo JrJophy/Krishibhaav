@@ -115,6 +115,57 @@ class BarrelService {
     });
   }
 
+  Future<void> returnBookingEmpty(String bookingId, String agentId) async {
+    final bookingRef = _firestore.collection('barrel_bookings').doc(bookingId);
+    final stockRef = _firestore.collection('barrel_stock').doc(agentId);
+
+    await _firestore.runTransaction((transaction) async {
+      final bookingSnapshot = await transaction.get(bookingRef);
+      if (!bookingSnapshot.exists) throw Exception('Booking not found');
+
+      final bookingData = bookingSnapshot.data()!;
+      final currentStatus = bookingData['status'] as String;
+      final quantity = ((bookingData['quantity'] ?? 0) as num).toInt();
+
+      final decision = decideReturnEmpty(currentStatus, quantity);
+      if (decision.newStatus == null) return; // No-op
+
+      if (decision.availableDelta != 0) {
+        transaction.update(stockRef, {
+          'availableBarrels': FieldValue.increment(decision.availableDelta),
+          'lastUpdated': FieldValue.serverTimestamp(),
+        });
+      }
+
+      transaction.set(bookingRef, {
+        'status': decision.newStatus,
+        'returnedEmptyAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    });
+  }
+
+  Future<void> returnBookingFilled(String bookingId, String agentId) async {
+    final bookingRef = _firestore.collection('barrel_bookings').doc(bookingId);
+
+    await _firestore.runTransaction((transaction) async {
+      final bookingSnapshot = await transaction.get(bookingRef);
+      if (!bookingSnapshot.exists) throw Exception('Booking not found');
+
+      final bookingData = bookingSnapshot.data()!;
+      final currentStatus = bookingData['status'] as String;
+
+      final decision = decideReturnFilled(currentStatus);
+      if (decision.newStatus == null) return; // No-op
+
+      transaction.set(bookingRef, {
+        'status': decision.newStatus,
+        'returnedFilledAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    });
+  }
+
   Future<void> cancelBooking(String bookingId, String agentId, String cancelReason) async {
     final bookingRef = _firestore.collection('barrel_bookings').doc(bookingId);
     final stockRef = _firestore.collection('barrel_stock').doc(agentId);

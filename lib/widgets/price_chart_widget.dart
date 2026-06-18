@@ -95,9 +95,14 @@ class PriceChartWidget extends StatelessWidget {
               ],
             ),
           ),
-        AspectRatio(
-          aspectRatio: 1.5,
-          child: Padding(
+        LayoutBuilder(
+          builder: (context, constraints) {
+            double targetHeight = constraints.maxWidth / 1.5;
+            if (targetHeight > 320) targetHeight = 320; // Cap height on wide screens
+            
+            return SizedBox(
+              height: targetHeight,
+              child: Padding(
             padding: const EdgeInsets.only(right: 16.0, left: 0, top: 24, bottom: 0),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
@@ -252,9 +257,11 @@ class PriceChartWidget extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ),
-      ],
+            ),
+          );
+        },
+      ),
+    ],
     );
   }
 

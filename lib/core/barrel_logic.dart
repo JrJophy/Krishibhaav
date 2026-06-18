@@ -28,6 +28,20 @@ BarrelDecision decideReturn(String currentStatus, int quantity) {
   return const BarrelDecision(null, 0);
 }
 
+BarrelDecision decideReturnEmpty(String currentStatus, int quantity) {
+  if (currentStatus == 'dispatched') {
+    return BarrelDecision('returned_empty', quantity);
+  }
+  return const BarrelDecision(null, 0);
+}
+
+BarrelDecision decideReturnFilled(String currentStatus) {
+  if (currentStatus == 'dispatched') {
+    return const BarrelDecision('returned_filled', 0);
+  }
+  return const BarrelDecision(null, 0);
+}
+
 BarrelDecision decideCancel(String currentStatus, int quantity) {
   if (currentStatus == 'requested') {
     return const BarrelDecision('cancelled', 0);

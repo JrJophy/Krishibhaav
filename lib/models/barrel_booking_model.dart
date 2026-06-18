@@ -16,7 +16,8 @@ class BarrelBookingModel {
   final Timestamp? dispatchedAt;
   final Timestamp? returnedAt;
   final Timestamp? cancelledAt;
-
+  final Timestamp? returnedEmptyAt;
+  final Timestamp? returnedFilledAt;
   BarrelBookingModel({
     required this.bookingId,
     required this.agentId,
@@ -33,10 +34,12 @@ class BarrelBookingModel {
     this.dispatchedAt,
     this.returnedAt,
     this.cancelledAt,
+    this.returnedEmptyAt,
+    this.returnedFilledAt,
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    final map = <String, dynamic>{
       'bookingId': bookingId,
       'agentId': agentId,
       'farmerId': farmerId,
@@ -44,15 +47,18 @@ class BarrelBookingModel {
       'location': location,
       'quantity': quantity,
       'status': status,
-      'cancelReason': cancelReason,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'requestedAt': requestedAt,
-      'approvedAt': approvedAt,
-      'dispatchedAt': dispatchedAt,
-      'returnedAt': returnedAt,
-      'cancelledAt': cancelledAt,
     };
+    if (cancelReason != null) map['cancelReason'] = cancelReason;
+    if (approvedAt != null) map['approvedAt'] = approvedAt;
+    if (dispatchedAt != null) map['dispatchedAt'] = dispatchedAt;
+    if (returnedAt != null) map['returnedAt'] = returnedAt;
+    if (cancelledAt != null) map['cancelledAt'] = cancelledAt;
+    if (returnedEmptyAt != null) map['returnedEmptyAt'] = returnedEmptyAt;
+    if (returnedFilledAt != null) map['returnedFilledAt'] = returnedFilledAt;
+    return map;
   }
 
   factory BarrelBookingModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -72,6 +78,8 @@ class BarrelBookingModel {
       dispatchedAt: map['dispatchedAt'],
       returnedAt: map['returnedAt'],
       cancelledAt: map['cancelledAt'],
+      returnedEmptyAt: map['returnedEmptyAt'],
+      returnedFilledAt: map['returnedFilledAt'],
     );
   }
 
@@ -91,6 +99,8 @@ class BarrelBookingModel {
     Timestamp? dispatchedAt,
     Timestamp? returnedAt,
     Timestamp? cancelledAt,
+    Timestamp? returnedEmptyAt,
+    Timestamp? returnedFilledAt,
   }) {
     return BarrelBookingModel(
       bookingId: bookingId ?? this.bookingId,
@@ -108,6 +118,8 @@ class BarrelBookingModel {
       dispatchedAt: dispatchedAt ?? this.dispatchedAt,
       returnedAt: returnedAt ?? this.returnedAt,
       cancelledAt: cancelledAt ?? this.cancelledAt,
+      returnedEmptyAt: returnedEmptyAt ?? this.returnedEmptyAt,
+      returnedFilledAt: returnedFilledAt ?? this.returnedFilledAt,
     );
   }
 }

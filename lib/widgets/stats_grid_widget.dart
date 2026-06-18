@@ -16,13 +16,15 @@ class StatsGridWidget extends StatelessWidget {
     final surface = theme.colorScheme.surface;
     final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
 
-    return GridView.count(
-      crossAxisCount: 2,
+    return GridView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: 1.8,
-      mainAxisSpacing: 8,
-      crossAxisSpacing: 8,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisExtent: 72,
+        mainAxisSpacing: 8,
+        crossAxisSpacing: 8,
+      ),
       children: [
         _buildStatCard('7-Day High', stats?.sevenDayHigh, valueGreen, surface, ink, isDark),
         _buildStatCard('7-Day Low', stats?.sevenDayLow, danger, surface, ink, isDark),
