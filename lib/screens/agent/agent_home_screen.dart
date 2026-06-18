@@ -20,7 +20,16 @@ import '../../widgets/barrel_booking_card.dart';
 import 'barrel_booking_detail_sheet.dart';
 
 class AgentHomeScreen extends StatefulWidget {
-  const AgentHomeScreen({super.key});
+  final BoardRateService? boardRateService;
+  final Future<String> Function(String)? fetchAgentName;
+  final bool enableNotifications;
+  
+  const AgentHomeScreen({
+    super.key, 
+    this.boardRateService,
+    this.fetchAgentName,
+    this.enableNotifications = true,
+  });
 
   @override
   State<AgentHomeScreen> createState() => _AgentHomeScreenState();
@@ -28,12 +37,13 @@ class AgentHomeScreen extends StatefulWidget {
 
 class _AgentHomeScreenState extends State<AgentHomeScreen> {
   final TextEditingController _searchController = TextEditingController();
-  final BoardRateService _boardRateService = BoardRateService();
+  late final BoardRateService _boardRateService;
   String _agentName = 'Agent';
 
   @override
   void initState() {
     super.initState();
+    _boardRateService = widget.boardRateService ?? BoardRateService();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
     });
@@ -43,14 +53,19 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final agentProvider = Provider.of<AgentProvider>(context, listen: false);
     if (authProvider.userId != null) {
-      FirebaseFirestore.instance.collection('users').doc(authProvider.userId!).get().then((doc) {
-        if (mounted && doc.exists) {
-          setState(() => _agentName = doc.data()?['name'] ?? 'Agent');
-        }
-      }).catchError((_) {});
+      if (widget.fetchAgentName != null) {
+        final name = await widget.fetchAgentName!(authProvider.userId!);
+        if (mounted) setState(() => _agentName = name);
+      } else {
+        FirebaseFirestore.instance.collection('users').doc(authProvider.userId!).get().then((doc) {
+          if (mounted && doc.exists) {
+            setState(() => _agentName = doc.data()?['name'] ?? 'Agent');
+          }
+        }).catchError((_) {});
+      }
 
       agentProvider.loadAgent(authProvider.userId!);
-      NotificationService().init(context, authProvider.userId!);
+      if (mounted && widget.enableNotifications) NotificationService().init(context, authProvider.userId!);
     }
   }
 

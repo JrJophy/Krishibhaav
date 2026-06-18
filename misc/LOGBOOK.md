@@ -269,3 +269,9 @@
 [2026-06-18] | V2 Phase 6 | lib/screens/farmer/farmer_home_screen.dart | Bug fix | Updated stats generation to use computeOpenMarketStats instead of agent stats.
 [2026-06-18] | V2 Phase 6 | test/farmer_history_service_test.dart | Addition | Added pure logic unit tests for OM parser and stats.
 [2026-06-18] | V2 Phase 5 | Summary | Phase Closure | Phase 5 Dynamic Price Chart Resizing completed with responsive clamping.
+### V2 Phase 7: Comprehensive Integration Testing
+- **Objective:** Widget-level testing of FarmerHomeScreen and AgentHomeScreen using mock providers.
+- **Approach:** Decoupled FarmerHomeScreen and AgentHomeScreen from direct NotificationService calls, passing an enableNotifications parameter instead. Built Fake providers (FakeFarmerProvider, FakeAgentProvider) rather than mocking Firestore to bypass rxdart package conflicts.
+- **Challenges:** pumpAndSettle timeout loops caused by infinitely running animations were handled by granular pump usages. Rendered UI formatting details like trailing zeroes (?230.00) and the SegmentedButton and StatsGridWidget components being conditionally off-screen or unbuilt required carefully checking widget tree state and adding skipOffstage: false or precise explicit scrolling to the UI tests.
+- **Result:** Successfully confirmed 5/5 UI widget tests passing.
+

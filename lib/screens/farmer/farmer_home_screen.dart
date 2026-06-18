@@ -16,7 +16,15 @@ import '../../widgets/farmer_barrel_booking_card.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   final String farmerId;
-  const FarmerHomeScreen({super.key, required this.farmerId});
+  final FarmerHistoryService? historyService;
+  final bool enableNotifications;
+  
+  const FarmerHomeScreen({
+    super.key, 
+    required this.farmerId,
+    this.historyService,
+    this.enableNotifications = true,
+  });
 
   @override
   State<FarmerHomeScreen> createState() => _FarmerHomeScreenState();
@@ -27,11 +35,12 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
   Future<List<OpenMarketPricePoint>>? _openMarketHistoryFuture;
   ChartMode _chartMode = ChartMode.agent;
   bool _chartsExpanded = false;
-  final FarmerHistoryService _historyService = FarmerHistoryService();
+  late final FarmerHistoryService _historyService;
 
   @override
   void initState() {
     super.initState();
+    _historyService = widget.historyService ?? FarmerHistoryService();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadData();
     });
@@ -41,7 +50,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
     final provider = Provider.of<FarmerProvider>(context, listen: false);
     await provider.loadFarmer(widget.farmerId);
     if (!mounted) return;
-    NotificationService().init(context, widget.farmerId);
+    if (widget.enableNotifications) NotificationService().init(context, widget.farmerId);
     setState(() {
       _priceHistoryFuture = _historyService.fetchHistory(widget.farmerId);
       if (provider.canSeeOpenMarket) {

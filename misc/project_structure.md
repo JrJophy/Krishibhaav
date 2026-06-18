@@ -72,6 +72,7 @@ mindmap
       barrel_logic_test.dart
       market_message_parser_test.dart
       router_redirect_test.dart
+      ui_integration_test.dart
     misc
       BUG_REPORT.md
       LOGBOOK.md
