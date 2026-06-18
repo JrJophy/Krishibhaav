@@ -21,6 +21,9 @@ Last updated: 2026-06-12 (V1 complete, V1.1 polish). Severity: H/M/L/C(osmetic).
 | B16 | H | FIXED | Code | BarrelService hardcodes FirebaseFirestore.instance. Cannot inject fake_cloud_firestore for tests. Blocked. | Constructor injection added |
 | B17 | H | WONTFIX | Build | fake_cloud_firestore version solving fails with cloud_firestore ^6.5.0 and rxdart ^0.27.7. Cannot add dev_dependency. | Dependency locked. Superseded by B18. |
 | B18 | H | FIXED | Build | No compatible fake_cloud_firestore version exists. 4.1.1 requires rxdart ^0.28.0 (project has ^0.27.7). Fallback to hand mock required. | Pure-logic refactor (no fake lib needed). |
+| B19 | H | RESOLVED | Auth | Barrel streams throw permission-denied during auth tick (request.auth == null). | Auth-gated all three streams (V1.1 pattern). |
+| B20 | C | OPEN | UI | Farmer-list delete "x" cramped/misaligned against price badge (agent dashboard). | Phase 8 polish |
+| B21 | M | OPEN | Data/Ops | Verify scraper writes openMarketPrice/openMarketRss5 into price_history (open-market chart shows "tracking starts soon" — empty state, needs data or seed). | V1.1 / scraper track |
 
 ## Process lessons (recurring failure modes)
 - Phantom fixes: Antigravity edit-review buffers must be ACCEPTED before any gate/build/commit; verify with findstr; a "1 file changed" commit that should contain more is the tell.

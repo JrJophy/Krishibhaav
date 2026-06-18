@@ -228,9 +228,6 @@ Phase 9 successfully restructured Krishibhaav's core pricing logic to support du
 [2026-06-17] | V2 Phase 1 | lib/models/barrel_booking_model.dart | Creation | BarrelBookingModel: booking fields + lifecycle timestamps + cancelReason
 [2026-06-17] | V2 Phase 1 | lib/services/barrel_service.dart | Creation | CRUD + transactional stock math (deduct-on-approve, refund-on-return/cancel, idempotency + overbooking guards)
 [2026-06-17] | V2 Phase 1 | Summary | Deferred | (1) upsertStock can drive availableBarrels negative if total reduced below outstanding — guard in Phase 2. (2) toMap() writes nulls — caution with merge:true in P2/P3. (3) denormalization backfill -> V3.
-[2026-06-17] | V2 Phase 1 | lib/models/barrel_stock_model.dart | Creation | BarrelStockModel: agentId, totalBarrels, availableBarrels, lastUpdated
-[2026-06-17] | V2 Phase 1 | lib/models/barrel_booking_model.dart | Creation | BarrelBookingModel: full lifecycle fields + denormalized farmerName/location
-[2026-06-17] | V2 Phase 1 | lib/services/barrel_service.dart | Creation | CRUD + transactional stock math (approve-deduct, return/cancel-refund, upsert delta)
 [2026-06-17] | V2 Phase 1.5 | test/barrel_service_test.dart | Creation | Created test file skeleton (blocked by hardcoded FirebaseFirestore.instance + fake_cloud_firestore version conflicts)
 [2026-06-17] | V2 Phase 1.5 | lib/services/barrel_service.dart | Modification | Added constructor injection for FirebaseFirestore (B16 fix)
 [2026-06-17] | V2 Phase 1.5 | pubspec.yaml | Build | Attempted flutter pub add --dev fake_cloud_firestore:4.1.1 but pub refused due to rxdart version conflict (B17 fix failed)
@@ -238,3 +235,13 @@ Phase 9 successfully restructured Krishibhaav's core pricing logic to support du
 [2026-06-17] | V2 Phase 1.5 | lib/core/barrel_logic.dart | Creation | Created pure-logic decision functions for barrel stock management
 [2026-06-17] | V2 Phase 1.5 | lib/services/barrel_service.dart | Modification | Rewired inline transaction logic to call pure decision functions
 [2026-06-17] | V2 Phase 1.5 | test/barrel_logic_test.dart | Creation | Created pure unit tests (10 groups) for barrel logic, deleted old mock skeleton
+[2026-06-17] | V2 Phase 2 | lib/core/barrel_logic.dart | Modification | Added validatedUpsertDelta to enforce negative-stock guard
+[2026-06-17] | V2 Phase 2 | lib/services/barrel_service.dart | Modification | Enforced negative-stock guard in upsertStock transaction
+[2026-06-17] | V2 Phase 2 | lib/providers/agent_provider.dart | Modification | Added barrel stock/booking state and wrapper methods
+[2026-06-17] | V2 Phase 2 | lib/widgets/barrel_stock_edit_dialog.dart | Creation | Created total barrels edit dialog with outstanding guard
+[2026-06-17] | V2 Phase 2 | lib/widgets/barrel_booking_card.dart | Creation | Created barrel booking list card
+[2026-06-17] | V2 Phase 2 | lib/screens/agent/barrel_booking_detail_sheet.dart | Creation | Created detail sheet for booking lifecycle actions
+[2026-06-17] | V2 Phase 2 | lib/screens/agent/agent_home_screen.dart | Modification | Added barrel inventory card and active bookings list
+[2026-06-17] | V2 Phase 2 | lib/services/barrel_service.dart | Modification | FIXED B19: Auth-gated all three streams mirroring board_rate_service (V1.1 pattern)
+[2026-06-17] | V2 Phase 2 | lib/screens/agent/barrel_booking_detail_sheet.dart | Modification | Removed agent Return button (dispatched is now terminal; return deferred to Phase 3)
+[2026-06-18] | V2 Phase 2 | Summary | Phase Closure | Agent stock UI + inventory card + bookings list + lifecycle sheet; B19 auth-gate fix; Return button removed (dispatched terminal, return -> Phase 3). Functional testing deferred to P7.

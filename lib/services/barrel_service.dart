@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/barrel_stock_model.dart';
 import '../models/barrel_booking_model.dart';
 import '../core/barrel_logic.dart';
@@ -163,7 +164,8 @@ class BarrelService {
         // Update of existing
         final stockData = stockSnapshot.data()!;
         final oldTotal = ((stockData['totalBarrels'] ?? 0) as num).toInt();
-        final delta = upsertAvailableDelta(oldTotal, newTotalBarrels);
+        final currentAvailable = ((stockData['availableBarrels'] ?? 0) as num).toInt();
+        final delta = validatedUpsertDelta(oldTotal, newTotalBarrels, currentAvailable);
 
         final updateData = <String, dynamic>{
           'totalBarrels': newTotalBarrels,
@@ -179,30 +181,55 @@ class BarrelService {
   }
 
   Stream<BarrelStockModel> streamBarrelStock(String agentId) {
-    return _firestore.collection('barrel_stock').doc(agentId).snapshots().map((doc) {
-      if (!doc.exists) {
-        return BarrelStockModel(
+    return FirebaseAuth.instance.authStateChanges()
+        .map((user) => user != null)
+        .distinct()
+        .asyncExpand((isLoggedIn) {
+      if (!isLoggedIn) {
+        return Stream.value(BarrelStockModel(
           agentId: agentId,
           totalBarrels: 0,
           availableBarrels: 0,
           lastUpdated: Timestamp.now(),
-        );
+        ));
       }
-      return BarrelStockModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      return _firestore.collection('barrel_stock').doc(agentId).snapshots().map((doc) {
+        if (!doc.exists) {
+          return BarrelStockModel(
+            agentId: agentId,
+            totalBarrels: 0,
+            availableBarrels: 0,
+            lastUpdated: Timestamp.now(),
+          );
+        }
+        return BarrelStockModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+      });
     });
   }
 
   Stream<List<BarrelBookingModel>> streamAgentBookings(String agentId) {
-    return _firestore.collection('barrel_bookings')
-        .where('agentId', isEqualTo: agentId)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => BarrelBookingModel.fromMap(doc.data(), doc.id)).toList());
+    return FirebaseAuth.instance.authStateChanges()
+        .map((user) => user != null)
+        .distinct()
+        .asyncExpand((isLoggedIn) {
+      if (!isLoggedIn) return Stream.value(<BarrelBookingModel>[]);
+      return _firestore.collection('barrel_bookings')
+          .where('agentId', isEqualTo: agentId)
+          .snapshots()
+          .map((snapshot) => snapshot.docs.map((doc) => BarrelBookingModel.fromMap(doc.data(), doc.id)).toList());
+    });
   }
 
   Stream<List<BarrelBookingModel>> streamFarmerBookings(String farmerId) {
-    return _firestore.collection('barrel_bookings')
-        .where('farmerId', isEqualTo: farmerId)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) => BarrelBookingModel.fromMap(doc.data(), doc.id)).toList());
+    return FirebaseAuth.instance.authStateChanges()
+        .map((user) => user != null)
+        .distinct()
+        .asyncExpand((isLoggedIn) {
+      if (!isLoggedIn) return Stream.value(<BarrelBookingModel>[]);
+      return _firestore.collection('barrel_bookings')
+          .where('farmerId', isEqualTo: farmerId)
+          .snapshots()
+          .map((snapshot) => snapshot.docs.map((doc) => BarrelBookingModel.fromMap(doc.data(), doc.id)).toList());
+    });
   }
 }

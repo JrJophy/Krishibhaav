@@ -72,5 +72,12 @@ void main() {
       expect(upsertAvailableDelta(5, 8), 3);
       expect(upsertAvailableDelta(10, 4), -6);
     });
+
+    test('11 validatedUpsertDelta tests', () {
+      expect(validatedUpsertDelta(0, 10, 0), 10);
+      expect(validatedUpsertDelta(10, 8, 5), -2);
+      expect(() => validatedUpsertDelta(10, 4, 2), throwsArgumentError);
+      expect(validatedUpsertDelta(10, 10, 0), 0);
+    });
   });
 }

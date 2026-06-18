@@ -4,22 +4,34 @@ import '../models/agent_settings_model.dart';
 import '../models/user_model.dart';
 import '../services/agent_service.dart';
 import '../services/fcm_dispatch_service.dart';
+import '../services/barrel_service.dart';
+import '../models/barrel_stock_model.dart';
+import '../models/barrel_booking_model.dart';
 
 class AgentProvider extends ChangeNotifier {
   final AgentService _agentService = AgentService();
+  final BarrelService _barrelService = BarrelService();
 
   AgentSettingsModel? _agentSettings;
   List<UserModel> _farmerList = [];
   String _searchQuery = '';
   bool _isLoading = false;
 
+  BarrelStockModel? _barrelStock;
+  List<BarrelBookingModel> _barrelBookings = [];
+
   StreamSubscription<AgentSettingsModel>? _settingsSub;
   StreamSubscription<List<UserModel>>? _farmersSub;
+  StreamSubscription<BarrelStockModel>? _barrelStockSub;
+  StreamSubscription<List<BarrelBookingModel>>? _barrelBookingsSub;
 
   AgentSettingsModel? get agentSettings => _agentSettings;
   List<UserModel> get farmerList => _farmerList;
   String get searchQuery => _searchQuery;
   bool get isLoading => _isLoading;
+  
+  BarrelStockModel? get barrelStock => _barrelStock;
+  List<BarrelBookingModel> get barrelBookings => _barrelBookings;
 
   List<UserModel> get filteredFarmerList {
     if (_searchQuery.isEmpty) return _farmerList;
@@ -45,6 +57,18 @@ class AgentProvider extends ChangeNotifier {
     _farmersSub?.cancel();
     _farmersSub = _agentService.streamFarmerList(agentId).listen((farmers) {
       _farmerList = farmers;
+      notifyListeners();
+    });
+
+    _barrelStockSub?.cancel();
+    _barrelStockSub = _barrelService.streamBarrelStock(agentId).listen((stock) {
+      _barrelStock = stock;
+      notifyListeners();
+    });
+
+    _barrelBookingsSub?.cancel();
+    _barrelBookingsSub = _barrelService.streamAgentBookings(agentId).listen((bookings) {
+      _barrelBookings = bookings;
       notifyListeners();
     });
   }
@@ -81,10 +105,36 @@ class AgentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> upsertStock(int totalBarrels) async {
+    if (_agentSettings == null) throw Exception("Agent not loaded");
+    await _barrelService.upsertStock(_agentSettings!.agentId, totalBarrels);
+  }
+
+  Future<void> approveBooking(String bookingId) async {
+    if (_agentSettings == null) throw Exception("Agent not loaded");
+    await _barrelService.approveBooking(bookingId, _agentSettings!.agentId);
+  }
+
+  Future<void> dispatchBooking(String bookingId) async {
+    await _barrelService.dispatchBooking(bookingId);
+  }
+
+  Future<void> returnBooking(String bookingId) async {
+    if (_agentSettings == null) throw Exception("Agent not loaded");
+    await _barrelService.returnBooking(bookingId, _agentSettings!.agentId);
+  }
+
+  Future<void> cancelBooking(String bookingId, String cancelReason) async {
+    if (_agentSettings == null) throw Exception("Agent not loaded");
+    await _barrelService.cancelBooking(bookingId, _agentSettings!.agentId, cancelReason);
+  }
+
   @override
   void dispose() {
     _settingsSub?.cancel();
     _farmersSub?.cancel();
+    _barrelStockSub?.cancel();
+    _barrelBookingsSub?.cancel();
     super.dispose();
   }
 }

@@ -15,6 +15,9 @@ import '../../widgets/profile_sheet.dart';
 import '../../widgets/paste_market_message_sheet.dart';
 import '../../models/board_rate_model.dart';
 import '../../services/board_rate_service.dart';
+import '../../widgets/barrel_stock_edit_dialog.dart';
+import '../../widgets/barrel_booking_card.dart';
+import 'barrel_booking_detail_sheet.dart';
 
 class AgentHomeScreen extends StatefulWidget {
   const AgentHomeScreen({super.key});
@@ -350,6 +353,101 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   onChanged: (val) => agentProvider.setSearchQuery(val),
                 ),
                 const SizedBox(height: 24),
+
+                // Barrel Inventory Card
+                Container(
+                  padding: const EdgeInsets.all(20.0),
+                  decoration: BoxDecoration(
+                    color: surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: isDark ? Border.all(color: surfaceTintA.withValues(alpha: 0.3)) : Border.all(color: Colors.transparent),
+                    boxShadow: isDark ? [] : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10)],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Barrel Inventory", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: ink)),
+                          if (agentProvider.barrelStock != null)
+                            IconButton(
+                              icon: const Icon(Icons.edit, size: 20, color: AppColors.primary),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(),
+                              onPressed: () async {
+                                final stock = agentProvider.barrelStock!;
+                                final newTotal = await showDialog<int>(
+                                  context: context,
+                                  builder: (context) => BarrelStockEditDialog(
+                                    currentTotal: stock.totalBarrels,
+                                    currentAvailable: stock.availableBarrels,
+                                  ),
+                                );
+                                if (newTotal != null && context.mounted) {
+                                  try {
+                                    await agentProvider.upsertStock(newTotal);
+                                  } catch (e) {
+                                    if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                  }
+                                }
+                              },
+                            )
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      if (agentProvider.barrelStock != null) ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Total Barrels', style: TextStyle(fontSize: 14, color: ink.withValues(alpha: 0.7))),
+                                Text(agentProvider.barrelStock!.totalBarrels.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: ink)),
+                              ],
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text('Available', style: TextStyle(fontSize: 14, color: ink.withValues(alpha: 0.7))),
+                                Text(agentProvider.barrelStock!.availableBarrels.toString(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: valueGreen)),
+                              ],
+                            ),
+                          ],
+                        )
+                      ] else ...[
+                        const Center(child: CircularProgressIndicator()),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // Barrel Bookings Section
+                ...(() {
+                  final activeBookings = agentProvider.barrelBookings.where((b) => b.status != 'returned' && b.status != 'cancelled').toList();
+                  activeBookings.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+                  
+                  if (activeBookings.isEmpty) return [const SizedBox.shrink()];
+
+                  return [
+                    Text('Active Bookings (${activeBookings.length})', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: ink)),
+                    const SizedBox(height: 8),
+                    ...activeBookings.map((booking) => BarrelBookingCard(
+                      booking: booking,
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => BarrelBookingDetailSheet(booking: booking),
+                        );
+                      },
+                    )),
+                    const SizedBox(height: 24),
+                  ];
+                })(),
 
                 // Farmer List Header
                 Row(

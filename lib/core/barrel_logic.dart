@@ -41,3 +41,11 @@ BarrelDecision decideCancel(String currentStatus, int quantity) {
 int upsertAvailableDelta(int oldTotal, int newTotal) {
   return newTotal - oldTotal;
 }
+
+int validatedUpsertDelta(int oldTotal, int newTotal, int currentAvailable) {
+  final delta = newTotal - oldTotal;
+  if (currentAvailable + delta < 0) {
+    throw ArgumentError('Cannot reduce total below outstanding barrels');
+  }
+  return delta;
+}
