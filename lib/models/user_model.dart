@@ -26,18 +26,19 @@ class UserModel {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    final map = <String, dynamic>{
       'uid': uid,
       'name': name,
       'mobile': mobile,
       'role': role,
       'location': location,
       'crop': crop,
-      'agentId': agentId,
       'fcmToken': fcmToken,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };
+    if (agentId != null) map['agentId'] = agentId;
+    return map;
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {

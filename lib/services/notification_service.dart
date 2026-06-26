@@ -93,7 +93,7 @@ class NotificationService {
 
   Future<void> init(BuildContext context, String uid) async {
     try {
-      debugPrint('[NotificationService] 1. Requesting permission...');
+
       // 1. Request Permission
       NotificationSettings settings = await _messaging.requestPermission(
         alert: true,
@@ -104,7 +104,7 @@ class NotificationService {
       if (settings.authorizationStatus == AuthorizationStatus.authorized ||
           settings.authorizationStatus == AuthorizationStatus.provisional) {
         
-        debugPrint('[NotificationService] 2. Permission granted. Fetching token...');
+
         // 2. Get FCM Token
         String? token;
         if (kIsWeb) {
@@ -113,13 +113,13 @@ class NotificationService {
           token = await _messaging.getToken();
         }
 
-        debugPrint('[NotificationService] 3. Token fetched: $token');
+
 
         if (token != null) {
-          debugPrint('[NotificationService] 4. Saving token to Firestore...');
+
           await _saveToken(uid, token);
         } else {
-          debugPrint('[NotificationService] Token was null, skipping save.');
+
         }
 
         // 3. Listen for token refreshes
@@ -137,7 +137,7 @@ class NotificationService {
           }
         });
       } else {
-        debugPrint('[NotificationService] Permission denied by user.');
+
       }
     } catch (e) {
       debugPrint('[NotificationService] Error initializing notifications: $e');
@@ -149,7 +149,7 @@ class NotificationService {
       await _firestore.collection('users').doc(uid).update({
         'fcmToken': token,
       });
-      debugPrint('[NotificationService] 5. FCM token successfully written to Firestore for $uid');
+
     } catch (e) {
       debugPrint('[NotificationService] Failed to save FCM token: $e');
     }

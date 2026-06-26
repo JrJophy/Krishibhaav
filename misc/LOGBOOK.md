@@ -275,3 +275,34 @@
 - **Challenges:** pumpAndSettle timeout loops caused by infinitely running animations were handled by granular pump usages. Rendered UI formatting details like trailing zeroes (?230.00) and the SegmentedButton and StatsGridWidget components being conditionally off-screen or unbuilt required carefully checking widget tree state and adding skipOffstage: false or precise explicit scrolling to the UI tests.
 - **Result:** Successfully confirmed 5/5 UI widget tests passing.
 
+
+### V2 Phase 8: Service Worker and UI Polish
+- **Objective:** Finalize service worker background messaging checks and polish UI components (Label ghosting, chart responsive heights).
+- **Part A:** Verified Firebase JS SDK version (10.7.1) and web credentials. Verified HTTP v1 payload formatting handles payload.notification directly on web background listeners. No blocker found.
+- **Part B (UI Polish):** Fixed label text ghosting in price_edit_dialog.dart and armer_detail_sheet.dart using loatingLabelBehavior: FloatingLabelBehavior.always and helperText. Replaced hardcoded 320px chart height cap in price_chart_widget.dart with a responsive clamped fraction of the viewport height (e.g. MediaQuery.of(context).size.height * 0.4.clamp(240.0, 450.0)). Updated cancel buttons in dialogs to use theme-aware ink.
+- **Result:** Closed out deferred Phase 8.5 UI defect, finished Phase 8. Tests and lint remain 100% green.
+
+
+### V2 Phase 9: Final Pre-Launch Audit
+- **Objective:** Perform read-only audit of edge cases, known debt, and production readiness.
+- **Findings:** Found dead illedBarrels field in model, verified idempotency and negative-stock guards are securely enforced via Firebase transactions, verified stream/router failsafes.
+- **Fixes:** Removed illedBarrels from BarrelStockModel completely (was inert and unused). Removed verbose PII/payload debugPrint statements in 
+otification_service.dart and cm_dispatch_service.dart. Fixed one missing 	oMap() null omission in user_model.dart (gentId).
+- **Result:** Tests passed 100%. Phase 9 is complete.
+
+
+### V2 Phase 9: Hotfix
+- **Action:** Restored FCM response status code check in \cm_dispatch_service.dart\ after an over-eager removal. The logging is now explicitly PII-free (\debugPrint('[FcmDispatchService] FCM dispatch failed: \')\) to maintain error visibility without leaking payload or token data.
+
+
+### V2 Phase 9: NaN Hardening
+- **Action:** Fixed input bypass where \double.tryParse('NaN')\ and \Infinity\ could evade \alue < 0\ checks. Added explicit \isFinite\ validation to \price_edit_dialog.dart\, \armer_detail_sheet.dart\ (custom price), and \market_message_parser.dart\ to prevent database corruption from non-finite numeric inputs.
+
+
+### V2 Phase 9: Security Rules Hardening
+- **Action:** Drafted and version-controlled \irestore.rules\ replacing the fully open default rules. Enforced least privilege, protected role field from client escalation, blocked client writes to scraper-owned datasets, and preserved transaction paths. Awaiting manual deployment and verification.
+
+
+### V2 Phase 9: Security Rules Hardening (Revisions)
+- **Action:** Addressed review feedback for \irestore.rules\. Fixed \arrel_bookings\ status whitelist to match phase 3 returns (\eturned_empty\, \eturned_filled\) and enforced booking immutability. Tightened \gent_settings\ and \arrel_stock\ read access via \isAgentFarmers\ getter. Prevented farmers from mutating their \gentId\ field. Constrained \arrel_stock\ farmer update bounds.
+

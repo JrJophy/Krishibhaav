@@ -22,12 +22,18 @@ class MarketMessageParser {
 
     final match4 = rss4RegEx.firstMatch(raw);
     if (match4 != null && match4.groupCount >= 1) {
-      rss4 = double.tryParse(match4.group(1)!);
+      final parsed = double.tryParse(match4.group(1)!);
+      if (parsed != null && parsed.isFinite && parsed >= 0) {
+        rss4 = parsed;
+      }
     }
 
     final match5 = rss5RegEx.firstMatch(raw);
     if (match5 != null && match5.groupCount >= 1) {
-      rss5 = double.tryParse(match5.group(1)!);
+      final parsed = double.tryParse(match5.group(1)!);
+      if (parsed != null && parsed.isFinite && parsed >= 0) {
+        rss5 = parsed;
+      }
     }
 
     if (rss4 == null && rss5 == null) {

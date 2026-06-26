@@ -97,8 +97,8 @@ class PriceChartWidget extends StatelessWidget {
           ),
         LayoutBuilder(
           builder: (context, constraints) {
-            double targetHeight = constraints.maxWidth / 1.5;
-            if (targetHeight > 320) targetHeight = 320; // Cap height on wide screens
+            double targetHeight = MediaQuery.of(context).size.height * 0.4;
+            targetHeight = targetHeight.clamp(240.0, 450.0);
             
             return SizedBox(
               height: targetHeight,

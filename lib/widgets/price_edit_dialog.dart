@@ -38,7 +38,7 @@ class _PriceEditDialogState extends State<PriceEditDialog> {
       return;
     }
     final value = double.tryParse(text);
-    if (value == null || value < 0) {
+    if (value == null || !value.isFinite || value < 0) {
       setState(() => _errorText = 'Invalid number');
       return;
     }
@@ -48,6 +48,10 @@ class _PriceEditDialogState extends State<PriceEditDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
+
     return AlertDialog(
       title: Text('Update ${widget.priceName}'),
       content: Column(
@@ -57,7 +61,9 @@ class _PriceEditDialogState extends State<PriceEditDialog> {
             controller: _controller,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
-              labelText: 'Current: ₹${widget.currentValue.toStringAsFixed(2)}',
+              labelText: 'New Price',
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              helperText: 'Current: ₹${widget.currentValue.toStringAsFixed(2)}',
               prefixText: '₹ ',
               errorText: _errorText,
             ),
@@ -67,7 +73,7 @@ class _PriceEditDialogState extends State<PriceEditDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(null),
-          child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+          child: Text('Cancel', style: TextStyle(color: ink.withValues(alpha: 0.5))),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),

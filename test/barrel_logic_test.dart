@@ -80,4 +80,24 @@ void main() {
       expect(validatedUpsertDelta(10, 10, 0), 0);
     });
   });
+
+  group('isTerminalBookingStatus', () {
+    test('12 terminal statuses return true', () {
+      expect(isTerminalBookingStatus('returned'), isTrue);
+      expect(isTerminalBookingStatus('returned_empty'), isTrue);
+      expect(isTerminalBookingStatus('returned_filled'), isTrue);
+      expect(isTerminalBookingStatus('cancelled'), isTrue);
+    });
+
+    test('13 active statuses return false', () {
+      expect(isTerminalBookingStatus('requested'), isFalse);
+      expect(isTerminalBookingStatus('approved'), isFalse);
+      expect(isTerminalBookingStatus('dispatched'), isFalse);
+    });
+
+    test('14 whitespace is trimmed before lookup', () {
+      expect(isTerminalBookingStatus('returned_empty '), isTrue);
+      expect(isTerminalBookingStatus(' requested '), isFalse);
+    });
+  });
 }

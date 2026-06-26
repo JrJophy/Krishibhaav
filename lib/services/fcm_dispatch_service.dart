@@ -43,10 +43,12 @@ class FcmDispatchService {
       );
 
       if (response.statusCode != 200) {
-        debugPrint('[FcmDispatchService] Failed to send to $token: ${response.statusCode} - ${response.body}');
+        debugPrint('[FcmDispatchService] FCM dispatch failed: ${response.statusCode}');
       }
+
+
     } catch (e) {
-      debugPrint('[FcmDispatchService] Dispatch error for $token: $e');
+      // Intentionally suppressing raw token logging in errors
     }
   }
 

@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    function isAgentFarmers(agentId) {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.agentId == agentId;
+    }
+
+    match /users/{userId} {
+      // Read: Users can read their own doc; Agents can read their assigned farmers.
+      allow read: if isAuth() && (request.auth.uid == userId || resource.data.agentId == request.auth.uid);
+      
+      // Create: Users can create their own doc during signup. Agents can create farmer docs.
+      allow create: if isAuth() && (request.auth.uid == userId || request.resource.data.agentId == request.auth.uid);
+      
+      // Update: Users can update their own doc but CANNOT escalate their role or change their agentId. Agents can update farmers.
+      allow update: if isAuth() && (
+        (request.auth.uid == userId && 
+         request.resource.data.role == resource.data.role &&
+         request.resource.data.agentId == resource.data.agentId) ||
+        (resource.data.agentId == request.auth.uid)
+      );
+      
+      allow delete: if isAuth() && resource.data.agentId == request.auth.uid;
+    }
+
+    match /agent_settings/{agentId} {
+      allow read: if isAuth() && (request.auth.uid == agentId || isAgentFarmers(agentId));
+      allow write: if isAuth() && request.auth.uid == agentId;
+    }
+
+    match /farmer_prices/{farmerId} {
+      allow read: if isAuth() && (request.auth.uid == farmerId || resource.data.agentId == request.auth.uid);
+      allow create: if isAuth() && request.resource.data.agentId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.agentId == request.auth.uid;
+
+      match /history/{historyId} {
+        allow read: if isAuth() && (request.auth.uid == farmerId || get(/databases/$(database)/documents/farmer_prices/$(farmerId)).data.agentId == request.auth.uid);
+        allow write: if false; // Scraper only
+      }
+    }
+
+    match /board_rates/{docId} {
+      allow read: if isAuth();
+      allow write: if false; // Scraper only
+    }
+
+    match /price_history/{docId} {
+      allow read: if isAuth();
+      allow write: if false; // Scraper only
+    }
+
+    match /barrel_stock/{agentId} {
+      allow read: if isAuth() && (request.auth.uid == agentId || isAgentFarmers(agentId));
+      allow create, delete: if isAuth() && request.auth.uid == agentId;
+      // FLAG: Farmers must be allowed to update their agent's stock to increment availableBarrels 
+      // when cancelling or returning a booking via the BarrelService transaction.
+      // Note: rules cannot verify the exact increment amount (enforced by the BarrelService transaction),
+      // so this only partially mitigates tampering by ensuring totalBarrels is untouched and available <= total.
+      allow update: if isAuth() && (
+        request.auth.uid == agentId || 
+        (
+          isAgentFarmers(agentId) &&
+          request.resource.data.totalBarrels == resource.data.totalBarrels &&
+          request.resource.data.availableBarrels <= request.resource.data.totalBarrels
+        )
+      );
+    }
+
+    match /barrel_bookings/{bookingId} {
+      allow read: if isAuth() && (request.auth.uid == resource.data.agentId || request.auth.uid == resource.data.farmerId);
+      
+      allow create: if isAuth() && request.auth.uid == request.resource.data.farmerId;
+      
+      allow update: if isAuth() && (
+        request.auth.uid == resource.data.agentId ||
+        (
+          request.auth.uid == resource.data.farmerId && 
+          request.resource.data.status in ['requested', 'cancelled', 'returned_empty', 'returned_filled'] &&
+          request.resource.data.farmerId == resource.data.farmerId &&
+          request.resource.data.agentId == resource.data.agentId &&
+          request.resource.data.quantity == resource.data.quantity &&
+          request.resource.data.bookingId == resource.data.bookingId
+        )
+      );
+      
+      allow delete: if false;
+    }
+  }
+}

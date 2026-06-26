@@ -66,7 +66,7 @@ class _BarrelBookingDetailSheetState extends State<BarrelBookingDetailSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.withValues(alpha: 0.3),
+                color: ink.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -138,7 +138,7 @@ class _BarrelBookingDetailSheetState extends State<BarrelBookingDetailSheet> {
                 child: const Text('Cancel Booking'),
               ),
             ] else ...[
-              const Center(child: Text('Terminal State: No further actions.', style: TextStyle(color: Colors.grey))),
+              Center(child: Text('Terminal State: No further actions.', style: TextStyle(color: ink.withValues(alpha: 0.5)))),
             ]
           ],
         ],

@@ -93,7 +93,7 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
       
       if (_useCustomPrice) {
         final price = double.tryParse(_priceController.text.trim());
-        if (price != null) {
+        if (price != null && price.isFinite && price >= 0) {
           await _agentService.setCustomPrice(widget.farmer.uid, price);
           FcmDispatchService().notifyCustomPriceSet(widget.farmer.uid, price);
         } else {
@@ -270,6 +270,7 @@ class _FarmerDetailSheetState extends State<FarmerDetailSheet> {
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       decoration: InputDecoration(
                         labelText: 'Custom Price',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
                         labelStyle: TextStyle(color: ink.withValues(alpha: 0.6)),
                         prefixText: '₹ ',
                         prefixStyle: TextStyle(color: ink),

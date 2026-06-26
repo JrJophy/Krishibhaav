@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../core/barrel_logic.dart';
 import '../../core/colors.dart';
 
 import '../../providers/auth_provider.dart';
@@ -441,7 +442,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
 
                 // Barrel Bookings Section
                 ...(() {
-                  final activeBookings = agentProvider.barrelBookings.where((b) => !['returned_empty', 'returned_filled', 'cancelled', 'returned'].contains(b.status)).toList();
+                  final activeBookings = agentProvider.barrelBookings.where((b) => !isTerminalBookingStatus(b.status)).toList();
                   activeBookings.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
                   
                   if (activeBookings.isEmpty) return [const SizedBox.shrink()];

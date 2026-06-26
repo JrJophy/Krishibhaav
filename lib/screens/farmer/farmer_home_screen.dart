@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/barrel_logic.dart';
 import '../../core/colors.dart';
 import '../../core/market_status.dart';
 import '../../providers/farmer_provider.dart';
@@ -252,7 +253,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                   ),
                   const SizedBox(height: 16),
                   ...(() {
-                    final activeBookings = provider.barrelBookings.where((b) => !['returned_empty', 'returned_filled', 'cancelled', 'returned'].contains(b.status)).toList();
+                    final activeBookings = provider.barrelBookings.where((b) => !isTerminalBookingStatus(b.status)).toList();
                     if (activeBookings.isEmpty) {
                       return [
                         Center(

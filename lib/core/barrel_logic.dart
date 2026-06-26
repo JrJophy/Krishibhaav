@@ -63,3 +63,13 @@ int validatedUpsertDelta(int oldTotal, int newTotal, int currentAvailable) {
   }
   return delta;
 }
+
+const Set<String> kTerminalBookingStatuses = {
+  'returned',
+  'returned_empty',
+  'returned_filled',
+  'cancelled',
+};
+
+bool isTerminalBookingStatus(String status) =>
+    kTerminalBookingStatuses.contains(status.trim());
