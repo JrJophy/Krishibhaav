@@ -23,3 +23,6 @@
 **Notes:**
 - Under Phase 5, chart collapse/minimise was pulled forward. Phase 5 only owes remaining resize work.
 - Layout reorder was done early (pulled from Phase 8 polish territory).
+
+## V2 Register
+- V2: normalize status .trim() in BarrelBookingModel.fromMap — DONE (Part A follow-up)

@@ -4,6 +4,7 @@
 
 ## Features
 - **Role-based Auth:** Distinct experiences and controls for Farmers and Agents.
+- **Security:** Role-scoped Firestore security rules, published and verified.
 - **Live Board Rate Scraping:** Automated daily fetching of RSS4/RSS5 rates with holiday carry-forward logic.
 - **WhatsApp Paste-Parser:** Smart parsing of Open Market prices directly from agent WhatsApp messages.
 - **Granular Pricing:** Per-farmer custom prices and visibility controls managed by agents.
@@ -31,6 +32,5 @@ flutter run -d chrome
 **V1 Completed (Full Release).**
 
 *Known limitations scheduled for resolution in V2:*
-- Firestore security rules are currently in test mode.
 - Simulated OTP for authentication.
 - Client-side FCM dispatch.
