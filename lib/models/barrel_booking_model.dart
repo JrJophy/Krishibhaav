@@ -69,7 +69,7 @@ class BarrelBookingModel {
       farmerName: map['farmerName'] ?? '',
       location: map['location'] ?? '',
       quantity: ((map['quantity'] ?? 0) as num).toInt(),
-      status: map['status'] ?? 'requested',
+      status: (map['status'] as String?)?.trim() ?? 'requested',
       cancelReason: map['cancelReason'],
       createdAt: map['createdAt'] ?? Timestamp.now(),
       updatedAt: map['updatedAt'] ?? Timestamp.now(),
