@@ -32,7 +32,7 @@ Last Updated: 2026-06-26
 | V2-9 | Final Pre-Launch Audit | COMPLETED | Dead field removed, debug prints cleaned. |
 | BH-A | Booking History: terminal-status filter refactor + fromMap trim | COMPLETED | - |
 | BH-B1 | Booking History: status-label helper, completedAt getter, read-only row widget | COMPLETED | - |
-| BH-B2 | Booking History: screen, /history route, date filter, entry points | IN PROGRESS | - |
+| BH-B2 | Booking History: screen, /history route, date filter, entry points | COMPLETED | - |
 
 ## Status Key
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
@@ -40,8 +40,7 @@ NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 ## Current Phase
 Phase: V2 Phase 10 — Version Two Release Production Build. NOT yet started.
 In-flight side feature: Booking History (outside the locked 10-phase roadmap)
-— Part A COMPLETED, B1 COMPLETED, B2 (screen + route + filter + entry points)
-IN PROGRESS.
+— Part A COMPLETED, B1 COMPLETED, B2 COMPLETED.
 
 ## V2 Phases
 | Phase | Name |

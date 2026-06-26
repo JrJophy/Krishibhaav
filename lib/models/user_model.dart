@@ -49,7 +49,7 @@ class UserModel {
       role: map['role'] ?? '',
       location: map['location'] ?? '',
       crop: map['crop'] ?? '',
-      agentId: map['agentId'],
+      agentId: (map['agentId'] as String?)?.trim(),
       fcmToken: map['fcmToken'] ?? '',
       createdAt: map['createdAt'] ?? Timestamp.now(),
       updatedAt: map['updatedAt'] ?? Timestamp.now(),
