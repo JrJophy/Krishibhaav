@@ -1,7 +1,7 @@
 ---
 # Krishibhaav Progress Tracker
 
-Last Updated: 2026-06-18T15:25:00+05:30
+Last Updated: 2026-06-26
 
 ## Phase Status
 | Phase | Name | Status | Blocker |
@@ -30,12 +30,18 @@ Last Updated: 2026-06-18T15:25:00+05:30
 | V2-7 | Comprehensive Integration Testing | COMPLETED | - |
 | V2-8 | Service Worker & UI Polish | COMPLETED | Closed out deferred ghosting defect. |
 | V2-9 | Final Pre-Launch Audit | COMPLETED | Dead field removed, debug prints cleaned. |
+| BH-A | Booking History: terminal-status filter refactor + fromMap trim | COMPLETED | - |
+| BH-B1 | Booking History: status-label helper, completedAt getter, read-only row widget | COMPLETED | - |
+| BH-B2 | Booking History: screen, /history route, date filter, entry points | IN PROGRESS | - |
 
 ## Status Key
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
 
 ## Current Phase
-Phase: V2 Phase 10 — Version Two Release Production Build. Ready to begin.
+Phase: V2 Phase 10 — Version Two Release Production Build. NOT yet started.
+In-flight side feature: Booking History (outside the locked 10-phase roadmap)
+— Part A COMPLETED, B1 COMPLETED, B2 (screen + route + filter + entry points)
+IN PROGRESS.
 
 ## V2 Phases
 | Phase | Name |
@@ -55,6 +61,7 @@ Phase: V2 Phase 10 — Version Two Release Production Build. Ready to begin.
 [2026-06-09] | Phase 1 | `flutter` command not found in PATH | - | RESOLVED
 [2026-06-10] | Phase 4 | Farmer sign-in with temp password fails (invalid-credential) | Auth user recreated and Firestore docs migrated to correct UID | RESOLVED
 [2026-06-18] | V2-2 | Active-list terminal filter added to agent and farmer views | - | COMPLETED
+[2026-06-26] | BH-B1 | Booking History row widget + shared status helpers landed (commit c1493e7) | - | COMPLETED
 
 ## Files Created So Far
 LOGBOOK.md (Phase 1)
