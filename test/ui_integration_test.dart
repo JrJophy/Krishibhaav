@@ -19,6 +19,9 @@ import 'package:krishibhaav/widgets/barrel_booking_card.dart';
 import 'package:krishibhaav/screens/farmer/farmer_barrel_request_sheet.dart';
 import 'package:krishibhaav/models/user_model.dart';
 import 'package:krishibhaav/models/agent_settings_model.dart';
+import 'package:krishibhaav/screens/booking_history_screen.dart';
+import 'package:krishibhaav/widgets/booking_history_row.dart';
+import 'package:intl/intl.dart';
 
 // -----------------------------------------------------------------------------
 // FAKE PROVIDERS
@@ -264,6 +267,99 @@ void main() {
       await tester.pump();
 
       expect(find.text('Only 3 barrels available from agent'), findsOneWidget);
+    });
+
+    testWidgets('6. Booking History (farmer): shows only terminal bookings with completed date', (tester) async {
+      final fakeFarmer = FakeFarmerProvider();
+      final now = DateTime.now();
+      final targetTime = now.subtract(const Duration(days: 5));
+      final ts = Timestamp.fromDate(targetTime);
+
+      fakeFarmer.barrelBookings = [
+        BarrelBookingModel(
+          bookingId: '1',
+          farmerId: 'fid',
+          farmerName: 'Fn',
+          location: 'loc',
+          agentId: 'aid',
+          quantity: 2,
+          status: 'requested',
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+          requestedAt: Timestamp.now(),
+        ),
+        BarrelBookingModel(
+          bookingId: '2',
+          farmerId: 'fid',
+          farmerName: 'Fn',
+          location: 'loc',
+          agentId: 'aid',
+          quantity: 3,
+          status: 'returned_empty',
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+          requestedAt: Timestamp.now(),
+          returnedEmptyAt: ts,
+        ),
+      ];
+
+      await tester.pumpWidget(MaterialApp(
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<FarmerProvider>.value(value: fakeFarmer),
+          ],
+          child: const BookingHistoryScreen(role: 'farmer'),
+        ),
+      ));
+
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      // Find the single terminal row (bookingId '2')
+      expect(find.byType(BookingHistoryRow), findsOneWidget);
+      expect(find.text('3 Barrels'), findsOneWidget);
+
+      // Verify the formatted completed date
+      final expectedDateStr = DateFormat('dd MMM yyyy').format(targetTime);
+      expect(find.textContaining(expectedDateStr), findsOneWidget);
+    });
+
+    testWidgets('7. Booking History (agent): shows farmer name on rows', (tester) async {
+      final fakeAgent = FakeAgentProvider();
+      final now = DateTime.now();
+      final ts = Timestamp.fromDate(now);
+
+      fakeAgent.barrelBookings = [
+        BarrelBookingModel(
+          bookingId: '1',
+          farmerId: 'fid',
+          farmerName: 'Rajan K',
+          location: 'loc',
+          agentId: 'aid',
+          quantity: 5,
+          status: 'cancelled',
+          createdAt: Timestamp.now(),
+          updatedAt: ts,
+          requestedAt: Timestamp.now(),
+          cancelledAt: ts,
+        ),
+      ];
+
+      await tester.pumpWidget(MaterialApp(
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<AgentProvider>.value(value: fakeAgent),
+          ],
+          child: const BookingHistoryScreen(role: 'agent'),
+        ),
+      ));
+
+      await tester.pump();
+      await tester.pump(const Duration(seconds: 1));
+
+      // Verify the farmer name is rendered on the row
+      expect(find.text('Rajan K'), findsOneWidget);
+      expect(find.byType(BookingHistoryRow), findsOneWidget);
     });
   });
 }

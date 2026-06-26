@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/barrel_logic.dart';
 import '../../core/colors.dart';
 import '../../core/market_status.dart';
@@ -124,6 +125,10 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
           },
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.history, size: 26, color: theme.appBarTheme.foregroundColor),
+            onPressed: () => context.push('/history', extra: {'role': 'farmer'}),
+          ),
           IconButton(
             icon: Icon(Icons.account_circle, size: 28, color: theme.appBarTheme.foregroundColor),
             onPressed: () {

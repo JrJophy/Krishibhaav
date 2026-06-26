@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/barrel_logic.dart';
@@ -262,6 +263,10 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
           ],
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.history, size: 26, color: theme.appBarTheme.foregroundColor),
+            onPressed: () => context.push('/history', extra: {'role': 'agent'}),
+          ),
           IconButton(
             icon: Icon(Icons.account_circle, size: 28, color: theme.appBarTheme.foregroundColor),
             onPressed: () {

@@ -7,6 +7,7 @@ import 'screens/auth/otp_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/agent/agent_home_screen.dart';
 import 'screens/farmer/farmer_home_screen.dart';
+import 'screens/booking_history_screen.dart';
 
 class DummyScreen extends StatelessWidget {
   final String title;
@@ -123,6 +124,13 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(path: '/agent/home', builder: (context, state) => const AgentHomeScreen()),
+    GoRoute(
+      path: '/history',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>? ?? {};
+        return BookingHistoryScreen(role: extra['role'] ?? 'farmer');
+      },
+    ),
     GoRoute(path: '/agent/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
     GoRoute(path: '/farmer/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
     GoRoute(path: '/profile', builder: (context, state) => const DummyScreen(title: 'Profile')),
