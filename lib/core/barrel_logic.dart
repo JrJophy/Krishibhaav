@@ -73,3 +73,24 @@ const Set<String> kTerminalBookingStatuses = {
 
 bool isTerminalBookingStatus(String status) =>
     kTerminalBookingStatuses.contains(status.trim());
+
+String bookingStatusLabel(String status) {
+  switch (status.trim()) {
+    case 'requested':
+      return 'Requested';
+    case 'approved':
+      return 'Approved';
+    case 'dispatched':
+      return 'Dispatched';
+    case 'returned':
+      return 'Returned';
+    case 'returned_empty':
+      return 'Returned Empty';
+    case 'returned_filled':
+      return 'Returned Filled';
+    case 'cancelled':
+      return 'Cancelled';
+    default:
+      return status.trim();
+  }
+}

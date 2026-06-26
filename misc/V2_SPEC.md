@@ -26,3 +26,8 @@
 
 ## V2 Register
 - V2: normalize status .trim() in BarrelBookingModel.fromMap — DONE (Part A follow-up)
+
+## V2 Post-Audit / Cleanup Notes
+- **V2 Cleanup (Optional):** Migrate `FarmerBarrelBookingCard` and `BarrelBookingCard` to consume the new `bookingStatusLabel` helper to eliminate the two inline status switches, fixing the agent card's raw rendering for `returned_empty` and missing split-status cases.
+- **V2 Test Debt:** `completedAt` getter in `BarrelBookingModel` has no direct unit test (Timestamp/Firebase boundary). Cover it indirectly via a V2 widget/integration test asserting that `BookingHistoryRow` shows the correct parsed "Completed: <date>" label.
+

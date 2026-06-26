@@ -122,4 +122,20 @@ class BarrelBookingModel {
       returnedFilledAt: returnedFilledAt ?? this.returnedFilledAt,
     );
   }
+
+  Timestamp get completedAt {
+    switch (status.trim()) {
+      case 'returned_empty':
+        return returnedEmptyAt ?? updatedAt;
+      case 'returned_filled':
+        return returnedFilledAt ?? updatedAt;
+      case 'returned':
+        return returnedAt ?? updatedAt;
+      case 'cancelled':
+        return cancelledAt ?? updatedAt;
+      default:
+        return updatedAt;
+    }
+  }
 }
+

@@ -304,5 +304,7 @@ otification_service.dart and cm_dispatch_service.dart. Fixed one missing 	oMap(
 
 
 ### V2 Phase 9: Security Rules Hardening (Revisions)
-- **Action:** Addressed review feedback for \irestore.rules\. Fixed \arrel_bookings\ status whitelist to match phase 3 returns (\eturned_empty\, \eturned_filled\) and enforced booking immutability. Tightened \gent_settings\ and \arrel_stock\ read access via \isAgentFarmers\ getter. Prevented farmers from mutating their \gentId\ field. Constrained \arrel_stock\ farmer update bounds.
+- **Action:** Addressed review feedback for `firestore.rules`. Fixed `barrel_bookings` status whitelist to match phase 3 returns (`returned_empty`, `returned_filled`) and enforced booking immutability. Tightened `agent_settings` and `barrel_stock` read access via `isAgentFarmers` getter. Prevented farmers from mutating their `agentId` field. Constrained `barrel_stock` farmer update bounds.
 
+### V2 Phase 10: Version Two Audit Logging
+- **Action:** Recorded V2 cleanup (optionally migrating card widgets to consume `bookingStatusLabel` to clean up switches and correct agent status rendering) and V2 test debt notes (indirect widget-test coverage for `completedAt` to bypass Firebase Timestamp compilation boundaries) in `V2_SPEC.md` and `LOGBOOK.md`.

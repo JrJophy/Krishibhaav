@@ -100,4 +100,26 @@ void main() {
       expect(isTerminalBookingStatus(' requested '), isFalse);
     });
   });
+
+  group('bookingStatusLabel', () {
+    test('15 maps each status to its expected label', () {
+      expect(bookingStatusLabel('requested'), 'Requested');
+      expect(bookingStatusLabel('approved'), 'Approved');
+      expect(bookingStatusLabel('dispatched'), 'Dispatched');
+      expect(bookingStatusLabel('returned'), 'Returned');
+      expect(bookingStatusLabel('returned_empty'), 'Returned Empty');
+      expect(bookingStatusLabel('returned_filled'), 'Returned Filled');
+      expect(bookingStatusLabel('cancelled'), 'Cancelled');
+    });
+
+    test('16 trims whitespace from input', () {
+      expect(bookingStatusLabel('cancelled '), 'Cancelled');
+      expect(bookingStatusLabel('  requested  '), 'Requested');
+    });
+
+    test('17 returns unknown status trimmed', () {
+      expect(bookingStatusLabel('  weird '), 'weird');
+    });
+  });
 }
+
