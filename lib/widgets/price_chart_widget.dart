@@ -59,10 +59,9 @@ class PriceChartWidget extends StatelessWidget {
       minPrice = prices.reduce((a, b) => a < b ? a : b);
     } else {
       for (var p in openMarketPoints!) {
-        if (p.rss4 > maxPrice) maxPrice = p.rss4;
-        if (p.rss5 > maxPrice) maxPrice = p.rss5;
-        if (p.rss4 > 0 && p.rss4 < minPrice) minPrice = p.rss4;
-        if (p.rss5 > 0 && p.rss5 < minPrice) minPrice = p.rss5;
+        final avg = p.averagePrice;
+        if (avg > maxPrice) maxPrice = avg;
+        if (avg > 0 && avg < minPrice) minPrice = avg;
       }
       if (minPrice == double.infinity) minPrice = 0;
     }
@@ -89,9 +88,7 @@ class PriceChartWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                buildLegendItem('RSS4', rss4Color),
-                const SizedBox(width: 16),
-                buildLegendItem('RSS5', rss5Color),
+                buildLegendItem('Average Market Price (RSS4/RSS5)', valueGreen),
               ],
             ),
           ),
@@ -145,8 +142,9 @@ class PriceChartWidget extends StatelessWidget {
                         showTitles: true,
                         reservedSize: 40,
                         getTitlesWidget: (value, meta) {
+                          if (value != value.toInt().toDouble()) return const SizedBox.shrink();
                           return Text(
-                            value.toStringAsFixed(0),
+                            value.toInt().toString(),
                             style: TextStyle(color: mutedInk, fontSize: 10),
                           );
                         },
@@ -190,9 +188,9 @@ class PriceChartWidget extends StatelessWidget {
                       ]
                     : [
                         LineChartBarData(
-                          spots: openMarketPoints!.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.rss4)).toList(),
+                          spots: openMarketPoints!.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.averagePrice)).toList(),
                           isCurved: true,
-                          color: rss4Color,
+                          color: valueGreen,
                           barWidth: 2,
                           isStrokeCapRound: true,
                           dotData: FlDotData(
@@ -201,30 +199,19 @@ class PriceChartWidget extends StatelessWidget {
                             getDotPainter: (spot, percent, barData, index) {
                               return FlDotCirclePainter(
                                 radius: 4,
-                                color: rss4Color,
+                                color: valueGreen,
                                 strokeWidth: 2,
                                 strokeColor: theme.colorScheme.surface,
                               );
                             },
                           ),
-                        ),
-                        LineChartBarData(
-                          spots: openMarketPoints!.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.rss5)).toList(),
-                          isCurved: true,
-                          color: rss5Color,
-                          barWidth: 2,
-                          isStrokeCapRound: true,
-                          dotData: FlDotData(
+                          belowBarData: BarAreaData(
                             show: true,
-                            checkToShowDot: (spot, barData) => spot.x == openMarketPoints!.length - 1,
-                            getDotPainter: (spot, percent, barData, index) {
-                              return FlDotCirclePainter(
-                                radius: 4,
-                                color: rss5Color,
-                                strokeWidth: 2,
-                                strokeColor: theme.colorScheme.surface,
-                              );
-                            },
+                            gradient: LinearGradient(
+                              colors: [valueGreenSoft, valueGreenSoft.withValues(alpha: 0.0)],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
                           ),
                         ),
                       ],
@@ -242,11 +229,9 @@ class PriceChartWidget extends StatelessWidget {
                         } else {
                           return touchedSpots.map((LineBarSpot touchedSpot) {
                             final point = openMarketPoints![touchedSpot.x.toInt()];
-                            final isRss4 = touchedSpot.barIndex == 0;
-                            final value = isRss4 ? point.rss4 : point.rss5;
-                            final label = isRss4 ? 'RSS4' : 'RSS5';
+                            final value = point.averagePrice;
                             return LineTooltipItem(
-                              '${_formatDate(point.date)}\n$label: ₹${value.toStringAsFixed(2)}',
+                              '${_formatDate(point.date)}\nAverage: ₹${value.toStringAsFixed(2)}',
                               TextStyle(color: theme.colorScheme.surface, fontWeight: FontWeight.bold),
                             );
                           }).toList();

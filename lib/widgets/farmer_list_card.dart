@@ -107,6 +107,8 @@ class FarmerListCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
                 icon: Icon(Icons.close, color: ink.withValues(alpha: 0.4)),
                 onPressed: onRemove,
               ),

@@ -22,7 +22,7 @@ class _PriceEditDialogState extends State<PriceEditDialog> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: widget.currentValue.toStringAsFixed(2));
   }
 
   @override
@@ -62,7 +62,6 @@ class _PriceEditDialogState extends State<PriceEditDialog> {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
               labelText: 'New Price',
-              floatingLabelBehavior: FloatingLabelBehavior.always,
               helperText: 'Current: ₹${widget.currentValue.toStringAsFixed(2)}',
               prefixText: '₹ ',
               errorText: _errorText,

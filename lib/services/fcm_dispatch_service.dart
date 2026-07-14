@@ -43,7 +43,9 @@ class FcmDispatchService {
       );
 
       if (response.statusCode != 200) {
-        debugPrint('[FcmDispatchService] FCM dispatch failed: ${response.statusCode}');
+        if (kDebugMode) {
+          debugPrint('[FcmDispatchService] FCM dispatch failed: ${response.statusCode}');
+        }
       }
 
 
@@ -81,7 +83,9 @@ class FcmDispatchService {
         );
       }
     } catch (e) {
-      debugPrint('[FcmDispatchService] Open market update query error: $e');
+      if (kDebugMode) {
+        debugPrint('[FcmDispatchService] Open market update query error: $e');
+      }
     }
   }
 
@@ -112,7 +116,9 @@ class FcmDispatchService {
         );
       }
     } catch (e) {
-      debugPrint('[FcmDispatchService] Board rate update query error: $e');
+      if (kDebugMode) {
+        debugPrint('[FcmDispatchService] Board rate update query error: $e');
+      }
     }
   }
 
@@ -147,7 +153,9 @@ class FcmDispatchService {
         );
       }
     } catch (e) {
-      debugPrint('[FcmDispatchService] Agent price update query error: $e');
+      if (kDebugMode) {
+        debugPrint('[FcmDispatchService] Agent price update query error: $e');
+      }
     }
   }
 
@@ -163,7 +171,9 @@ class FcmDispatchService {
         );
       }
     } catch (e) {
-      debugPrint('[FcmDispatchService] Custom price set query error: $e');
+      if (kDebugMode) {
+        debugPrint('[FcmDispatchService] Custom price set query error: $e');
+      }
     }
   }
 
@@ -179,7 +189,9 @@ class FcmDispatchService {
         );
       }
     } catch (e) {
-      debugPrint('[FcmDispatchService] Custom price revert query error: $e');
+      if (kDebugMode) {
+        debugPrint('[FcmDispatchService] Custom price revert query error: $e');
+      }
     }
   }
 }

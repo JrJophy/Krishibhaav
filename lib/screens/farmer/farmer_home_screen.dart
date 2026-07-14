@@ -397,7 +397,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                     }),
                     const SizedBox(height: 16),
                     Text(
-                      _chartMode == ChartMode.agent ? 'Agent Price Trend' : 'Open Market Price Trend', 
+                      _chartMode == ChartMode.agent ? 'Effective Price Trend' : 'Open Market Price Trend', 
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: ink.withValues(alpha: 0.8))
                     ),
                     const SizedBox(height: 16),

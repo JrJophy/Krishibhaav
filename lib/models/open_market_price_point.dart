@@ -3,6 +3,8 @@ class OpenMarketPricePoint {
   final double rss4;
   final double rss5;
 
+  double get averagePrice => (rss4 + rss5) / 2;
+
   OpenMarketPricePoint({required this.date, required this.rss4, required this.rss5});
 
   factory OpenMarketPricePoint.fromMap(Map<String, dynamic> map) {

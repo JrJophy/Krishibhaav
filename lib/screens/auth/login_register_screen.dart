@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'dart:math';
@@ -130,7 +131,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
             TextField(
               controller: _signInMobileController,
               keyboardType: TextInputType.number,
-              maxLength: 10,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
               style: TextStyle(color: ink),
               decoration: InputDecoration(
                 labelText: 'Mobile Number',
@@ -208,7 +209,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
           TextField(
             controller: _regMobileController,
             keyboardType: TextInputType.number,
-            maxLength: 10,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly, LengthLimitingTextInputFormatter(10)],
             style: TextStyle(color: ink),
             decoration: InputDecoration(
               labelText: 'Mobile Number',

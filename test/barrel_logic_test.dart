@@ -49,6 +49,26 @@ void main() {
       expect(dec2.availableDelta, 0);
     });
 
+    test('6b decideReturnEmpty dispatched -> returned_empty, qty; other -> null, 0', () {
+      final dec1 = decideReturnEmpty('dispatched', 5);
+      expect(dec1.newStatus, 'returned_empty');
+      expect(dec1.availableDelta, 5);
+
+      final dec2 = decideReturnEmpty('requested', 5);
+      expect(dec2.newStatus, isNull);
+      expect(dec2.availableDelta, 0);
+    });
+
+    test('6c decideReturnFilled dispatched -> returned_filled, 0; other -> null, 0', () {
+      final dec1 = decideReturnFilled('dispatched');
+      expect(dec1.newStatus, 'returned_filled');
+      expect(dec1.availableDelta, 0);
+
+      final dec2 = decideReturnFilled('approved');
+      expect(dec2.newStatus, isNull);
+      expect(dec2.availableDelta, 0);
+    });
+
     test('7 decideCancel requested -> cancelled, 0', () {
       final decision = decideCancel('requested', 5);
       expect(decision.newStatus, 'cancelled');

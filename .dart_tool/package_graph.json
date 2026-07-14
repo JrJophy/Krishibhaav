@@ -13,7 +13,6 @@
         "firebase_messaging",
         "fl_chart",
         "flutter",
-        "flutter_spinkit",
         "go_router",
         "google_fonts",
         "googleapis_auth",
@@ -104,13 +103,6 @@
       "version": "0.69.2",
       "dependencies": [
         "equatable",
-        "flutter"
-      ]
-    },
-    {
-      "name": "flutter_spinkit",
-      "version": "5.2.2",
-      "dependencies": [
         "flutter"
       ]
     },

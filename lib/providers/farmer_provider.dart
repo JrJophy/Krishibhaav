@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/farmer_service.dart';
@@ -117,7 +118,11 @@ class FarmerProvider extends ChangeNotifier {
           _boardRate = rate;
           notifyListeners();
         },
-        onError: (e) => debugPrint('Error streaming board rate: $e'),
+        onError: (e) {
+          if (kDebugMode) {
+            debugPrint('Error streaming board rate: $e');
+          }
+        },
       );
 
       _barrelStockSub = _barrelService.streamBarrelStock(agentId).listen(
@@ -125,7 +130,11 @@ class FarmerProvider extends ChangeNotifier {
           _barrelStock = stock;
           notifyListeners();
         },
-        onError: (e) => debugPrint('Error streaming barrel stock: $e'),
+        onError: (e) {
+          if (kDebugMode) {
+            debugPrint('Error streaming barrel stock: $e');
+          }
+        },
       );
 
       _barrelBookingsSub = _barrelService.streamFarmerBookings(farmerId).listen(
@@ -133,7 +142,11 @@ class FarmerProvider extends ChangeNotifier {
           _barrelBookings = bookings;
           notifyListeners();
         },
-        onError: (e) => debugPrint('Error streaming barrel bookings: $e'),
+        onError: (e) {
+          if (kDebugMode) {
+            debugPrint('Error streaming barrel bookings: $e');
+          }
+        },
       );
     } catch (e) {
       await _handleOffline();
@@ -166,7 +179,9 @@ class FarmerProvider extends ChangeNotifier {
         timestamp: DateTime.now(),
       );
     } catch (e) {
-      debugPrint('Failed to save to cache: $e');
+      if (kDebugMode) {
+        debugPrint('Failed to save to cache: $e');
+      }
     }
   }
 

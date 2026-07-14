@@ -140,7 +140,9 @@ class NotificationService {
 
       }
     } catch (e) {
-      debugPrint('[NotificationService] Error initializing notifications: $e');
+      if (kDebugMode) {
+        debugPrint('[NotificationService] Error initializing notifications: $e');
+      }
     }
   }
 
@@ -151,7 +153,9 @@ class NotificationService {
       });
 
     } catch (e) {
-      debugPrint('[NotificationService] Failed to save FCM token: $e');
+      if (kDebugMode) {
+        debugPrint('[NotificationService] Failed to save FCM token: $e');
+      }
     }
   }
 }
