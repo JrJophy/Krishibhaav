@@ -9,13 +9,6 @@ import 'screens/agent/agent_home_screen.dart';
 import 'screens/farmer/farmer_home_screen.dart';
 import 'screens/booking_history_screen.dart';
 
-class DummyScreen extends StatelessWidget {
-  final String title;
-  const DummyScreen({super.key, required this.title});
-  @override
-  Widget build(BuildContext context) => Scaffold(appBar: AppBar(title: Text(title)), body: Center(child: Text(title)));
-}
-
 String? _cachedRole;
 bool isAwaitingOtp = false;
 
@@ -131,11 +124,6 @@ final GoRouter appRouter = GoRouter(
         return BookingHistoryScreen(role: extra['role'] ?? 'farmer');
       },
     ),
-    GoRoute(path: '/agent/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
-    GoRoute(path: '/farmer/profile', builder: (context, state) => const DummyScreen(title: 'Coming in Phase 8')),
-    GoRoute(path: '/profile', builder: (context, state) => const DummyScreen(title: 'Profile')),
-    GoRoute(path: '/settings', builder: (context, state) => const DummyScreen(title: 'Settings')),
-    GoRoute(path: '/notifications', builder: (context, state) => const DummyScreen(title: 'Notifications')),
-    GoRoute(path: '/charts', builder: (context, state) => const DummyScreen(title: 'Charts')),
+
   ],
 );

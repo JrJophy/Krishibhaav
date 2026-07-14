@@ -25,41 +25,8 @@ class AppColors {
   static const Color darkDanger = Color(0xFFEF5350);
   static const Color darkWarning = Color(0xFFF9A825);
 
-  // DEPRECATED ALIASES (mapping to light tokens to prevent breakage until restyled)
-  @Deprecated('Use theme instead')
+  // CONVENIENCE ALIASES (widely used cross-file, map to light tokens)
   static const Color primary = lightPrimary;
-  @Deprecated('Use theme instead')
-  static const Color secondary = lightSurfaceTintA;
-  @Deprecated('Use theme instead')
-  static const Color background = lightBackground;
-  @Deprecated('Use theme instead')
-  static const Color surface = lightSurface;
-  @Deprecated('Use theme instead')
-  static const Color error = lightDanger;
-  @Deprecated('Use theme instead')
-  static const Color textPrimary = lightInk;
-  @Deprecated('Use theme instead')
-  static const Color textSecondary = lightSurfaceTintB;
-  @Deprecated('Use theme instead')
-  static const Color divider = Color(0xFFBDBDBD);
-  @Deprecated('Use theme instead')
-  static const Color agentPrice = Color(0xFF1976D2);
-  @Deprecated('Use theme instead')
-  static const Color companyPrice = Color(0xFF388E3C);
-  @Deprecated('Use theme instead')
-  static const Color marketPrice = Color(0xFFFBC02D);
-  @Deprecated('Use theme instead')
   static const Color primaryLight = lightSurfaceTintA;
-  @Deprecated('Use theme instead')
-  static const Color accent = lightWarning;
-  @Deprecated('Use theme instead')
   static const Color danger = lightDanger;
-  @Deprecated('Use theme instead')
-  static const Color cardBackground = lightSurface;
-  @Deprecated('Use theme instead')
-  static const Color textOnPrimary = lightSurface;
-  @Deprecated('Use theme instead')
-  static const Color priceGreen = lightValueGreen;
-  @Deprecated('Use theme instead')
-  static const Color priceRed = lightDanger;
 }

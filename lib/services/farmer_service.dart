@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
-import '../models/agent_settings_model.dart';
 import '../models/user_model.dart';
 
 class EffectivePriceResult {
@@ -66,20 +65,6 @@ class FarmerService {
     );
   }
 
-  Stream<AgentSettingsModel> streamAgentSettings(String agentId) {
-    return _firestore.collection('agent_settings').doc(agentId).snapshots().map((doc) {
-      if (!doc.exists) {
-        return AgentSettingsModel(
-          agentId: agentId,
-          openMarketPrice: 0,
-          companyPrice: 0,
-          globalAgentPrice: 0,
-          lastUpdated: Timestamp.now(),
-        );
-      }
-      return AgentSettingsModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
-    });
-  }
 
   Future<UserModel?> getFarmerUser(String farmerId) async {
     final doc = await _firestore.collection('users').doc(farmerId).get();

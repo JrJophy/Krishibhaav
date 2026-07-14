@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/farmer_service.dart';
+import '../services/agent_service.dart';
 import '../services/cache_service.dart';
 import '../models/board_rate_model.dart';
 import '../services/board_rate_service.dart';
@@ -11,6 +12,7 @@ import '../models/barrel_stock_model.dart';
 
 class FarmerProvider extends ChangeNotifier {
   final FarmerService _farmerService = FarmerService();
+  final AgentService _agentService = AgentService();
   final CacheService _cacheService = CacheService();
   final BoardRateService _boardRateService = BoardRateService();
   final BarrelService _barrelService = BarrelService();
@@ -98,7 +100,7 @@ class FarmerProvider extends ChangeNotifier {
         onError: (e) => _handleOffline(),
       );
 
-      _agentSettingsSub = _farmerService.streamAgentSettings(agentId).listen(
+      _agentSettingsSub = _agentService.streamAgentSettings(agentId).listen(
         (settings) {
           _openMarketPrice = settings.openMarketPrice;
           _openMarketRss5 = settings.openMarketRss5;
