@@ -32,3 +32,6 @@ doc/api/
 assets/service_account.json
 web/downloads/*.apk
 .firebase/ 
+jdk21.zip
+jdk21/
+TESTING.md

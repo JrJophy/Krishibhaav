@@ -1,7 +1,7 @@
 name: krishibhaav
 description: "Kerala Rubber Price Intelligence App"
 publish_to: 'none'
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
   sdk: '>=3.2.0 <4.0.0'
@@ -16,10 +16,10 @@ dependencies:
   go_router: ^13.2.0
 
   # Firebase (Spark plan)
-  firebase_core: ^4.10.0
-  firebase_auth: ^6.5.2
-  cloud_firestore: ^6.5.0
-  firebase_messaging: ^16.3.0
+  firebase_core: ^4.12.1
+  firebase_auth: ^6.5.6
+  cloud_firestore: ^6.7.1
+  firebase_messaging: ^16.4.3
 
   # UI / Utils
   google_fonts: ^6.1.0
@@ -30,6 +30,7 @@ dependencies:
   fl_chart: ^0.69.0
   url_launcher: ^6.3.2
   package_info_plus: ^10.1.0
+  cloud_functions: ^6.3.5
 
 dev_dependencies:
   flutter_test:
@@ -45,5 +46,5 @@ flutter_launcher_icons:
 flutter:
   uses-material-design: true
   assets:
-    - assets/service_account.json
     - assets/branding/
+

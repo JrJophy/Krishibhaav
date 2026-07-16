@@ -8,11 +8,13 @@ import '../../app_router.dart';
 class OtpScreen extends StatefulWidget {
   final String otpGenerated;
   final Map<String, dynamic> userData;
+  final String password;
 
   const OtpScreen({
     super.key,
     required this.otpGenerated,
     required this.userData,
+    required this.password,
   });
 
   @override
@@ -20,8 +22,8 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  final List<TextEditingController> _controllers = List.generate(4, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
+  final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
 
   @override
   void dispose() {
@@ -35,7 +37,7 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _onChanged(String value, int index) {
-    if (value.isNotEmpty && index < 3) {
+    if (value.isNotEmpty && index < 5) {
       _focusNodes[index + 1].requestFocus();
     }
     if (value.isEmpty && index > 0) {
@@ -45,14 +47,14 @@ class _OtpScreenState extends State<OtpScreen> {
 
   void _verifyOtp() async {
     String enteredOtp = _controllers.map((c) => c.text).join();
-    if (enteredOtp.length != 4) return;
+    if (enteredOtp.length != 6) return;
 
     final provider = Provider.of<AuthProvider>(context, listen: false);
     final success = await provider.verifyOTP(
-      uid: widget.userData['uid'] ?? '',
       otpEntered: enteredOtp,
       otpGenerated: widget.otpGenerated,
       userData: widget.userData,
+      password: widget.password,
     );
 
     if (success && mounted) {
@@ -76,7 +78,6 @@ class _OtpScreenState extends State<OtpScreen> {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
     final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
-    final surfaceTintA = isDark ? AppColors.darkSurfaceTintA : AppColors.lightSurfaceTintA;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -88,24 +89,12 @@ class _OtpScreenState extends State<OtpScreen> {
         child: Column(
           children: [
             Text('Sending to $maskedMobile', style: TextStyle(fontSize: 18, color: ink.withValues(alpha: 0.7))),
-            const SizedBox(height: 24),
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: surfaceTintA.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                'Your OTP is: ${widget.otpGenerated}',
-                style: const TextStyle(fontSize: 20, color: AppColors.primary, fontWeight: FontWeight.bold),
-              ),
-            ),
             const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(4, (index) {
+              children: List.generate(6, (index) {
                 return SizedBox(
-                  width: 50,
+                  width: 40,
                   child: TextField(
                     controller: _controllers[index],
                     focusNode: _focusNodes[index],

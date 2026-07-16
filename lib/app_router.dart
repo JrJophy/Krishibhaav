@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'screens/auth/login_register_screen.dart';
@@ -106,6 +105,7 @@ final GoRouter appRouter = GoRouter(
         return OtpScreen(
           otpGenerated: extra['otpGenerated'] ?? '',
           userData: extra['userData'] ?? {},
+          password: extra['password'] ?? '',
         );
       },
     ),

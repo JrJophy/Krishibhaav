@@ -101,8 +101,8 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
     if (otp != null && mounted) {
       context.push('/otp', extra: {
         'otpGenerated': otp,
+        'password': password,
         'userData': {
-          'uid': provider.userId,
           'name': name,
           'mobile': mobile,
           'role': _selectedRole,

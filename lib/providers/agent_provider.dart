@@ -7,6 +7,7 @@ import '../services/fcm_dispatch_service.dart';
 import '../services/barrel_service.dart';
 import '../models/barrel_stock_model.dart';
 import '../models/barrel_booking_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AgentProvider extends ChangeNotifier {
   final AgentService _agentService = AgentService();
@@ -24,6 +25,10 @@ class AgentProvider extends ChangeNotifier {
   StreamSubscription<List<UserModel>>? _farmersSub;
   StreamSubscription<BarrelStockModel>? _barrelStockSub;
   StreamSubscription<List<BarrelBookingModel>>? _barrelBookingsSub;
+  StreamSubscription<QuerySnapshot>? _linkRequestsSub;
+
+  List<Map<String, dynamic>> _linkRequests = [];
+  List<Map<String, dynamic>> get linkRequests => _linkRequests;
 
   AgentSettingsModel? get agentSettings => _agentSettings;
   List<UserModel> get farmerList => _farmerList;
@@ -69,6 +74,21 @@ class AgentProvider extends ChangeNotifier {
     _barrelBookingsSub?.cancel();
     _barrelBookingsSub = _barrelService.streamAgentBookings(agentId).listen((bookings) {
       _barrelBookings = bookings;
+      notifyListeners();
+    });
+
+    _linkRequestsSub?.cancel();
+    _linkRequestsSub = FirebaseFirestore.instance
+        .collection('link_requests')
+        .where('agentId', isEqualTo: agentId)
+        .where('status', isEqualTo: 'pending')
+        .snapshots()
+        .listen((snapshot) {
+      _linkRequests = snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return data;
+      }).toList();
       notifyListeners();
     });
   }
@@ -129,12 +149,22 @@ class AgentProvider extends ChangeNotifier {
     await _barrelService.cancelBooking(bookingId, _agentSettings!.agentId, cancelReason);
   }
 
+  Future<void> acceptLinkRequest(String requestId, String farmerId, String farmerName, String agentName) async {
+    if (_agentSettings == null) throw Exception("Agent not loaded");
+    await FcmDispatchService().acceptLinkRequest(requestId, farmerId, agentName);
+  }
+
+  Future<void> rejectLinkRequest(String requestId, String farmerId, String agentName) async {
+    await FcmDispatchService().rejectLinkRequest(requestId, farmerId, agentName);
+  }
+
   @override
   void dispose() {
     _settingsSub?.cancel();
     _farmersSub?.cancel();
     _barrelStockSub?.cancel();
     _barrelBookingsSub?.cancel();
+    _linkRequestsSub?.cancel();
     super.dispose();
   }
 }

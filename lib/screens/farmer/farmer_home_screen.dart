@@ -15,6 +15,7 @@ import '../../widgets/profile_sheet.dart';
 import 'farmer_barrel_request_sheet.dart';
 import 'farmer_barrel_action_sheet.dart';
 import '../../widgets/farmer_barrel_booking_card.dart';
+import 'request_link_screen.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   final String farmerId;
@@ -195,10 +196,47 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                     ),
                   ),
 
-                if (provider.isLoading)
-                  _buildLoadingSkeletons()
-                else ...[
-                  // Hero Price Card
+                  if (provider.isLoading)
+                    _buildLoadingSkeletons()
+                  else if (provider.agentId.isEmpty) ...[
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: isDark ? surface : Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: surfaceTintA.withValues(alpha: 0.3)),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(Icons.link_off, size: 48, color: ink.withValues(alpha: 0.5)),
+                          const SizedBox(height: 16),
+                          Text('Not linked to an Agent', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: ink)),
+                          const SizedBox(height: 8),
+                          Text(
+                            'You need to link with an agent to view live market rates, see price trends, and request barrels.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: ink.withValues(alpha: 0.7)),
+                          ),
+                          const SizedBox(height: 24),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => RequestLinkScreen(farmerId: widget.farmerId)));
+                            },
+                            icon: const Icon(Icons.link),
+                            label: const Text('Link with Agent', style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ] else ...[
+                    // Hero Price Card
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(24.0),

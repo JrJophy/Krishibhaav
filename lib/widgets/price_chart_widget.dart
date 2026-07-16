@@ -45,9 +45,6 @@ class PriceChartWidget extends StatelessWidget {
     final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
     final mutedInk = ink.withValues(alpha: 0.5);
 
-    final rss4Color = isDark ? Colors.red.shade300 : Colors.red.shade600;
-    final rss5Color = isDark ? Colors.blue.shade300 : Colors.blue.shade600;
-
     final dataLength = isAgent ? points.length : openMarketPoints!.length;
     
     double maxPrice = 0;

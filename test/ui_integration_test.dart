@@ -38,7 +38,7 @@ class FakeAuthProvider extends ChangeNotifier implements AuthProvider {
 
   Future<void> sendOtp(String mobile) async {}
   Future<bool> verifyOtp(String otp) async => true;
-  @override Future<bool> verifyOTP({required String otpEntered, required String otpGenerated, required String uid, required Map<String, dynamic> userData}) async => true;
+  @override Future<bool> verifyOTP({required String otpEntered, required String otpGenerated, required Map<String, dynamic> userData, required String password}) async => true;
   Future<void> checkAuthState() async {}
   Future<void> logout() async {}
   @override Future<void> signOut() async {}
@@ -82,6 +82,7 @@ class FakeAgentProvider extends ChangeNotifier implements AgentProvider {
   @override AgentSettingsModel? agentSettings;
   @override BarrelStockModel? barrelStock = BarrelStockModel(agentId: 'test_agent', totalBarrels: 100, availableBarrels: 50, lastUpdated: Timestamp.now());
   @override List<BarrelBookingModel> barrelBookings = [];
+  @override List<Map<String, dynamic>> get linkRequests => [];
 
   @override Future<void> loadAgent(String agentId) async {}
   @override Future<void> updatePrice(String type, double price, [double? price2]) async {}
@@ -92,6 +93,8 @@ class FakeAgentProvider extends ChangeNotifier implements AgentProvider {
   @override Future<void> dispatchBooking(String bookingId) async {}
   @override Future<void> returnBooking(String bookingId) async {}
   @override Future<void> cancelBooking(String bookingId, String cancelReason) async {}
+  @override Future<void> acceptLinkRequest(String requestId, String farmerId, String farmerName, String agentName) async {}
+  @override Future<void> rejectLinkRequest(String requestId, String farmerId, String agentName) async {}
 }
 
 class FakeFarmerHistoryService implements FarmerHistoryService {

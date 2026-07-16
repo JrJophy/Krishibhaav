@@ -26,11 +26,7 @@
 flutter pub get
 flutter run -d chrome
 ```
-*Note:* Local execution requires `assets/service_account.json` and `android/app/google-services.json`, which are required but intentionally gitignored for security.
+*Note:* Local execution requires `android/app/google-services.json`, which is required but intentionally gitignored for security.
 
 ## Status
-**V1 Completed (Full Release).**
-
-*Known limitations scheduled for resolution in V2:*
-- Simulated OTP for authentication.
-- Client-side FCM dispatch.
+**V2 Completed (Full Release).**

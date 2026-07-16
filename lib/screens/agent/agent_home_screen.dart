@@ -20,6 +20,7 @@ import '../../services/board_rate_service.dart';
 import '../../widgets/barrel_stock_edit_dialog.dart';
 import '../../widgets/barrel_booking_card.dart';
 import 'barrel_booking_detail_sheet.dart';
+import 'pending_requests_screen.dart';
 
 class AgentHomeScreen extends StatefulWidget {
   final BoardRateService? boardRateService;
@@ -346,9 +347,44 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                 ),
                 const SizedBox(height: 16),
                 
-                // Stats Strip
-                Text('Total Farmers: ${agentProvider.farmerList.length}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ink)),
+                // Stats Strip & Agent Code
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Total Farmers: ${agentProvider.farmerList.length}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: ink)),
+                    if (settings != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: surfaceTintA.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          'Code: ${settings.agentId.substring(0, 6).toUpperCase()}',
+                          style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, letterSpacing: 2),
+                        ),
+                      ),
+                  ],
+                ),
                 const SizedBox(height: 16),
+                
+                // Pending Requests Button
+                if (agentProvider.linkRequests.isNotEmpty) ...[
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => PendingRequestsScreen(agentName: _agentName)));
+                    },
+                    icon: const Icon(Icons.person_add),
+                    label: Text('Pending Link Requests (${agentProvider.linkRequests.length})'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange.shade700,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                ],
 
                 // Search Bar
                 TextField(

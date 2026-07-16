@@ -269,6 +269,18 @@
 [2026-06-18] | V2 Phase 6 | lib/screens/farmer/farmer_home_screen.dart | Bug fix | Updated stats generation to use computeOpenMarketStats instead of agent stats.
 [2026-06-18] | V2 Phase 6 | test/farmer_history_service_test.dart | Addition | Added pure logic unit tests for OM parser and stats.
 [2026-06-18] | V2 Phase 5 | Summary | Phase Closure | Phase 5 Dynamic Price Chart Resizing completed with responsive clamping.
+[Squashed: 2026-06-26] | V2 Phase 7 | Summary | Phase Closure | Comprehensive Integration Testing completed (5/5 UI widget tests passing).
+[Squashed: 2026-06-26] | V2 Phase 8 | Summary | Phase Closure | Service Worker and UI Polish completed (ghosting defect fixed, chart responsive heights).
+[2026-06-26] | V2 Phase 9 | firestore.rules | Security | Drafted and enforced Firestore rules, hardened barrel logic against NaN inputs, and cleaned up unused fields.
+[2026-06-26] | BH-B1 | lib/widgets/booking_history_row.dart | Creation | Added Booking History row widget and shared status helpers for rendering.
+[2026-06-26] | BH-B2 | lib/screens/booking_history_screen.dart | Creation | Built Booking History screen with date filters and wired /history route.
+[2026-06-26] | BH-B2 | lib/models/user_model.dart | Bug fix | Added trim() to agentId at fromMap boundary and added unit test.
+[2026-07-09] | V2 Phase 10 | firebase.json | Security | Configured Firestore rules in firebase.json for deployment.
+[2026-07-14] | V2 Phase 1 | test/barrel_booking_model_test.dart | Addition | Added unit tests for the barrel booking model.
+[2026-07-14] | Stage 1 Blockers | Multiple | Code Cleanup | Swept and removed unused imports and variables across app_router, colors, and text_styles.
+[2026-07-14] | Stage 1 Blockers | lib/services/fcm_dispatch_service.dart | Security | Migrated FCM notifications to Cloud Functions and removed client-side service_account.json.
+[2026-07-14] | Stage 1 Blockers | lib/services/auth_service.dart | Feature | Replaced simulated OTP with real Firebase Phone Authentication.
+[2026-07-14] | Stage 1 Blockers | pubspec.yaml | Build | Upgraded dependencies which broke tests with FirebasePlugin errors; resolved by pinning firebase_core and plugins to known stable  .
 ### V2 Phase 7: Comprehensive Integration Testing
 - **Objective:** Widget-level testing of FarmerHomeScreen and AgentHomeScreen using mock providers.
 - **Approach:** Decoupled FarmerHomeScreen and AgentHomeScreen from direct NotificationService calls, passing an enableNotifications parameter instead. Built Fake providers (FakeFarmerProvider, FakeAgentProvider) rather than mocking Firestore to bypass rxdart package conflicts.

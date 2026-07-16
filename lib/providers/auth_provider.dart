@@ -75,10 +75,10 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<bool> verifyOTP({
-    required String uid,
     required String otpEntered,
     required String otpGenerated,
     required Map<String, dynamic> userData,
+    required String password,
   }) async {
     _isLoading = true;
     _errorMessage = null;
@@ -86,10 +86,10 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       final success = await _authService.verifyOTPAndCreateUser(
-        uid: uid,
         otpEntered: otpEntered,
         otpGenerated: otpGenerated,
         userData: userData,
+        password: password,
       );
       if (success) {
         _userRole = userData['role'];
