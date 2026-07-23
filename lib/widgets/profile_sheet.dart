@@ -239,7 +239,6 @@ class _ProfileSheetState extends State<ProfileSheet> {
                           const SizedBox(height: 16),
                         ],
                         
-                        // Mobile is read-only because it is the login identity (mapped to the Auth email).
                         TextField(
                           controller: TextEditingController(text: _user!.mobile),
                           readOnly: true,
@@ -253,7 +252,44 @@ class _ProfileSheetState extends State<ProfileSheet> {
                             border: UnderlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
                           ),
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 24),
+                        
+                        if (_user!.role == 'farmer' && _user!.agentId != null && _user!.agentId!.isNotEmpty) ...[
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: inputFill,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.handshake, color: AppColors.primary, size: 24),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Agent Link', style: TextStyle(color: ink, fontWeight: FontWeight.bold)),
+                                      const SizedBox(height: 4),
+                                      Text('You are currently linked to an agent.', style: TextStyle(color: ink.withValues(alpha: 0.6), fontSize: 12)),
+                                    ],
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the sheet
+                                    context.push('/farmer/request_link');
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppColors.primary,
+                                  ),
+                                  child: const Text('Change Agent'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                        ],
                         
                         Consumer<ThemeProvider>(
                           builder: (context, themeProvider, _) {
