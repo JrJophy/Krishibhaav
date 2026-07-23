@@ -211,7 +211,7 @@ erDiagram
 * **Access Control (Plain Language):**
   * *Read:* Owner farmer and assigned agent can read.
   * *Create:* Only the farmer can create a booking for themselves.
-  * *Update:* Managing agent can update. Alternatively, the farmer can update if they are setting the status to `'requested'`, `'cancelled'`, `'returned_empty'`, or `'returned_filled'`, provided they change no other fields.
+  * *Update:* Restricted by a helper function `isValidBookingTransition` which validates `(currentStatus -> newStatus, role)` transitions server-side. The managing agent can update the status only to valid subsequent states (`approved`, `dispatched`, `returned`, `cancelled`). Similarly, the farmer can update the status only to valid subsequent states (`cancelled`, `returned_empty`, `returned_filled`). Both branches strictly enforce that immutable fields (`farmerId`, `agentId`, `quantity`, `bookingId`) are not changed.
   * *Delete:* Denied.
 * **Read/Write Operations:**
   * *Reads:* Client-side streaming in Agent bookings panel and Farmer history.

@@ -6,6 +6,7 @@ import 'screens/auth/otp_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/agent/agent_home_screen.dart';
 import 'screens/farmer/farmer_home_screen.dart';
+import 'screens/farmer/request_link_screen.dart';
 import 'screens/booking_history_screen.dart';
 
 String? _cachedRole;
@@ -117,6 +118,13 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(path: '/agent/home', builder: (context, state) => const AgentHomeScreen()),
+    GoRoute(
+      path: '/farmer/request_link',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>? ?? {};
+        return RequestLinkScreen(farmerId: extra['farmerId'] ?? '');
+      },
+    ),
     GoRoute(
       path: '/history',
       builder: (context, state) {

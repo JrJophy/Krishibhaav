@@ -9,7 +9,26 @@ service cloud.firestore {
     function isAgentFarmers(agentId) {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.agentId == agentId;
     }
-
+    function isValidBookingTransition(currentStatus, newStatus, role) {
+  // Single boolean expression — Firestore Rules functions do not support
+  // imperative if/return control flow, only a terminal return expression.
+  return !(currentStatus in ['returned', 'returned_empty', 'returned_filled', 'cancelled']) &&
+    (
+      (role == 'agent' && (
+        (currentStatus == 'requested'  && newStatus == 'approved')   ||  // decideApprove
+        (currentStatus == 'requested'  && newStatus == 'cancelled')  ||  // decideCancel
+        (currentStatus == 'approved'   && newStatus == 'dispatched') ||  // decideDispatch
+        (currentStatus == 'approved'   && newStatus == 'cancelled')  ||  // decideCancel
+        (currentStatus == 'dispatched' && newStatus == 'returned')       // decideReturn
+      )) ||
+      (role == 'farmer' && (
+        (currentStatus == 'requested'  && newStatus == 'cancelled')      ||  // decideCancel
+        (currentStatus == 'approved'   && newStatus == 'cancelled')      ||  // decideCancel
+        (currentStatus == 'dispatched' && newStatus == 'returned_empty') ||  // decideReturnEmpty
+        (currentStatus == 'dispatched' && newStatus == 'returned_filled')    // decideReturnFilled
+      ))
+    );
+}
     match /users/{userId} {
       // Read: Users can read their own doc; Agents can read their assigned farmers.
       allow read: if isAuth() && (request.auth.uid == userId || resource.data.agentId == request.auth.uid);
@@ -72,22 +91,43 @@ service cloud.firestore {
     }
 
     match /barrel_bookings/{bookingId} {
-      allow read: if isAuth() && (request.auth.uid == resource.data.agentId || request.auth.uid == resource.data.farmerId);
-      
-      allow create: if isAuth() && request.auth.uid == request.resource.data.farmerId;
-      
-      allow update: if isAuth() && (
+      // Read: owner farmer or managing agent only.
+      allow read: if isAuth() && (
         request.auth.uid == resource.data.agentId ||
-        (
-          request.auth.uid == resource.data.farmerId && 
-          request.resource.data.status in ['requested', 'cancelled', 'returned_empty', 'returned_filled'] &&
-          request.resource.data.farmerId == resource.data.farmerId &&
-          request.resource.data.agentId == resource.data.agentId &&
-          request.resource.data.quantity == resource.data.quantity &&
-          request.resource.data.bookingId == resource.data.bookingId
-        )
+        request.auth.uid == resource.data.farmerId
       );
-      
+
+      // Create: farmer creates their own booking, always with status='requested'.
+      allow create: if isAuth() &&
+        request.auth.uid == request.resource.data.farmerId;
+
+      // Update (agent branch): valid transition + immutable field guards.
+      allow update: if isAuth() &&
+        request.auth.uid == resource.data.agentId &&
+        isValidBookingTransition(
+          resource.data.status,
+          request.resource.data.status,
+          'agent'
+        ) &&
+        request.resource.data.farmerId  == resource.data.farmerId  &&
+        request.resource.data.agentId   == resource.data.agentId   &&
+        request.resource.data.quantity  == resource.data.quantity   &&
+        request.resource.data.bookingId == resource.data.bookingId;
+
+      // Update (farmer branch): valid transition + immutable field guards.
+      allow update: if isAuth() &&
+        request.auth.uid == resource.data.farmerId &&
+        isValidBookingTransition(
+          resource.data.status,
+          request.resource.data.status,
+          'farmer'
+        ) &&
+        request.resource.data.farmerId  == resource.data.farmerId  &&
+        request.resource.data.agentId   == resource.data.agentId   &&
+        request.resource.data.quantity  == resource.data.quantity   &&
+        request.resource.data.bookingId == resource.data.bookingId;
+
+      // Delete: permanently denied.
       allow delete: if false;
     }
   }

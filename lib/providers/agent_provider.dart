@@ -111,10 +111,7 @@ class AgentProvider extends ChangeNotifier {
     }
   }
 
-  Future<String> addFarmer(String name, String mobile, String location) async {
-    if (_agentSettings == null) throw Exception("Agent not loaded");
-    return await _agentService.addFarmer(_agentSettings!.agentId, name, mobile, location);
-  }
+
 
   Future<void> removeFarmer(String farmerId) async {
     await _agentService.removeFarmer(farmerId);

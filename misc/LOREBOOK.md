@@ -66,3 +66,19 @@ In a strict departure from tightly-coupled database logic, we were forbidden fro
 
 ## V2 Phase 2: Agent Stock Management UI
 With the schema and pure logic intact, we built the Agent Stock Management UI. We established an inventory control panel and an active incoming bookings list directly on the agent dashboard. The core transactional logic from Phase 1—specifically the deduct-on-approve model—came to life as the UI intuitively guarded against overbooking. We caught a critical issue, Bug B19, where barrel streams crashed with permission-denied errors during an auth-state change tick. We patched this using the proven V1.1 auth-gate pattern directly in the `BarrelService`. At the final hour, a critical domain correction was made: the agent does not manually process "Returns" in this flow; a dispatched booking is terminal for the agent side. The return flow has been completely deferred to a farmer-initiated action in Phase 3. Functional runtime testing is deferred to Phase 7.
+
+## V2 Phase 3: The Farmer's Request and Return Paths
+With the agent UI ready, we enabled the farmer-facing booking request flow. Farmers could now request barrels with active validation checking against the agent's available inventory. We implemented the return fork, allowing farmers to return barrels as either "Returned Empty" (restoring stock) or "Returned Filled" (triggering payout and weighing paths). 
+
+## V2 Phase 4: Real-Time State Sync
+We secured real-time synchronization between the agent and farmer dashboard. Changes in barrel stock or booking status made on one side were instantly propagated to the other, creating a cohesive, shared state across the workspace.
+
+## V2 Phase 5 & 6: Chart Resizing and Market Data
+To improve responsiveness on tablet and landscape screens, we clamped the price charts dynamically using `LayoutBuilder`. In Phase 6, we verified open-market stats and history parsing logic, cleaning up legacy variables and ensuring line charts dynamically scaled and correctly rendered RSS4 and RSS5 averages.
+
+## V2 Phase 7 & 8: Testing and UI Polish
+We ran comprehensive integration testing, ensuring 5/5 UI widget tests passed without relying on Firestore. In Phase 8, we resolved the deferred ghosting label issue, completed service worker background messaging checks, and polished all UI ink colors and margins.
+
+## V2 Phase 9: Rules Hardening and Launch Readiness
+The final audit unmasked a critical vulnerability: firestore rules allowed unrestricted state jumps. We patched this in the final hours by writing the `isValidBookingTransition` helper inside `firestore.rules`, restricting updates for both roles to the canonical state machine and locking down immutable fields.
+

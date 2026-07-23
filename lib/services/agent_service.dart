@@ -1,5 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/agent_settings_model.dart';
 import '../models/user_model.dart';
@@ -50,60 +48,7 @@ class AgentService {
     });
   }
 
-  Future<String> addFarmer(String agentId, String name, String mobile, String location) async {
-    String namePart = name.replaceAll(' ', '').toUpperCase();
-    if (namePart.length < 4) {
-      namePart = namePart.padRight(4, 'A');
-    } else {
-      namePart = namePart.substring(0, 4);
-    }
-    
-    String mobilePart = mobile.length >= 4 ? mobile.substring(mobile.length - 4) : mobile.padLeft(4, '0');
-    String tempPassword = '$namePart$mobilePart';
-    final email = '$mobile@krishibhaav.app';
 
-    // Using a secondary app to avoid signing out the current agent
-    final app = await Firebase.initializeApp(
-      name: 'Secondary_${DateTime.now().millisecondsSinceEpoch}',
-      options: Firebase.app().options,
-    );
-    final secondaryAuth = FirebaseAuth.instanceFor(app: app);
-    
-    try {
-      final userCredential = await secondaryAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: tempPassword,
-      );
-      final uid = userCredential.user!.uid;
-
-      await _firestore.collection('users').doc(uid).set({
-        'uid': uid,
-        'name': name,
-        'mobile': mobile,
-        'role': 'farmer',
-        'location': location,
-        'crop': 'Rubber',
-        'agentId': agentId,
-        'fcmToken': '',
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
-
-      await _firestore.collection('farmer_prices').doc(uid).set({
-        'farmerId': uid,
-        'agentId': agentId,
-        'hasCustomPrice': false,
-        'customPrice': null,
-        'canSeeBoardRate': false,
-        'canSeeOpenMarket': false,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
-      
-      return tempPassword;
-    } finally {
-      await app.delete();
-    }
-  }
 
   Future<void> updateFarmerProfile(String farmerId, String name, String location) async {
     await _firestore.collection('users').doc(farmerId).update({

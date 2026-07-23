@@ -1,4 +1,4 @@
-# Project State Checkpoint - 2026-07-16
+# Project State Checkpoint - 2026-07-17
 
 This document maps the exact technical state of the Krishibhaav codebase and live environments for context loading.
 
@@ -292,25 +292,12 @@ Detailed document schemas, collections, fields, and security policies are tracke
 *   **2026-06-17 \| e04acc4:** feat: V2 Phase 1.5 - pure barrel logic extraction + unit tests
 
 ### Uncommitted Changes
-*   `lib/app_router.dart`
-*   `lib/providers/agent_provider.dart`
-*   `lib/providers/auth_provider.dart`
-*   `lib/providers/farmer_provider.dart`
-*   `lib/screens/agent/agent_home_screen.dart`
-*   `lib/screens/auth/login_register_screen.dart`
-*   `lib/screens/auth/otp_screen.dart`
-*   `lib/screens/farmer/farmer_home_screen.dart`
-*   `lib/services/auth_service.dart`
-*   `lib/services/fcm_dispatch_service.dart`
-*   `lib/widgets/price_chart_widget.dart`
-*   `misc/LOGBOOK.md`
-*   `misc/V2_SPEC.md`
-*   `pubspec.yaml`
-*   `test/ui_integration_test.dart`
-*   `lib/screens/agent/pending_requests_screen.dart`
-*   `lib/screens/farmer/request_link_screen.dart`
-*   `misc/DATABASE_SCHEMA.md`
-*   `test/gatekeeper_link_test.dart`
+*   `firestore.rules` (Security rules state-machine validation)
+*   `misc/DATABASE_SCHEMA.md` (Update access control mappings for barrel_bookings)
+*   `misc/LOGBOOK.md` (Log transition validation edits)
+*   `misc/PROGRESS_TRACKER.md` (Progress tracker update for rules hardening)
+*   `misc/PROJECT_STATE.md` (Update checkpoint state and uncommitted list)
+*   `misc/LOREBOOK.md` (Update project history with rules hardening epic)
 
 ---
 

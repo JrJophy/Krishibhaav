@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/colors.dart';
 import '../../providers/farmer_provider.dart';
 
@@ -75,7 +76,11 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
       });
 
       if (!mounted) return;
-      Navigator.pop(context, true); // Return true on success
+      if (context.canPop()) {
+        context.pop(true);
+      } else {
+        context.go('/farmer/home');
+      }
     } catch (e) {
       setState(() {
         _isLoading = false;

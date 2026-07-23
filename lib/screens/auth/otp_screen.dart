@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/auth_provider.dart';
 import '../../app_router.dart';
 
@@ -63,7 +65,28 @@ class _OtpScreenState extends State<OtpScreen> {
       if (widget.userData['role'] == 'agent') {
         context.go('/agent/home');
       } else {
-        context.go('/farmer/home');
+        final user = FirebaseAuth.instance.currentUser;
+        bool shouldRouteToLink = false;
+        
+        if (user != null) {
+          try {
+            final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+            if (doc.exists) {
+              final agentId = doc.data()?['agentId'] ?? '';
+              if (agentId.isEmpty) {
+                shouldRouteToLink = true;
+              }
+            }
+          } catch (_) {}
+        }
+        
+        if (mounted) {
+          if (shouldRouteToLink && user != null) {
+            context.go('/farmer/request_link', extra: {'farmerId': user.uid});
+          } else {
+            context.go('/farmer/home');
+          }
+        }
       }
     }
   }

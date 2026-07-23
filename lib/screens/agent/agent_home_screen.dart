@@ -10,7 +10,6 @@ import '../../providers/auth_provider.dart';
 import '../../providers/agent_provider.dart';
 import '../../widgets/price_edit_dialog.dart';
 import '../../widgets/farmer_list_card.dart';
-import 'add_farmer_sheet.dart';
 import 'farmer_detail_sheet.dart';
 import '../../services/notification_service.dart';
 import '../../widgets/profile_sheet.dart';
@@ -511,18 +510,6 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('All Farmers (${farmers.length})', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: ink)),
-                    TextButton.icon(
-                      icon: const Icon(Icons.add, color: AppColors.primary),
-                      label: const Text('Add Farmer', style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          builder: (context) => const AddFarmerSheet(),
-                        );
-                      },
-                    ),
                   ],
                 ),
                 const SizedBox(height: 8),

@@ -15,7 +15,6 @@ import '../../widgets/profile_sheet.dart';
 import 'farmer_barrel_request_sheet.dart';
 import 'farmer_barrel_action_sheet.dart';
 import '../../widgets/farmer_barrel_booking_card.dart';
-import 'request_link_screen.dart';
 
 class FarmerHomeScreen extends StatefulWidget {
   final String farmerId;
@@ -221,7 +220,7 @@ class _FarmerHomeScreenState extends State<FarmerHomeScreen> {
                           const SizedBox(height: 24),
                           ElevatedButton.icon(
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (_) => RequestLinkScreen(farmerId: widget.farmerId)));
+                              context.push('/farmer/request_link', extra: {'farmerId': widget.farmerId});
                             },
                             icon: const Icon(Icons.link),
                             label: const Text('Link with Agent', style: TextStyle(fontWeight: FontWeight.bold)),

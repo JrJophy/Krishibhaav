@@ -1,7 +1,7 @@
 ---
 # Krishibhaav Progress Tracker
 
-Last Updated: 2026-06-26
+Last Updated: 2026-07-17
 
 ## Phase Status
 | Phase | Name | Status | Blocker |
@@ -29,7 +29,7 @@ Last Updated: 2026-06-26
 | V2-6 | Live Open-Market Data Verification | COMPLETED | - |
 | V2-7 | Comprehensive Integration Testing | COMPLETED | - |
 | V2-8 | Service Worker & UI Polish | COMPLETED | Closed out deferred ghosting defect. |
-| V2-9 | Final Pre-Launch Audit | COMPLETED | Dead field removed, debug prints cleaned. |
+| V2-9 | Final Pre-Launch Audit | COMPLETED | Dead field removed, debug prints cleaned, booking transition rules enforced. |
 | BH-A | Booking History: terminal-status filter refactor + fromMap trim | COMPLETED | - |
 | BH-B1 | Booking History: status-label helper, completedAt getter, read-only row widget | COMPLETED | - |
 | BH-B2 | Booking History: screen, /history route, date filter, entry points | COMPLETED | - |

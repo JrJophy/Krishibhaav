@@ -281,6 +281,7 @@
 [2026-07-14] | Stage 1 Blockers | lib/services/fcm_dispatch_service.dart | Security | Migrated FCM notifications to Cloud Functions and removed client-side service_account.json.
 [2026-07-14] | Stage 1 Blockers | lib/services/auth_service.dart | Feature | Replaced simulated OTP with real Firebase Phone Authentication.
 [2026-07-14] | Stage 1 Blockers | pubspec.yaml | Build | Upgraded dependencies which broke tests with FirebasePlugin errors; resolved by pinning firebase_core and plugins to known stable  .
+[2026-07-17] | V2 Phase 9 | firestore.rules | Security | Added helper function isValidBookingTransition() to check all state-machine status updates and split the allow update rules for agents and farmers with immutable-field guards.
 ### V2 Phase 7: Comprehensive Integration Testing
 - **Objective:** Widget-level testing of FarmerHomeScreen and AgentHomeScreen using mock providers.
 - **Approach:** Decoupled FarmerHomeScreen and AgentHomeScreen from direct NotificationService calls, passing an enableNotifications parameter instead. Built Fake providers (FakeFarmerProvider, FakeAgentProvider) rather than mocking Firestore to bypass rxdart package conflicts.
@@ -320,3 +321,7 @@ otification_service.dart and cm_dispatch_service.dart. Fixed one missing 	oMap(
 
 ### V2 Phase 10: Version Two Audit Logging
 - **Action:** Recorded V2 cleanup (optionally migrating card widgets to consume `bookingStatusLabel` to clean up switches and correct agent status rendering) and V2 test debt notes (indirect widget-test coverage for `completedAt` to bypass Firebase Timestamp compilation boundaries) in `V2_SPEC.md` and `LOGBOOK.md`.
+
+### V2 Phase 9: Security Rules State Machine Hardening
+- **Action:** Implemented transition checks for `barrel_bookings` in `firestore.rules` using a new `isValidBookingTransition` helper function. Constrained both agent and farmer status updates to only the canonical state machine transitions, and enforced immutable-field guards on the agent update branch to prevent field tampering.
+
