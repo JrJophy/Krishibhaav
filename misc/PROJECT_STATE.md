@@ -1,4 +1,4 @@
-# Project State Checkpoint - 2026-07-17
+# Project State Checkpoint - 2026-07-23
 
 This document maps the exact technical state of the Krishibhaav codebase and live environments for context loading.
 
@@ -78,7 +78,6 @@ This document maps the exact technical state of the Krishibhaav codebase and liv
 │   │   ├── booking_history_screen.dart
 │   │   ├── splash_screen.dart
 │   │   ├── agent/
-│   │   │   ├── add_farmer_sheet.dart
 │   │   │   ├── agent_home_screen.dart
 │   │   │   ├── barrel_booking_detail_sheet.dart
 │   │   │   ├── farmer_detail_sheet.dart
@@ -292,12 +291,18 @@ Detailed document schemas, collections, fields, and security policies are tracke
 *   **2026-06-17 \| e04acc4:** feat: V2 Phase 1.5 - pure barrel logic extraction + unit tests
 
 ### Uncommitted Changes
+*   `lib/app_router.dart` (Registered `/farmer/request_link` route)
+*   `lib/providers/agent_provider.dart` (Removed `addFarmer`)
+*   `lib/services/agent_service.dart` (Removed `addFarmer` and unused Firebase imports)
+*   `lib/screens/agent/add_farmer_sheet.dart` (DELETED)
+*   `lib/screens/agent/agent_home_screen.dart` (Removed Add Farmer button and restored imports)
+*   `lib/screens/auth/otp_screen.dart` (Added agentId check and auto-routing to RequestLinkScreen)
+*   `lib/screens/farmer/farmer_home_screen.dart` (Updated Link button to use GoRouter)
+*   `lib/screens/farmer/request_link_screen.dart` (Updated back navigation fallback)
 *   `firestore.rules` (Security rules state-machine validation)
-*   `misc/DATABASE_SCHEMA.md` (Update access control mappings for barrel_bookings)
-*   `misc/LOGBOOK.md` (Log transition validation edits)
-*   `misc/PROGRESS_TRACKER.md` (Progress tracker update for rules hardening)
-*   `misc/PROJECT_STATE.md` (Update checkpoint state and uncommitted list)
-*   `misc/LOREBOOK.md` (Update project history with rules hardening epic)
+*   `misc/LOGBOOK.md` (Updated logs for V3 linking changes)
+*   `misc/PROGRESS_TRACKER.md` (Updated tracker for V3 linking changes)
+*   `misc/PROJECT_STATE.md` (Updated state checkpoint)
 
 ---
 

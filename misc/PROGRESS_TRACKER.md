@@ -1,7 +1,7 @@
 ---
 # Krishibhaav Progress Tracker
 
-Last Updated: 2026-07-17
+Last Updated: 2026-07-23
 
 ## Phase Status
 | Phase | Name | Status | Blocker |
@@ -33,6 +33,7 @@ Last Updated: 2026-07-17
 | BH-A | Booking History: terminal-status filter refactor + fromMap trim | COMPLETED | - |
 | BH-B1 | Booking History: status-label helper, completedAt getter, read-only row widget | COMPLETED | - |
 | BH-B2 | Booking History: screen, /history route, date filter, entry points | COMPLETED | - |
+| V3 | Farmer-Agent Linking Overhaul | COMPLETED | AddFarmerSheet removed, approval-only linking, OTP auto-routing |
 
 ## Status Key
 NOT STARTED | IN PROGRESS | COMPLETED | BLOCKED
@@ -61,6 +62,7 @@ In-flight side feature: Booking History (outside the locked 10-phase roadmap)
 [2026-06-10] | Phase 4 | Farmer sign-in with temp password fails (invalid-credential) | Auth user recreated and Firestore docs migrated to correct UID | RESOLVED
 [2026-06-18] | V2-2 | Active-list terminal filter added to agent and farmer views | - | COMPLETED
 [2026-06-26] | BH-B1 | Booking History row widget + shared status helpers landed (commit c1493e7) | - | COMPLETED
+[2026-07-23] | V3 | Farmer-Agent Linking: AddFarmerSheet removed, approval-only linking enforced, auto-routing after OTP added | - | COMPLETED
 
 ## Files Created So Far
 LOGBOOK.md (Phase 1)

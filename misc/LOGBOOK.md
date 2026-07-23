@@ -325,3 +325,9 @@ otification_service.dart and cm_dispatch_service.dart. Fixed one missing 	oMap(
 ### V2 Phase 9: Security Rules State Machine Hardening
 - **Action:** Implemented transition checks for `barrel_bookings` in `firestore.rules` using a new `isValidBookingTransition` helper function. Constrained both agent and farmer status updates to only the canonical state machine transitions, and enforced immutable-field guards on the agent update branch to prevent field tampering.
 
+### V3 Farmer-Agent Linking Flow Overhaul [2026-07-23]
+- **Action:** Removed `AddFarmerSheet` (`lib/screens/agent/add_farmer_sheet.dart` deleted) to enforce `link_requests` approval system as the single method for farmer-agent connection.
+- **Agent Clean-Up:** Removed `addFarmer` from `AgentProvider` and `AgentService`, and removed the "+ Add Farmer" button from `AgentHomeScreen`.
+- **Auto-Routing:** Updated `otp_screen.dart` to check `agentId` in Firestore upon successful OTP verification for farmers. If `agentId` is empty, auto-routes to `RequestLinkScreen`; if already set, routes to `FarmerHomeScreen`.
+- **Router & Nav Updates:** Added `/farmer/request_link` route in `app_router.dart`, updated `farmer_home_screen.dart` to use `context.push` for manual link triggers, and updated `request_link_screen.dart` to fall back to `context.go('/farmer/home')` when popped from root.
+- **Bug Fixes:** Restored `farmer_list_card.dart` import in `agent_home_screen.dart`, restored `app_router.dart` import in `otp_screen.dart`, resolved `AuthProvider` import collision with `firebase_auth`, fixed nullable `errorMessage` access in `otp_screen.dart`, and cleaned unused imports in `agent_service.dart`.
