@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:math';
 import '../../core/colors.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../app_router.dart';
-
 class LoginRegisterScreen extends StatefulWidget {
   const LoginRegisterScreen({super.key});
 
@@ -99,6 +99,15 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
     );
 
     if (otp != null && mounted) {
+      if (kDebugMode) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('DEBUG ONLY: Your mock OTP is $otp'),
+            duration: const Duration(seconds: 10),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
       context.push('/otp', extra: {
         'otpGenerated': otp,
         'password': password,
