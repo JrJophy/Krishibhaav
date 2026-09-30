@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:math';
 import '../../core/colors.dart';
 
@@ -90,7 +89,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
 
     final provider = Provider.of<AuthProvider>(context, listen: false);
     isAwaitingOtp = true;
-    final otp = await provider.register(
+    final success = await provider.register(
       name: name,
       mobile: mobile,
       password: password,
@@ -98,18 +97,8 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
       location: location,
     );
 
-    if (otp != null && mounted) {
-      if (kDebugMode) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('DEBUG ONLY: Your mock OTP is $otp'),
-            duration: const Duration(seconds: 10),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+    if (success && mounted) {
       context.push('/otp', extra: {
-        'otpGenerated': otp,
         'password': password,
         'userData': {
           'name': name,

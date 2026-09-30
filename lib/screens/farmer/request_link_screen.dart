@@ -25,8 +25,8 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
   }
 
   Future<void> _submitRequest() async {
-    final code = _codeController.text.trim().toUpperCase();
-    if (code.length != 6) {
+    final cleanCode = _codeController.text.replaceAll(' ', '');
+    if (cleanCode.length != 6) {
       setState(() => _errorMessage = 'Please enter a valid 6-character agent code.');
       return;
     }
@@ -44,7 +44,7 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
       final query = await FirebaseFirestore.instance
           .collection('users')
           .where('role', isEqualTo: 'agent')
-          .where('agentCode', isEqualTo: code)
+          .where('agentCode', isEqualTo: cleanCode)
           .limit(1)
           .get();
 
@@ -114,7 +114,7 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
             const SizedBox(height: 32),
             TextField(
               controller: _codeController,
-              textCapitalization: TextCapitalization.characters,
+              textCapitalization: TextCapitalization.none,
               maxLength: 6,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 8, color: ink),
               textAlign: TextAlign.center,

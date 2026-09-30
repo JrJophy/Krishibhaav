@@ -99,7 +99,8 @@ service cloud.firestore {
 
       // Create: farmer creates their own booking, always with status='requested'.
       allow create: if isAuth() &&
-        request.auth.uid == request.resource.data.farmerId;
+  request.auth.uid == request.resource.data.farmerId &&
+  request.resource.data.status == 'requested';
 
       // Update (agent branch): valid transition + immutable field guards.
       allow update: if isAuth() &&

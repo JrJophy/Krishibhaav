@@ -38,12 +38,12 @@ class FakeAuthProvider extends ChangeNotifier implements AuthProvider {
 
   Future<void> sendOtp(String mobile) async {}
   Future<bool> verifyOtp(String otp) async => true;
-  @override Future<bool> verifyOTP({required String otpEntered, required String otpGenerated, required Map<String, dynamic> userData, required String password}) async => true;
+  @override Future<bool> verifyOTP({required String otpEntered, String? otpGenerated, required Map<String, dynamic> userData, required String password}) async => true;
   Future<void> checkAuthState() async {}
   Future<void> logout() async {}
   @override Future<void> signOut() async {}
   @override Future<bool> signIn(String mobile, String password) async => true;
-  @override Future<String?> register({required String location, required String mobile, required String name, required String password, required String role}) async => null;
+  @override Future<bool> register({required String location, required String mobile, required String name, required String password, required String role}) async => true;
 }
 
 class FakeFarmerProvider extends ChangeNotifier implements FarmerProvider {
@@ -86,7 +86,7 @@ class FakeAgentProvider extends ChangeNotifier implements AgentProvider {
 
   @override Future<void> loadAgent(String agentId) async {}
   @override Future<void> updatePrice(String type, double price, [double? price2]) async {}
-  @override Future<String> addFarmer(String name, String mobile, String location) async => 'fid';
+  Future<String> addFarmer(String name, String mobile, String location) async => 'fid';
   @override Future<void> removeFarmer(String farmerId) async {}
   @override Future<void> upsertStock(int totalBarrels) async {}
   @override Future<void> approveBooking(String bookingId) async {}

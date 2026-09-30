@@ -44,7 +44,7 @@ class AuthProvider extends ChangeNotifier {
     return 'Something went wrong. Please try again.';
   }
 
-  Future<String?> register({
+  Future<bool> register({
     required String name,
     required String mobile,
     required String password,
@@ -56,7 +56,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final otp = await _authService.registerUser(
+      final success = await _authService.registerUser(
         name: name,
         mobile: mobile,
         password: password,
@@ -64,10 +64,10 @@ class AuthProvider extends ChangeNotifier {
         location: location,
       );
       _userId = _authService.getCurrentUser()?.uid;
-      return otp;
+      return success;
     } catch (e) {
       _errorMessage = _mapFirebaseError(e);
-      return null;
+      return false;
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -76,7 +76,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> verifyOTP({
     required String otpEntered,
-    required String otpGenerated,
+    String? otpGenerated,
     required Map<String, dynamic> userData,
     required String password,
   }) async {

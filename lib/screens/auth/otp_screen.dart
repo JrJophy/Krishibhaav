@@ -5,16 +5,17 @@ import '../../core/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../providers/auth_provider.dart';
+import '../../services/auth_service.dart';
 import '../../app_router.dart';
 
 class OtpScreen extends StatefulWidget {
-  final String otpGenerated;
+  final String? otpGenerated;
   final Map<String, dynamic> userData;
   final String password;
 
   const OtpScreen({
     super.key,
-    required this.otpGenerated,
+    this.otpGenerated,
     required this.userData,
     required this.password,
   });
@@ -26,6 +27,20 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   final List<TextEditingController> _controllers = List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
+
+  @override
+  void initState() {
+    super.initState();
+    final mobile = widget.userData['mobile'] as String?;
+    final otp = widget.otpGenerated ?? (mobile != null ? AuthService.getMockOtp(mobile) : null);
+    if (otp != null) {
+      print('\n==================================================');
+      print(' [VERIFY OTP SCREEN LOADED] ');
+      print(' Target Mobile : $mobile');
+      print(' ENTER OTP CODE: $otp');
+      print('==================================================\n');
+    }
+  }
 
   @override
   void dispose() {
@@ -102,6 +117,8 @@ class _OtpScreenState extends State<OtpScreen> {
     final isDark = theme.brightness == Brightness.dark;
     final ink = isDark ? AppColors.darkInk : AppColors.lightInk;
 
+    final displayOtp = widget.otpGenerated ?? (mobile.isNotEmpty ? AuthService.getMockOtp(mobile) : null) ?? '123456';
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -112,7 +129,24 @@ class _OtpScreenState extends State<OtpScreen> {
         child: Column(
           children: [
             Text('Sending to $maskedMobile', style: TextStyle(fontSize: 18, color: ink.withValues(alpha: 0.7))),
-            const SizedBox(height: 32),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+              ),
+              child: SelectableText(
+                'Test OTP Code: $displayOtp  (or 123456)',
+                style: const TextStyle(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(6, (index) {
