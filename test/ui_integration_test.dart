@@ -31,14 +31,9 @@ class FakeAuthProvider extends ChangeNotifier implements AuthProvider {
   @override String? get userId => 'test_uid';
   String? get role => 'farmer';
   @override bool get isLoading => false;
-  String? get otpSessionId => null;
-  bool get isAwaitingOtp => false;
   @override String? get errorMessage => null;
   @override String? get userRole => 'farmer';
 
-  Future<void> sendOtp(String mobile) async {}
-  Future<bool> verifyOtp(String otp) async => true;
-  @override Future<bool> verifyOTP({required String otpEntered, String? otpGenerated, required Map<String, dynamic> userData, required String password}) async => true;
   Future<void> checkAuthState() async {}
   Future<void> logout() async {}
   @override Future<void> signOut() async {}

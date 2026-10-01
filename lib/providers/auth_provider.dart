@@ -56,54 +56,22 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final success = await _authService.registerUser(
+      final uid = await _authService.registerUser(
         name: name,
         mobile: mobile,
         password: password,
         role: role,
         location: location,
       );
-      _userId = _authService.getCurrentUser()?.uid;
-      return success;
+      _userId = uid;
+      _userRole = role;
+      return true;
     } catch (e) {
       _errorMessage = _mapFirebaseError(e);
       return false;
     } finally {
       _isLoading = false;
       notifyListeners();
-    }
-  }
-
-  Future<bool> verifyOTP({
-    required String otpEntered,
-    String? otpGenerated,
-    required Map<String, dynamic> userData,
-    required String password,
-  }) async {
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
-
-    try {
-      final success = await _authService.verifyOTPAndCreateUser(
-        otpEntered: otpEntered,
-        otpGenerated: otpGenerated,
-        userData: userData,
-        password: password,
-      );
-      if (success) {
-        _userRole = userData['role'];
-      } else {
-        _errorMessage = "Incorrect OTP, please try again";
-      }
-      _isLoading = false;
-      notifyListeners();
-      return success;
-    } catch (e) {
-      _errorMessage = _mapFirebaseError(e);
-      _isLoading = false;
-      notifyListeners();
-      return false;
     }
   }
 

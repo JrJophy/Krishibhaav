@@ -76,7 +76,20 @@ class PendingRequestsScreen extends StatelessWidget {
                         Expanded(
                           child: OutlinedButton(
                             onPressed: () async {
-                              await agentProvider.rejectLinkRequest(requestId, farmerId, agentName);
+                              try {
+                                await agentProvider.rejectLinkRequest(requestId, farmerId, agentName);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Request rejected')),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Failed to reject request. Please try again.')),
+                                  );
+                                }
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               foregroundColor: AppColors.lightDanger,
@@ -90,7 +103,20 @@ class PendingRequestsScreen extends StatelessWidget {
                         Expanded(
                           child: ElevatedButton(
                             onPressed: () async {
-                              await agentProvider.acceptLinkRequest(requestId, farmerId, farmerName, agentName);
+                              try {
+                                await agentProvider.acceptLinkRequest(requestId, farmerId, farmerName, agentName);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Farmer linked successfully!')),
+                                  );
+                                }
+                              } catch (e) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Failed to accept request. Please try again.')),
+                                  );
+                                }
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,

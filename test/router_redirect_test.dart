@@ -5,7 +5,6 @@ void main() {
   group('decideRedirect', () {
     test('agent on /farmer/home -> /agent/home', () {
       final result = decideRedirect(
-        isAwaitingOtp: false,
         loggedIn: true,
         cachedRole: 'agent',
         location: '/farmer/home',
@@ -15,7 +14,6 @@ void main() {
 
     test('farmer on /agent/home -> /farmer/home', () {
       final result = decideRedirect(
-        isAwaitingOtp: false,
         loggedIn: true,
         cachedRole: 'farmer',
         location: '/agent/home',
@@ -25,7 +23,6 @@ void main() {
 
     test('logged-out on any protected route -> /auth', () {
       final result = decideRedirect(
-        isAwaitingOtp: false,
         loggedIn: false,
         cachedRole: null,
         location: '/farmer/home',
@@ -33,37 +30,17 @@ void main() {
       expect(result, '/auth');
     });
 
-    test('isAwaitingOtp on a protected route -> /otp', () {
+    test('logged-out on /auth -> null', () {
       final result = decideRedirect(
-        isAwaitingOtp: true,
-        loggedIn: false,
-        cachedRole: null,
-        location: '/farmer/home',
-      );
-      expect(result, '/otp');
-    });
-
-    test('isAwaitingOtp on /otp or /auth -> null', () {
-      final resultAuth = decideRedirect(
-        isAwaitingOtp: true,
         loggedIn: false,
         cachedRole: null,
         location: '/auth',
       );
-      expect(resultAuth, isNull);
-
-      final resultOtp = decideRedirect(
-        isAwaitingOtp: true,
-        loggedIn: false,
-        cachedRole: null,
-        location: '/otp',
-      );
-      expect(resultOtp, isNull);
+      expect(result, isNull);
     });
 
     test('logged-in user on /auth -> their home', () {
       final resultAgent = decideRedirect(
-        isAwaitingOtp: false,
         loggedIn: true,
         cachedRole: 'agent',
         location: '/auth',
@@ -71,7 +48,6 @@ void main() {
       expect(resultAgent, '/agent/home');
 
       final resultFarmer = decideRedirect(
-        isAwaitingOtp: false,
         loggedIn: true,
         cachedRole: 'farmer',
         location: '/auth',
@@ -81,10 +57,27 @@ void main() {
 
     test('null role -> fail-closed path (/auth)', () {
       final result = decideRedirect(
-        isAwaitingOtp: false,
         loggedIn: true,
         cachedRole: null,
         location: '/agent/home',
+      );
+      expect(result, '/auth');
+    });
+
+    test('splash route (/) always returns null', () {
+      final result = decideRedirect(
+        loggedIn: false,
+        cachedRole: null,
+        location: '/',
+      );
+      expect(result, isNull);
+    });
+
+    test('logged-out on obsolete /otp route redirects to /auth', () {
+      final result = decideRedirect(
+        loggedIn: false,
+        cachedRole: null,
+        location: '/otp',
       );
       expect(result, '/auth');
     });

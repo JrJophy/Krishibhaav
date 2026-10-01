@@ -359,7 +359,7 @@ class _AgentHomeScreenState extends State<AgentHomeScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
-                          'Code: ${settings.agentId.substring(0, 6)}',
+                          'Code: ${settings.agentId.substring(0, 6).toUpperCase()}',
                           style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary, letterSpacing: 2),
                         ),
                       ),

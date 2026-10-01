@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math';
 import '../../core/colors.dart';
 
@@ -88,7 +89,6 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
     }
 
     final provider = Provider.of<AuthProvider>(context, listen: false);
-    isAwaitingOtp = true;
     final success = await provider.register(
       name: name,
       mobile: mobile,
@@ -98,17 +98,34 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
     );
 
     if (success && mounted) {
-      context.push('/otp', extra: {
-        'password': password,
-        'userData': {
-          'name': name,
-          'mobile': mobile,
-          'role': _selectedRole,
-          'location': location,
-          'crop': 'Rubber',
-          'fcmToken': '',
+      setCachedRole(_selectedRole);
+      if (_selectedRole == 'agent') {
+        context.go('/agent/home');
+      } else {
+        final uid = provider.userId;
+        if (uid != null) {
+          try {
+            final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+            final agentId = (doc.data()?['agentId'] as String?)?.trim() ?? '';
+            if (mounted) {
+              if (agentId.isEmpty) {
+                context.go('/farmer/request_link', extra: {'farmerId': uid});
+              } else {
+                context.go('/farmer/home');
+              }
+            }
+          } catch (e) {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Could not check agent link: $e. You can link anytime from Home.')),
+              );
+              context.go('/farmer/home');
+            }
+          }
+        } else {
+          context.go('/farmer/home');
         }
-      });
+      }
     }
   }
 
@@ -292,7 +309,7 @@ class _LoginRegisterScreenState extends State<LoginRegisterScreen> with TickerPr
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: _handleRegister,
-              child: const Text('Send OTP', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+              child: const Text('Register', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ),
           Consumer<AuthProvider>(

@@ -7,7 +7,7 @@ service cloud.firestore {
     }
 
     function isAgentFarmers(agentId) {
-      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.agentId == agentId;
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('agentId', '') == agentId;
     }
     function isValidBookingTransition(currentStatus, newStatus, role) {
   // Single boolean expression — Firestore Rules functions do not support
@@ -31,20 +31,69 @@ service cloud.firestore {
 }
     match /users/{userId} {
       // Read: Users can read their own doc; Agents can read their assigned farmers.
-      allow read: if isAuth() && (request.auth.uid == userId || resource.data.agentId == request.auth.uid);
+      allow read: if isAuth() && (request.auth.uid == userId || resource.data.get('agentId', '') == request.auth.uid);
       
-      // Create: Users can create their own doc during signup. Agents can create farmer docs.
-      allow create: if isAuth() && (request.auth.uid == userId || request.resource.data.agentId == request.auth.uid);
+      // Create: Users can create their own doc during signup. No agentId allowed initially.
+      allow create: if isAuth() && request.auth.uid == userId &&
+        (request.resource.data.role == 'farmer' || request.resource.data.role == 'agent') &&
+        request.resource.data.get('agentId', '') == '';
       
       // Update: Users can update their own doc but CANNOT escalate their role or change their agentId. Agents can update farmers.
+      // Or an agent can claim a farmer doc via a batch update.
       allow update: if isAuth() && (
         (request.auth.uid == userId && 
          request.resource.data.role == resource.data.role &&
-         request.resource.data.agentId == resource.data.agentId) ||
-        (resource.data.agentId == request.auth.uid)
+         request.resource.data.get('agentId', '') == resource.data.get('agentId', '')) ||
+        (resource.data.get('agentId', '') == request.auth.uid) ||
+        (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['agentId']) &&
+          request.resource.data.agentId == request.auth.uid &&
+          resource.data.get('agentId', '') == '' &&
+          resource.data.role == 'farmer' &&
+          get(/databases/$(database)/documents/link_requests/$(userId + '_' + request.auth.uid)).data.status == 'pending'
+        )
       );
       
-      allow delete: if isAuth() && resource.data.agentId == request.auth.uid;
+      allow delete: if isAuth() && resource.data.get('agentId', '') == request.auth.uid;
+    }
+
+    match /agent_codes/{code} {
+      allow read: if isAuth();
+      allow create: if isAuth() &&
+        request.resource.data.keys().hasOnly(['agentId']) &&
+        request.resource.data.agentId == request.auth.uid &&
+        code == code.upper() && code.size() == 6 &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'agent';
+      allow update, delete: if false;
+    }
+    
+    match /link_requests/{requestId} {
+      allow read: if isAuth() && (
+        request.auth.uid == resource.data.farmerId ||
+        request.auth.uid == resource.data.agentId
+      );
+      
+      allow create: if isAuth() &&
+        request.auth.uid == request.resource.data.farmerId &&
+        requestId == request.auth.uid + "_" + request.resource.data.agentId &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.keys().hasAll(['farmerId','farmerName','farmerMobile','agentId','status','requestedAt']) &&
+        request.resource.data.keys().hasOnly(['farmerId','farmerName','farmerMobile','agentId','status','requestedAt']);
+        
+      allow update: if isAuth() && (
+        (request.auth.uid == resource.data.farmerId &&
+         resource.data.status == 'rejected' &&
+         request.resource.data.status == 'pending' &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status','requestedAt','farmerName','farmerMobile']) &&
+         request.resource.data.farmerId == resource.data.farmerId &&
+         request.resource.data.agentId == resource.data.agentId) ||
+        (request.auth.uid == resource.data.agentId &&
+         resource.data.status == 'pending' &&
+         (request.resource.data.status == 'accepted' || request.resource.data.status == 'rejected') &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']) &&
+         request.resource.data.farmerId == resource.data.farmerId &&
+         request.resource.data.agentId == resource.data.agentId)
+      );
     }
 
     match /agent_settings/{agentId} {
@@ -53,12 +102,12 @@ service cloud.firestore {
     }
 
     match /farmer_prices/{farmerId} {
-      allow read: if isAuth() && (request.auth.uid == farmerId || resource.data.agentId == request.auth.uid);
+      allow read: if isAuth() && (request.auth.uid == farmerId || resource.data.get('agentId', '') == request.auth.uid);
       allow create: if isAuth() && request.resource.data.agentId == request.auth.uid;
-      allow update, delete: if isAuth() && resource.data.agentId == request.auth.uid;
+      allow update, delete: if isAuth() && resource.data.get('agentId', '') == request.auth.uid;
 
       match /history/{historyId} {
-        allow read: if isAuth() && (request.auth.uid == farmerId || get(/databases/$(database)/documents/farmer_prices/$(farmerId)).data.agentId == request.auth.uid);
+        allow read: if isAuth() && (request.auth.uid == farmerId || get(/databases/$(database)/documents/farmer_prices/$(farmerId)).data.get('agentId', '') == request.auth.uid);
         allow write: if false; // Scraper only
       }
     }

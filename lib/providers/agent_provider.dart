@@ -148,11 +148,36 @@ class AgentProvider extends ChangeNotifier {
 
   Future<void> acceptLinkRequest(String requestId, String farmerId, String farmerName, String agentName) async {
     if (_agentSettings == null) throw Exception("Agent not loaded");
-    await FcmDispatchService().acceptLinkRequest(requestId, farmerId, agentName);
+    final agentId = _agentSettings!.agentId;
+
+    final batch = FirebaseFirestore.instance.batch();
+
+    final requestRef = FirebaseFirestore.instance.collection('link_requests').doc(requestId);
+    batch.update(requestRef, {
+      'status': 'accepted',
+      'resolvedAt': FieldValue.serverTimestamp(),
+    });
+
+    final farmerRef = FirebaseFirestore.instance.collection('users').doc(farmerId);
+    batch.update(farmerRef, {
+      'agentId': agentId,
+    });
+
+    final farmerPriceRef = FirebaseFirestore.instance.collection('farmer_prices').doc(farmerId);
+    batch.set(farmerPriceRef, {
+      'agentId': agentId,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+
+    await batch.commit();
   }
 
   Future<void> rejectLinkRequest(String requestId, String farmerId, String agentName) async {
-    await FcmDispatchService().rejectLinkRequest(requestId, farmerId, agentName);
+    if (_agentSettings == null) throw Exception("Agent not loaded");
+    await FirebaseFirestore.instance.collection('link_requests').doc(requestId).update({
+      'status': 'rejected',
+      'resolvedAt': FieldValue.serverTimestamp(),
+    });
   }
 
   @override

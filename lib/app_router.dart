@@ -2,7 +2,6 @@ import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'screens/auth/login_register_screen.dart';
-import 'screens/auth/otp_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/agent/agent_home_screen.dart';
 import 'screens/farmer/farmer_home_screen.dart';
@@ -10,11 +9,9 @@ import 'screens/farmer/request_link_screen.dart';
 import 'screens/booking_history_screen.dart';
 
 String? _cachedRole;
-bool isAwaitingOtp = false;
 
 void resetAuthCache() {
   _cachedRole = null;
-  isAwaitingOtp = false;
 }
 
 void setCachedRole(String role) {
@@ -22,20 +19,14 @@ void setCachedRole(String role) {
 }
 
 String? decideRedirect({
-  required bool isAwaitingOtp,
   required bool loggedIn,
   String? cachedRole,
   required String location,
 }) {
-  final isAuthRoute = location == '/auth' || location == '/otp';
+  final isAuthRoute = location == '/auth';
   final isSplash = location == '/';
 
   if (isSplash) return null;
-
-  if (isAwaitingOtp) {
-    if (isAuthRoute) return null;
-    return '/otp';
-  }
 
   if (!loggedIn) {
     if (!isAuthRoute) return '/auth';
@@ -66,8 +57,8 @@ final GoRouter appRouter = GoRouter(
     final user = FirebaseAuth.instance.currentUser;
     final location = state.matchedLocation;
     
-    // Only fetch if we actually need the role (logged in, no role, not awaiting OTP, not splash)
-    if (user != null && _cachedRole == null && !isAwaitingOtp && location != '/') {
+    // Only fetch if we actually need the role (logged in, no role, not splash)
+    if (user != null && _cachedRole == null && location != '/') {
       try {
         // Note: Firestore's default get() falls back to local cache when offline, preserving offline mode.
         final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
@@ -83,14 +74,13 @@ final GoRouter appRouter = GoRouter(
       }
     }
 
-    if (user != null && _cachedRole == null && !isAwaitingOtp && location != '/') {
+    if (user != null && _cachedRole == null && location != '/') {
       // Failsafe if role still null after fetch
       await FirebaseAuth.instance.signOut();
       resetAuthCache();
     }
 
     return decideRedirect(
-      isAwaitingOtp: isAwaitingOtp,
       loggedIn: user != null,
       cachedRole: _cachedRole,
       location: location,
@@ -99,17 +89,6 @@ final GoRouter appRouter = GoRouter(
   routes: [
     GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
     GoRoute(path: '/auth', builder: (context, state) => const LoginRegisterScreen()),
-    GoRoute(
-      path: '/otp',
-      builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>? ?? {};
-        return OtpScreen(
-          otpGenerated: extra['otpGenerated'] ?? '',
-          userData: extra['userData'] ?? {},
-          password: extra['password'] ?? '',
-        );
-      },
-    ),
     GoRoute(
       path: '/farmer/home', 
       builder: (context, state) {

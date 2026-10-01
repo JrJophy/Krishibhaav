@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/colors.dart';
-import '../../providers/farmer_provider.dart';
 
 class RequestLinkScreen extends StatefulWidget {
   final String farmerId;
@@ -25,7 +23,7 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
   }
 
   Future<void> _submitRequest() async {
-    final cleanCode = _codeController.text.replaceAll(' ', '');
+    final cleanCode = _codeController.text.trim().replaceAll(' ', '').toUpperCase();
     if (cleanCode.length != 6) {
       setState(() => _errorMessage = 'Please enter a valid 6-character agent code.');
       return;
@@ -37,18 +35,13 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
     });
 
     try {
-      final farmerProvider = Provider.of<FarmerProvider>(context, listen: false);
-      final farmerName = farmerProvider.farmerName;
-      
-      // Find the agent with this code
-      final query = await FirebaseFirestore.instance
-          .collection('users')
-          .where('role', isEqualTo: 'agent')
-          .where('agentCode', isEqualTo: cleanCode)
-          .limit(1)
+      // Find the agent with this code from agent_codes
+      final codeDoc = await FirebaseFirestore.instance
+          .collection('agent_codes')
+          .doc(cleanCode)
           .get();
 
-      if (query.docs.isEmpty) {
+      if (!codeDoc.exists) {
         if (mounted) {
           setState(() {
             _isLoading = false;
@@ -58,22 +51,62 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
         return;
       }
 
-      final agentDoc = query.docs.first;
-      final agentId = agentDoc.id;
+      final agentId = codeDoc.data()?['agentId'] as String?;
+      if (agentId == null || agentId.isEmpty) {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+            _errorMessage = 'Invalid agent record. Please contact support.';
+          });
+        }
+        return;
+      }
 
-      // Get farmer mobile directly from firestore since it's not in FarmerProvider
+      // Read farmer details directly from firestore users doc
       final farmerDoc = await FirebaseFirestore.instance.collection('users').doc(widget.farmerId).get();
-      final farmerMobile = farmerDoc.data()?['mobile'] ?? '';
+      final farmerData = farmerDoc.data();
+      final farmerName = farmerData?['name'] as String? ?? 'Unknown';
+      final farmerMobile = farmerData?['mobile'] as String? ?? '';
 
-      // Create a link request
-      await FirebaseFirestore.instance.collection('link_requests').add({
-        'farmerId': widget.farmerId,
-        'farmerName': farmerName,
-        'farmerMobile': farmerMobile,
-        'agentId': agentId,
-        'status': 'pending',
-        'requestedAt': FieldValue.serverTimestamp(),
-      });
+      // Create or re-request a link request with deterministic ID
+      final requestId = '${widget.farmerId}_$agentId';
+      final requestRef = FirebaseFirestore.instance.collection('link_requests').doc(requestId);
+
+      final existingDoc = await requestRef.get();
+      if (existingDoc.exists) {
+        final existingStatus = existingDoc.data()?['status'] as String?;
+        if (existingStatus == 'rejected') {
+          await requestRef.update({
+            'status': 'pending',
+            'requestedAt': FieldValue.serverTimestamp(),
+          });
+        } else if (existingStatus == 'pending') {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+              _errorMessage = 'Request already sent to this agent.';
+            });
+          }
+          return;
+        } else if (existingStatus == 'accepted') {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+              _errorMessage = 'You are already linked with this agent.';
+            });
+          }
+          return;
+        }
+      } else {
+        await requestRef.set({
+          'farmerId': widget.farmerId,
+          'farmerName': farmerName,
+          'farmerMobile': farmerMobile,
+          'agentId': agentId,
+          'status': 'pending',
+          'requestedAt': FieldValue.serverTimestamp(),
+        });
+      }
 
       if (!mounted) return;
       if (context.canPop()) {
@@ -81,11 +114,24 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
       } else {
         context.go('/farmer/home');
       }
+    } on FirebaseException catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          if (e.code == 'permission-denied') {
+            _errorMessage = 'Request already sent to this agent.';
+          } else {
+            _errorMessage = 'Failed to submit request. Please try again.';
+          }
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _errorMessage = 'Failed to submit request. Please try again.';
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = 'Failed to submit request. Please try again.';
+        });
+      }
     }
   }
 
@@ -114,7 +160,7 @@ class _RequestLinkScreenState extends State<RequestLinkScreen> {
             const SizedBox(height: 32),
             TextField(
               controller: _codeController,
-              textCapitalization: TextCapitalization.none,
+              textCapitalization: TextCapitalization.characters,
               maxLength: 6,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, letterSpacing: 8, color: ink),
               textAlign: TextAlign.center,
